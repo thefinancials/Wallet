@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Wallet.DebitPaymentPage"
+             NavigationPage.HasBackButton="False"
+             Title="Add a Debit Payment"
+             IconImageSource="wallet_512_512">
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30">
+            <Label Text="Add a Debit Payment"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+               FontSize="18"/>
+            <Picker
+                x:Name="BankPicker"
+                Title="Select a Bank :-"
+                TitleColor="Black"
+                HorizontalOptions="Center"/>
+            <Entry
+                x:Name="DebitAmount"
+                Placeholder="Enter the Debit Amount"
+                Keyboard="Numeric"
+                MaximumWidthRequest="450"/>
+            <Entry
+                x:Name="CreditorName"
+                Placeholder="Enter the Name of the Creditor/Business"
+                Keyboard="Text"
+                MaximumWidthRequest="450"/>
+            <Picker
+                Title="Select Payment Mode :-"
+                x:Name="PaymentMode"
+                HorizontalOptions="Center">
+                <Picker.Items>
+                    <x:String>UPI</x:String>
+                    <x:String>Netbanking</x:String>
+                    <x:String>Debit Card</x:String>
+                    <x:String>Cheque</x:String>
+                </Picker.Items>
+            </Picker>
+            <Button
+                x:Name="AddDebitButton"
+                HorizontalOptions="Center"
+                Text="Add Debit Payment"
+                BackgroundColor="Red"
+                Clicked="AddDebitButton_Clicked"/>
+            <Button
+                x:Name="AddAnotherDebit"
+                HorizontalOptions="Center"
+                IsVisible="False"
+                Text="Add another Debit Payment"
+                BackgroundColor="Red"
+                Clicked="AddAnotherDebit_Clicked"/>
+            <Button
+                x:Name="GoBackHome"
+                HorizontalOptions="Center"
+                IsVisible="False"
+                Text="Go back to Home Screen"
+                Clicked="GoBackHome_Clicked"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

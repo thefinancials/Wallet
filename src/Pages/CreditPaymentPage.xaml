@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Wallet.CreditPaymentPage"
+             Title="Add a Credit Payment"
+             IconImageSource="wallet_512_512">
+    <StackLayout>
+        <Label Text="Add a Credit Payment"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+               FontSize="18"/>
+        <Label Text=""/>
+        <Picker
+            x:Name="BankPicker"
+            Title="Select a Bank :-"
+            TitleColor="Black"
+            HorizontalOptions="Center"/>
+        <Label Text=""/>
+        <Entry
+            x:Name="CreditAmount"
+            Placeholder="Enter the Credit Amount"
+            Keyboard="Numeric"
+            MaximumWidthRequest="450"/>
+        <Label Text=""/>
+        <Entry
+            x:Name="SourceName"
+            Placeholder="Enter the name of the Source of the Credit"
+            Keyboard="Text"
+            MaximumWidthRequest="450"/>
+        <Label Text=""/>
+        <Button
+            x:Name="AddCreditButton"
+            HorizontalOptions="Center"
+            Text="Add Credit Payment"
+            BackgroundColor="Red"
+            Clicked="AddCreditButton_Clicked"/>
+        <Label Text=""/>
+        <Button
+            x:Name="AddAnotherCredit"
+            HorizontalOptions="Center"
+            IsVisible="False"
+            Text="Add another Credit Payment"
+            BackgroundColor="Red"
+            Clicked="AddAnotherCredit_Clicked"/>
+        <Label Text=""/>
+        <Button
+            x:Name="GoBackHome"
+            HorizontalOptions="Center"
+            IsVisible="False"
+            Text="Go back to Home Screen"
+            Clicked="GoBackHome_Clicked"/>
+
+    </StackLayout>
+</ContentPage>

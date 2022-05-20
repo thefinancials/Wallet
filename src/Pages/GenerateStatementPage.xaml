@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Wallet.GenerateStatementPage"
+             Title="Generate Monthly Statement"
+             IconImageSource="wallet_512_512">
+    <StackLayout>
+        <Label Text="Generate your Monthly Statement"
+                VerticalOptions="Center" 
+                FontSize="18"
+                HorizontalOptions="Center" />
+        <Label Text=""/>
+        <Picker
+            x:Name="BankPicker"
+            Title="Select a Bank :-"
+            TitleColor="Black"
+            HorizontalOptions="Center"/>
+        <Label Text=""/>
+        <Picker
+            x:Name="MonthPicker"
+            Title="Select a Month :-"
+            TitleColor="Black"
+            HorizontalOptions="Center"/>
+        <Label Text=""/>
+        <Picker
+            x:Name="YearPicker"
+            Title="Select a Year :-"
+            TitleColor="Black"
+            HorizontalOptions="Center"/>
+        <Label Text=""/>
+        <Picker 
+            x:Name="GetFileFormat"
+            Title="Select a Format to export your Statement"
+            TitleColor="Black"
+            HorizontalOptions="Center">
+            <Picker.Items>
+                <x:String>View the Statement</x:String>
+                <x:String>Text File (.txt)</x:String>
+                <x:String>CSV File (.csv)</x:String>
+            </Picker.Items>
+        </Picker>
+        <Label Text=""/>
+        <Button
+            x:Name="GetStatement"
+            Text="Get Statement"
+            Clicked="GetStatement_Clicked"
+            HorizontalOptions="Center"/>
+    </StackLayout>
+</ContentPage>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Wallet.SettingsPage"
+             NavigationPage.HasBackButton="False"
+             Title="Settings"
+             IconImageSource="wallet_512_512">
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30">
+            <Label
+                Text="Settings"
+                FontSize="18"
+                HorizontalOptions="Center"/>
+            <Button
+                Text="Add a Bank Account"
+                Clicked="Button_Clicked"
+                BackgroundColor="Green"
+                MaximumWidthRequest="300"/>
+            <Button
+                Text="Delete a Bank Account"
+                Clicked="Button_Clicked_1"
+                BackgroundColor="Red"
+                MaximumWidthRequest="300"/>
+            <Label
+                Text="Facing issues with Wallet?"/>
+            <Button
+                Text="Reset Wallet"
+                Clicked="Button_Clicked_2"
+                HorizontalOptions="Start"
+                MaximumWidthRequest="300"/>
+            <Label
+                x:Name="Developed"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
