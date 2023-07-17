@@ -209,43 +209,44 @@
         else
         {
             data = JSON.parse(localStorage.getItem("BANKS"))
-           new_object = new Object()
-           new_object.Date = document.getElementById("date_transaction").value
-           if(document.getElementById("particulars_transaction").value="CASH")
-           {
-            document.getElementById("particulars_transaction").value="Cash withdrawn from Bank"
-           }
-           new_object.Particulars = document.getElementById("particulars_transaction").value
-          
-           if(localStorage.getItem("particulars_ai")==null)
-           {
-               array_part =[]
-               array_part.push(document.getElementById("particulars_transaction").value)
-               localStorage.setItem("particulars_ai", JSON.stringify(array_part))
-           }
-           else
-           {
-               array_part=JSON.parse(localStorage.getItem("particulars_ai"))
-               if(document.getElementById("particulars_transaction").value=='Cash withdrawn from Bank')
-               {
-                
-               }
-               else
-               {
-                if(isStringInList(document.getElementById("particulars_transaction").value, array_part)==true)
-               {
-                   console.log("Exists in AI")
-               }
-               else
-               {
-                   console.log("Adding to AI")
-                   array_part.push(document.getElementById("particulars_transaction").value)
-                   localStorage.setItem("particulars_ai", JSON.stringify(array_part))
-               }
-               }
-           }
-           
-           
+            new_object = new Object()
+            new_object.Date = document.getElementById("date_transaction").value
+            if(document.getElementById("particulars_transaction").value=="CASH")
+            {
+                new_object.Particulars="Cash withdrawn from Bank"
+            }
+            else
+            {
+                new_object.Particulars = document.getElementById("particulars_transaction").value
+            }
+            console.log(new_object.Particulars)
+            if(document.getElementById("particulars_transaction").value="CASH")
+            {
+
+            }
+            else
+            {
+                if(localStorage.getItem("particulars_ai")==null)
+                {
+                    array_part =[]
+                    array_part.push(document.getElementById("particulars_transaction").value)
+                    localStorage.setItem("particulars_ai", JSON.stringify(array_part))
+                }
+                else
+                {
+                    array_part=JSON.parse(localStorage.getItem("particulars_ai"))
+                        if(isStringInList(document.getElementById("particulars_transaction").value, array_part)==true)
+                    {
+                        console.log("Exists in AI")
+                    }
+                    else
+                    {
+                        console.log("Adding to AI")
+                        array_part.push(document.getElementById("particulars_transaction").value)
+                        localStorage.setItem("particulars_ai", JSON.stringify(array_part))
+                    }
+                }
+            }
            new_object.Type = "Dr"
            new_object.Amount = document.getElementById("amount_transaction").value
            bankkk = document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text
@@ -261,26 +262,25 @@
            }
            else
            {
-            bankbalance-=parseFloat(document.getElementById("amount_transaction").value)
-           data[bankname]=bankbalance
-           localStorage.setItem("BANKS", JSON.stringify(data))
-           if(document.getElementById("particulars_transaction").value=='Cash withdrawn from Bank')
-           {
-            cashdata = JSON.parse(localStorage.getItem("CASH"))
-           new_cashobject = new Object()
-           new_cashobject.Date = document.getElementById("date_transaction").value
-           new_cashobject.Particulars = "Cash withdrawn from Bank"
-
-           new_cashobject.Type = "Cr"
-           new_cashobject.Amount = document.getElementById("amount_transaction").value
-           new_cashobject.Narration = document.getElementById("narration").value
-           cashdata["TRANSACTIONS"].push(new_cashobject)
-           cashdata["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
-           cash_balance = parseFloat(cashdata["CASH_BALANCE"])
-           cash_balance+=parseFloat(document.getElementById("amount_transaction").value)
-           cashdata["CASH_BALANCE"]=cash_balance
-           localStorage.setItem("CASH", JSON.stringify(cashdata))
-           }
+                bankbalance-=parseFloat(document.getElementById("amount_transaction").value)
+                data[bankname]=bankbalance
+                localStorage.setItem("BANKS", JSON.stringify(data))
+                if(document.getElementById("particulars_transaction").value=='CASH')
+                {
+                    cashdata = JSON.parse(localStorage.getItem("CASH"))
+                    new_cashobject = new Object()
+                    new_cashobject.Date = document.getElementById("date_transaction").value
+                    new_cashobject.Particulars = "Cash withdrawn from Bank"
+                    new_cashobject.Type = "Cr"
+                    new_cashobject.Amount = document.getElementById("amount_transaction").value
+                    new_cashobject.Narration = document.getElementById("narration").value
+                    cashdata["TRANSACTIONS"].push(new_cashobject)
+                    cashdata["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+                    cash_balance = parseFloat(cashdata["CASH_BALANCE"])
+                    cash_balance+=parseFloat(document.getElementById("amount_transaction").value)
+                    cashdata["CASH_BALANCE"]=cash_balance
+                    localStorage.setItem("CASH", JSON.stringify(cashdata))
+                }
            alert("Added!")
            window.location.reload();
            }
