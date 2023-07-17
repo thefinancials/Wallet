@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<head>
+    <title>Sign up for Wallet</title>
+    <link rel="icon" href="../Assets/main-icon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+    .centre
+    {
+    text-align: center;
+    }
+</style>
+<body>
+    <header>
+        <h1 class="centre">Welcome to Wallet</h1>
+        <p class="centre">This app helps you manage all your financial transactions with ease</p>
+        <p class="centre">Works with:-
+        <li class="centre">Credit Cards</li>
+        <li class="centre">Debit Cards</li>
+        <li class="centre">Banks</li>
+        <li class="centre">Cash</li>
+        </p>
+    </header>
+    <br>
+    <form id="details_form" class="centre">
+        <label for="name_user">Enter your name:</label>
+        <input id="name_user" type="text">
+        <br>
+        <br>
+        <button onclick="submitName()">Submit</button>
+        <br>
+        <!-- <label for="password_user">Enter a strong password</label>
+            <input id="password_user" type="password"> -->
+        <!-- <br> -->
+        <h2 style="visibility: hidden;" id="add_details_1">Add your details</h2>
+        <select style="visibility: hidden;" id="type_of_finance" onchange="change_option()">
+            <option>Select a financial option</option>
+            <option>Credit Cards</option>
+            <option>Banks</option>
+            <option>Cash</option>
+        </select>
+    </form>
+    <div class="centre" id="to_delete"></div>
+</body>
+<script>
+   
+    if(localStorage.getItem("NameUser")!=null)
+    {
+        document.getElementById("name_user").value = localStorage.getItem("NameUser")
+        document.getElementById("add_details_1").style.visibility = "visible";
+        document.getElementById("type_of_finance").style.visibility = "visible";
+    }
+    function submitName()
+    {
+        event.preventDefault();
+        if(name_user.value == "")
+        {
+            alert("Please enter your name")
+        }
+        else
+        {
+            localStorage.setItem("NameUser", name_user.value)
+            document.getElementById("add_details_1").style.visibility = "visible";
+            document.getElementById("type_of_finance").style.visibility = "visible";
+        }
+        
+    }
+    function change_option()
+    {
+        var x = document.getElementById("type_of_finance").value;
+        if (x=="Select a financial option")
+        {
+            alert("Select any one of the option to begin with")
+            document.getElementById("to_delete").replaceChildren()
+    
+        }
+        else if (x=="Credit Cards")
+        {
+            try
+            {
+                document.getElementById("to_delete").replaceChildren()
+            }
+            catch
+            {
+    
+            }
+            var spacer = document.createElement("br")
+            document.getElementById("details_form").appendChild(spacer)
+            var creditcard_entry = document.createElement("input")
+            creditcard_entry.id="creditcard_entry"
+            creditcard_entry.placeholder="Enter your credit card bank"
+            creditcard_entry.width="150px"
+            creditcard_entry.type="text"
+            var nickname_entry = document.createElement("input")
+            nickname_entry.id="nickname_entry"
+            nickname_entry.placeholder="Enter a nickname for your card"
+            nickname_entry.width="150px"
+            nickname_entry.type="text"
+            var spacer = document.createElement("br")
+            var due_date = document.createElement("select")
+            due_date.id="due_date_checker"
+            var options = ["On which date of the month is your credit card statement generated? If it is on 31st of any month, please select 30", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"];
+            for (var i = 0; i < options.length; i++) {
+                var option = document.createElement("option");
+                option.value = options[i];
+                option.text = options[i];
+                due_date.appendChild(option);
+            }
+            document.getElementById("to_delete").innerHTML+="<br>"
+            document.getElementById("to_delete").appendChild(spacer)
+            document.getElementById("to_delete").appendChild(creditcard_entry)
+            document.getElementById("to_delete").appendChild(nickname_entry)
+            document.getElementById("to_delete").appendChild(spacer)
+            document.getElementById("to_delete").appendChild(due_date)
+            var submit_btn = document.createElement("button")
+            submit_btn.id="submit_btn"
+            submit_btn.innerHTML="Add details"
+            submit_btn.addEventListener("click", function(){
+                if(nickname_entry.value == "" || creditcard_entry.value=="" || document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text=="On which date of the month is your credit card statement generated? If it is on 31st of any month, please select 30")
+                {
+                    alert("Please fill out all the fields")
+                }
+                else
+                {
+                    if (localStorage.getItem("CREDIT CARDS")==null)
+                {
+                    objeee = new Object()
+                    objeee.NO_OF_CARDS = 1
+                    strrr = `${creditcard_entry.value} (${nickname_entry.value})`
+                    objeee.TRANSACTIONS = []
+                    oobb = new Object()
+                    oobb.DueDate = `${(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)}-${new Date().getMonth()+1}-${new Date().getFullYear()}`
+                    oobb.BalanceOutstanding = 0
+                    objeee[strrr] = oobb
+                    towrite = JSON.stringify(objeee)
+                    localStorage.setItem("CREDIT CARDS", towrite)
+                    
+                }
+                else
+                {
+                    data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+                    if (`${creditcard_entry.value} (${nickname_entry.value})` in data)
+                    {
+                     alert("You already have a credit card with the same nickname. Try another nickname")
+                    }
+                    else
+                    {
+                        data["NO_OF_CARDS"]+=1
+                        oobb = new Object()
+                        oobb.DueDate = oobb.DueDate = document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text
+                        oobb.BalanceOutstanding = 0
+                        data[`${creditcard_entry.value} (${nickname_entry.value})`] = oobb
+                        towrite = JSON.stringify(data)
+                        localStorage.setItem("CREDIT CARDS", towrite)
+                    }
+    
+    
+                }
+                localStorage.setItem("setup", "DONE")
+                if (localStorage.getItem("NameUser")==null) 
+                {
+                    alert("Please submit your name and username also")
+                }
+                else
+                {
+                    if(confirm("Added successfully. Add another financial option?"))
+                {
+                    document.getElementById("type_of_finance").value = "Select a financial option"
+                    document.getElementById("to_delete").replaceChildren()
+                }
+                else
+                {
+                    window.location = "../index.html"
+                }
+                }
+                
+                }
+                
+            })
+            document.getElementById("to_delete").appendChild(spacer)
+            document.getElementById("to_delete").appendChild(submit_btn)
+        }
+        else if (x=="Cash")
+        {
+            try
+            {
+                document.getElementById("to_delete").replaceChildren()
+            }
+            catch
+            {
+    
+            }
+            var spacer = document.createElement("br")
+            var creditcard_entry = document.createElement("input")
+            creditcard_entry.id="creditcard_entry"
+            creditcard_entry.placeholder="Enter the amount of cash with you now"
+            creditcard_entry.width="150px"
+            creditcard_entry.type="text"
+            var spacer = document.createElement("br")
+            document.getElementById("to_delete").appendChild(spacer)
+            document.getElementById("to_delete").appendChild(creditcard_entry)
+            var submit_btn = document.createElement("button")
+            submit_btn.id="submit_btn"
+            submit_btn.innerHTML="Add details"
+            submit_btn.addEventListener("click", function(){
+                if(creditcard_entry.value=="")
+                {
+                    alert("Please fill out all the fields")
+                }
+                else
+                {
+                    if (localStorage.getItem("CASH")!=null)
+                {
+                    if (confirm("Warning\nThis will overwrite your current cash balance and delete all your previous transactions recorded in Wallet. Continue?") == true)
+                    {
+                        objeee = new Object()
+                        objeee.CASH_BALANCE = creditcard_entry.value
+                        objeee.TRANSACTIONS = []
+                        towrite = JSON.stringify(objeee)
+                        localStorage.setItem("CASH", towrite)
+                    }
+                }
+                else
+                {
+                    objeee = new Object()
+                    objeee.CASH_BALANCE = creditcard_entry.value
+                    objeee.TRANSACTIONS = []
+                    towrite = JSON.stringify(objeee)
+                    localStorage.setItem("CASH", towrite)
+                }  
+                localStorage.setItem("setup", "DONE")
+                if (localStorage.getItem("NameUser")==null) 
+                {
+                    alert("Please submit your name and username also")
+                }
+                else
+                {
+                    if(confirm("Added successfully. Add another financial option?"))
+                {
+                    document.getElementById("type_of_finance").value = "Select a financial option"
+                    document.getElementById("to_delete").replaceChildren()
+                }
+                else
+                {
+                    window.location = "../index.html"
+                }
+                }
+                
+                }
+                
+            })
+    
+            document.getElementById("to_delete").appendChild(spacer)
+            document.getElementById("to_delete").appendChild(submit_btn)
+        }
+        else if (x=="Banks")
+        {
+            try
+            {
+                document.getElementById("to_delete").replaceChildren()
+            }
+            catch
+            {
+    
+            }
+            var spacer = document.createElement("br")
+            document.getElementById("details_form").appendChild(spacer)
+            var creditcard_entry = document.createElement("input")
+            creditcard_entry.id="creditcard_entry"
+            creditcard_entry.placeholder="Enter your bank name"
+            creditcard_entry.width="150px"
+            creditcard_entry.type="text"
+            var nickname_entry = document.createElement("input")
+            nickname_entry.id="nickname_entry"
+            nickname_entry.placeholder="Enter a nickname for your bank account"
+            nickname_entry.width="150px"
+            nickname_entry.type="text"
+            
+            
+            var spacer = document.createElement("br")
+            var balance_entry = document.createElement("input")
+            balance_entry.id="balance_entry"
+            balance_entry.placeholder="Enter your bank balance"
+            balance_entry.width="150px"
+            balance_entry.type="number"
+            var spacer = document.createElement("br")
+            document.getElementById("to_delete").appendChild(spacer)
+            document.getElementById("to_delete").appendChild(creditcard_entry)
+            document.getElementById("to_delete").appendChild(spacer)
+            document.getElementById("to_delete").appendChild(nickname_entry)
+            document.getElementById("to_delete").appendChild(spacer)
+            document.getElementById("to_delete").appendChild(balance_entry)
+            var details = document.createElement("p")
+            details.innerHTML="This will add a bank account. "
+            
+            document.getElementById("to_delete").appendChild(spacer)
+            document.getElementById("to_delete").appendChild(details)
+            var submit_btn = document.createElement("button")
+            submit_btn.id="submit_btn"
+            submit_btn.innerHTML="Add details"
+            submit_btn.addEventListener("click", function(){
+                if(nickname_entry.value == "" || creditcard_entry.value=="" || balance_entry.value=="")
+                {
+                    alert("Please fill out all the fields")
+                }
+                else
+                {
+                    if (localStorage.getItem("BANKS")==null)
+                    {
+                        objeee = new Object()
+                        objeee.NO_OF_BANKACCOUNTS = 1
+                        strrr = `${creditcard_entry.value} (${nickname_entry.value})`
+                        objeee[strrr] = parseFloat(balance_entry.value)
+                        objeee.TRANSACTIONS=[]
+                        towrite = JSON.stringify(objeee)
+                        localStorage.setItem("BANKS", towrite)
+                        
+                        localStorage.setItem("setup", "DONE")
+                        if (localStorage.getItem("NameUser")==null) 
+                {
+                    alert("Please submit your name and username also")
+                }
+                        else
+                        {
+                            if(confirm("Added successfully. Add another financial option?"))
+                        {
+                            document.getElementById("type_of_finance").value = "Select a financial option"
+                            document.getElementById("to_delete").replaceChildren()
+                        }
+                        else
+                        {
+                            window.location = "../index.html"
+                        }
+                        }
+                
+                    }
+                else
+                {
+                    data = JSON.parse(localStorage.getItem("BANKS"))
+                    if(`${creditcard_entry.value} (${nickname_entry.value})` in data)
+                        {
+                            alert("You have a bank account with the same nickname. Enter another nickname")
+
+                        }
+                        else
+                        {
+                            data["NO_OF_BANKACCOUNTS"]+=1
+                            data[`${creditcard_entry.value} (${nickname_entry.value})`] = parseFloat(balance_entry.value)
+                            towrite = JSON.stringify(data)
+                            console.log(towrite)
+                            localStorage.setItem("BANKS", towrite)
+                            
+                            localStorage.setItem("setup", "DONE")
+                            if (localStorage.getItem("NameUser")==null) 
+                {
+                    alert("Please submit your name and username also")
+                }
+                            else
+                            {
+                                if(confirm("Added successfully. Add another financial option?"))
+                            {
+                                document.getElementById("type_of_finance").value = "Select a financial option"
+                                document.getElementById("to_delete").replaceChildren()
+                            }
+                            else
+                            {
+                                window.location = "../index.html"
+                            }
+                            }
+                
+                        }
+                }
+                
+                
+                }
+                
+            })
+            document.getElementById("to_delete").appendChild(spacer)
+            document.getElementById("to_delete").appendChild(submit_btn)
+            
+        }
+    }
+</script>
+</html>

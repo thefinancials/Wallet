@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<head>
+    <title>Wallet</title>
+    <meta name="description" content="Wallet - The app designed and developed to keep track of your Cash, Bank, and Credit Card Transactions">
+    <meta name="keywords" content="wallet, finance, measurement, credit cards, cash, bank">
+    <meta name="author" content="Abhinav Satheesh">
+    <link rel="apple-touch-icon" href="Assets/apple-touch-icon-iphone-60x60.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="Assets/apple-touch-icon-ipad-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="Assets/apple-touch-icon-iphone-retina-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="Assets/apple-touch-icon-ipad-retina-152x152.png">
+    <link rel="icon" href="Assets/main-icon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+    .centre
+        {
+            text-align: center;
+        }
+        .center{
+            margin: auto;
+  width: 30%;
+align-items: center;  
+  padding: 10px;
+        }   
+    .rectangle {
+      width: 200px;
+      height: 100px;
+      border: 1px solid black;
+      
+      text-align: center;
+      display: inline-block;
+      line-height: 50px;
+      
+      font-weight: bold;
+      font-size: 20px;
+    }
+</style>
+<body>
+    <h1 class="centre">Wallet</h1>
+    <p class="centre" id="welcome_message"></p>
+    <div style="display: flex; justify-content: center;">
+        <div class="rectangle center" id="credit_card" onclick="window.location='Pages/CreditCard.html'">
+            <div>Credit Cards</div>
+            <div id="creditcard_no"></div>
+          </div>
+    </div>
+    <br>
+    <div style="display: flex; justify-content: center;">
+          <div class="rectangle center" id="bank_button" onclick="window.location='Pages/Bank.html'">
+            <div>Banks</div>
+            <div id="bankaccount_no"></div>
+          </div>
+    </div>
+    <br>
+    <div style="display: flex; justify-content: center;">
+        <div class="rectangle center" id="cash_button" onclick="window.location='Pages/Cash.html'">
+            <div>Cash</div>
+            <div id="cashbalance"></div>
+        </div>
+    </div>
+   
+    <br>
+    
+</body>
+<script>
+    if ("serviceWorker" in navigator) {
+        if (navigator.serviceWorker.controller) {
+            console.log("[PWA Builder] active service worker found, no need to register");
+        } else {
+            // Register the service worker
+            navigator.serviceWorker
+            .register("pwabuilder-sw.js", {
+                scope: "./"
+            })
+            .then(function (reg) {
+                console.log("[PWA Builder] Service worker has been registered for scope: " + reg.scope);
+            });
+        }
+        }
+    function initialise()
+    {
+        if(localStorage.getItem("CASH") == null)
+        {
+            document.getElementById("cashbalance").innerHTML = "Not set up"
+        }
+        else
+        {
+            data = JSON.parse(localStorage.getItem("CASH"))
+            document.getElementById("cashbalance").innerHTML = `Rs. ${data["CASH_BALANCE"]}`
+        }
+
+        if(localStorage.getItem("BANKS") == null)
+        {
+            document.getElementById("bankaccount_no").innerHTML = "Not set up"
+        }
+        else
+        {
+            data = JSON.parse(localStorage.getItem("BANKS"))
+            document.getElementById("bankaccount_no").innerHTML = `${data["NO_OF_BANKACCOUNTS"]} Account(s)`
+        }
+        if(localStorage.getItem("CREDIT CARDS") == null)
+        {
+            document.getElementById("creditcard_no").innerHTML = "Not set up"
+        }
+        else
+        {
+            data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+            document.getElementById("creditcard_no").innerHTML = `${data["NO_OF_CARDS"]} Credit Card(s)`
+        }
+        
+    }   
+    if(localStorage.getItem("setup")==null)
+    {
+        window.location="Pages/Signup.html"
+    }
+    else
+    {
+        document.getElementById("welcome_message").innerHTML=`Welcome, ${localStorage.getItem("NameUser")}`    
+        initialise()
+
+    }
+    
+</script>
+</html>

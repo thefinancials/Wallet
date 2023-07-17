@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<head>
+   <title>Bank</title>
+   <link rel="icon" href="../Assets/main-icon.png">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+   .centre
+   {
+   text-align: center;
+   }
+   .button {
+   padding: 15px 25px;
+   font-size: 20px;
+   text-align: center;
+   cursor: pointer;
+   outline: none;
+   color: #fff;
+   background-color: peru;
+   border: none;
+   border-radius: 15px;
+   box-shadow: 0 9px #999;
+   }
+   .button:hover {background-color: darkgoldenrod}
+   .button:active {
+   background-color: peru;
+   box-shadow: 0 5px #666;
+   transform: translateY(4px);
+   }
+   .content {
+   padding: 0 18px;
+   display: none;
+   overflow: hidden;
+   }
+   .center{
+   margin: auto;
+   width: 30%;
+   align-items: center;  
+   padding: 10px;
+   }   
+</style>
+<body>
+   <h2 class="centre">Wallet: Bank</h2>
+   <p class="centre" id="cur_balance" style="font-size: 20px;"></p>
+   <form class="centre">
+      <button class="button" onclick="money_in()">+ Money comes in</button>
+      <button class="button" onclick="money_out()">- Money goes out</button>
+      <button class="button" onclick="money_out('CASH')">- Withdraw from Bank to Cash</button>
+   </form>
+   <div id="details_div" class="margin: auto;
+      display: block;
+      ">
+      <h2 class="centre">Transactions</h2>
+      <table id="transactions_table" class="center" border="1">
+         <tr>
+            <th style="margin-left: 10px; margin-right:10px;">Date</th>
+            <th style="margin-left: 10px; margin-right:10px;">Particulars</th>
+            <th style="margin-left: 10px; margin-right:10px;">Bank</th>
+            <th style="margin-left: 10px; margin-right:10px;">Type</th>
+            
+            <th style="margin-left: 10px; margin-right:10px;">Amount</th>
+            <th style="margin-left: 10px; margin-right:10px;">Narration</th>
+         </tr>
+      </table>
+   </div>
+</body>
+<script>
+   function isStringInList(string, list) {
+       var lowercaseString = string.toLowerCase();
+       return list.map(item => item.toLowerCase()).includes(lowercaseString);
+       }
+
+   
+   function moneyadded_in()
+   {
+       event.preventDefault()
+       if(document.getElementById("date_transaction").value=="" || document.getElementById("particulars_transaction").value=="" || document.getElementById("amount_transaction").value=="" || document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text=="Select a bank account")
+       {
+           alert("Please enter all the details. The narration is optional")
+       }
+       else
+       {
+           data = JSON.parse(localStorage.getItem("BANKS"))
+           new_object = new Object()
+           new_object.Date = document.getElementById("date_transaction").value
+           new_object.Particulars = document.getElementById("particulars_transaction").value
+           if(localStorage.getItem("particulars_ai")==null)
+           {
+               array_part =[]
+               array_part.push(document.getElementById("particulars_transaction").value)
+               localStorage.setItem("particulars_ai", JSON.stringify(array_part))
+           }
+           else
+           {
+               array_part=JSON.parse(localStorage.getItem("particulars_ai"))
+               if(isStringInList(document.getElementById("particulars_transaction").value, array_part)==true)
+               {
+                   console.log("Exists in AI")
+               }
+               else
+               {
+                   console.log("Adding to AI")
+                   array_part.push(document.getElementById("particulars_transaction").value)
+                   localStorage.setItem("particulars_ai", JSON.stringify(array_part))
+               }
+           }
+           new_object.Type = "Cr"
+           new_object.Amount = document.getElementById("amount_transaction").value
+           bankkk = document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text
+           new_object.BankAccount = bankkk
+           bankname = bankkk.split(" - ")[0]
+           new_object.Narration = document.getElementById("narration").value
+           data["TRANSACTIONS"].push(new_object)
+           data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+           cash_balance = parseFloat(bankkk.split("₹")[1])
+           cash_balance+=parseFloat(document.getElementById("amount_transaction").value)
+           data[bankname]=cash_balance
+           localStorage.setItem("BANKS", JSON.stringify(data))
+           alert("Added!")
+           window.location.reload();
+       }
+   }
+   function money_in()
+   {
+       event.preventDefault()
+       document.getElementById("details_div").innerHTML=""
+       document.getElementById("details_div").innerHTML+='\
+       <h2 class="centre">+ Money comes in</h2>\
+       <form><label>Enter the date of the transaction</form><input id="date_transaction" class="margin: auto; display: block;" type="date" placeholder="Enter the date of the transaction"></form>\
+       <br><input id="particulars_transaction" class="margin: auto; display: block;" type="text" placeholder="Who paid you money?">\
+       <br><ul id="list"></ul>\
+       <br><input id="amount_transaction" class="margin: auto; display: block;" type="number" placeholder="Enter the amount">\
+       <br><select id="bank_select" class="margin: auto; display: block;"><option>Select a bank account</option></select>\
+       <br><input id="narration" class="margin: auto; display: block;" type="text" placeholder="Enter narration"></p>\
+       <br><button onclick="moneyadded_in()">Add transaction</button>'
+       data = JSON.parse(localStorage.getItem("BANKS"))
+        
+        for (keey in data)
+        {
+            if(keey == "NO_OF_BANKACCOUNTS"|| keey=="TRANSACTIONS")
+            {
+
+            }
+            else
+            {
+                var newElement = document.createElement("option")
+                newElement.innerHTML = `${keey} - ₹${data[keey]}`
+                document.getElementById("bank_select").add(newElement)
+            }
+            
+        }
+       if (localStorage.getItem("particulars_ai")==null)
+       {
+   
+       }
+       else
+       {
+            
+            var listItems = JSON.parse(localStorage.getItem("particulars_ai"))
+            var listElement = document.getElementById('list');
+            var searchInput = document.getElementById('particulars_transaction');
+            
+            function filterList() {
+                var searchValue = searchInput.value.toLowerCase();
+                var filteredList = listItems.filter(function(item) {
+                return item.toLowerCase().includes(searchValue);
+                });
+                renderList(filteredList);
+            }
+   
+            // Function to render the list
+            function addText(text)
+            {
+                document.getElementById("particulars_transaction").value = text
+            }
+            // Function to render the list
+            function renderList(items) {
+                listElement.innerHTML = '';
+                items.forEach(function(item) {
+                var li = document.createElement('li');
+                
+                li.textContent = item;
+                li.addEventListener("click", function(){addText(li.textContent)})
+                listElement.appendChild(li);
+                });
+            }
+   
+            searchInput.addEventListener('input', filterList);
+            
+            // Initial list rendering
+            renderList(listItems);
+                }
+       
+    }
+   function moneyadded_out()
+   {
+       event.preventDefault()
+       if(document.getElementById("date_transaction").value=="" || document.getElementById("particulars_transaction").value=="" || document.getElementById("amount_transaction").value=="" || document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text=="Select a bank account")
+       {
+           alert("Please enter all the details. The narration is optional")
+       }
+       else
+       {
+        if(document.getElementById("particulars_transaction").value=='CASH' && localStorage.getItem("CASH")==null)
+        {
+            alert("Cash account has not been added. Please set up cash account first")   
+            window.location.href="Signup.html"
+        }
+        else
+        {
+            data = JSON.parse(localStorage.getItem("BANKS"))
+           new_object = new Object()
+           new_object.Date = document.getElementById("date_transaction").value
+           if(document.getElementById("particulars_transaction").value="CASH")
+           {
+            document.getElementById("particulars_transaction").value="Cash withdrawn from Bank"
+           }
+           new_object.Particulars = document.getElementById("particulars_transaction").value
+          
+           if(localStorage.getItem("particulars_ai")==null)
+           {
+               array_part =[]
+               array_part.push(document.getElementById("particulars_transaction").value)
+               localStorage.setItem("particulars_ai", JSON.stringify(array_part))
+           }
+           else
+           {
+               array_part=JSON.parse(localStorage.getItem("particulars_ai"))
+               if(document.getElementById("particulars_transaction").value=='Cash withdrawn from Bank')
+               {
+                
+               }
+               else
+               {
+                if(isStringInList(document.getElementById("particulars_transaction").value, array_part)==true)
+               {
+                   console.log("Exists in AI")
+               }
+               else
+               {
+                   console.log("Adding to AI")
+                   array_part.push(document.getElementById("particulars_transaction").value)
+                   localStorage.setItem("particulars_ai", JSON.stringify(array_part))
+               }
+               }
+           }
+           
+           
+           new_object.Type = "Dr"
+           new_object.Amount = document.getElementById("amount_transaction").value
+           bankkk = document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text
+           new_object.BankAccount = bankkk
+           bankname = bankkk.split(" - ")[0]
+           new_object.Narration = document.getElementById("narration").value
+           data["TRANSACTIONS"].push(new_object)
+           data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+           bankbalance = parseFloat(bankkk.split("₹")[1])
+           if (bankbalance<parseFloat(document.getElementById("amount_transaction").value))
+           {
+            alert("Insufficient balance")
+           }
+           else
+           {
+            bankbalance-=parseFloat(document.getElementById("amount_transaction").value)
+           data[bankname]=bankbalance
+           localStorage.setItem("BANKS", JSON.stringify(data))
+           if(document.getElementById("particulars_transaction").value=='Cash withdrawn from Bank')
+           {
+            cashdata = JSON.parse(localStorage.getItem("CASH"))
+           new_cashobject = new Object()
+           new_cashobject.Date = document.getElementById("date_transaction").value
+           new_cashobject.Particulars = "Cash withdrawn from Bank"
+
+           new_cashobject.Type = "Cr"
+           new_cashobject.Amount = document.getElementById("amount_transaction").value
+           new_cashobject.Narration = document.getElementById("narration").value
+           cashdata["TRANSACTIONS"].push(new_cashobject)
+           cashdata["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+           cash_balance = parseFloat(cashdata["CASH_BALANCE"])
+           cash_balance+=parseFloat(document.getElementById("amount_transaction").value)
+           cashdata["CASH_BALANCE"]=cash_balance
+           localStorage.setItem("CASH", JSON.stringify(cashdata))
+           }
+           alert("Added!")
+           window.location.reload();
+           }
+        }
+       }
+   }
+   function money_out(account)
+   {
+       event.preventDefault()
+       document.getElementById("details_div").innerHTML=""
+       if(account=="")
+       {
+        document.getElementById("details_div").innerHTML+='\
+       <h2 class="centre">- Money goes out</h2>\
+       <form><label>Enter the date of the transaction</form><input id="date_transaction" class="margin: auto; display: block;" type="date" placeholder="Enter the date of the transaction"></form>\
+       <br><input id="particulars_transaction" class="margin: auto; display: block;" type="text" placeholder="Whom did you pay money?">\
+       <br><ul id="list"></ul>\
+       <br><input id="amount_transaction" class="margin: auto; display: block;" type="number" placeholder="Enter the amount">\
+       <br><select id="bank_select" class="margin: auto; display: block;"><option>Select a bank account</option></select>\
+       <br><input id="narration" class="margin: auto; display: block;" type="text" placeholder="Enter narration"></p>\
+       <br><button onclick="moneyadded_out()">Add transaction</button>'
+       }
+       else
+       {
+        document.getElementById("details_div").innerHTML+=`\
+       <h2 class="centre">- Money goes out</h2>\
+       <form><label>Enter the date of the transaction</form><input id="date_transaction" class="margin: auto; display: block;" type="date" placeholder="Enter the date of the transaction"></form>\
+       <br><input id="particulars_transaction" class="margin: auto; display: block;" type="text" value="${account}">\
+       <br><ul id="list"></ul>\
+       <br><input id="amount_transaction" class="margin: auto; display: block;" type="number" placeholder="Enter the amount">\
+       <br><select id="bank_select" class="margin: auto; display: block;"><option>Select a bank account</option></select>\
+       <br><input id="narration" class="margin: auto; display: block;" type="text" placeholder="Enter narration"></p>\
+       <br><button onclick="moneyadded_out()">Add transaction</button>`
+       }
+
+       data = JSON.parse(localStorage.getItem("BANKS"))
+        
+        for (keey in data)
+        {
+            if(keey == "NO_OF_BANKACCOUNTS"|| keey=="TRANSACTIONS")
+            {
+
+            }
+            else
+            {
+                var newElement = document.createElement("option")
+                newElement.innerHTML = `${keey} - ₹${data[keey]}`
+                document.getElementById("bank_select").add(newElement)
+            }
+            
+        }
+       if (localStorage.getItem("particulars_ai")==null)
+       {
+   
+       }
+       else
+       {
+           var listItems = JSON.parse(localStorage.getItem("particulars_ai"))
+   var listElement = document.getElementById('list');
+   var searchInput = document.getElementById('particulars_transaction');
+   
+   // Function to filter the list based on search input
+   function filterList() {
+     var searchValue = searchInput.value.toLowerCase();
+     var filteredList = listItems.filter(function(item) {
+       return item.toLowerCase().includes(searchValue);
+     });
+     renderList(filteredList);
+   }
+   function addText(text)
+   {
+       document.getElementById("particulars_transaction").value = text
+   }
+   // Function to render the list
+   function renderList(items) {
+     listElement.innerHTML = '';
+     items.forEach(function(item) {
+       var li = document.createElement('li');
+       
+       li.textContent = item;
+       li.addEventListener("click", function(){addText(li.textContent)})
+       listElement.appendChild(li);
+     });
+   }
+   
+   // Event listener for search input
+   searchInput.addEventListener('input', filterList);
+   
+   // Initial list rendering
+   renderList(listItems);
+       }
+   }
+   
+   if(localStorage.getItem("BANKS")==null)
+   {
+       alert("You have not setup a bank account. Please add atleast 1 bank account")
+       window.location.href="Signup.html"
+   }
+   else
+   {
+       data = JSON.parse(localStorage.getItem("BANKS"))
+       for (var key in data)
+       {
+        if(key=="NO_OF_BANKACCOUNTS"||key=="TRANSACTIONS")
+        {
+
+        }
+        else
+        {
+            document.getElementById("cur_balance").innerHTML+=`${key} - ₹${data[key]}<br>`
+        }
+       }
+       
+       if(data["TRANSACTIONS"].length==0)
+       {
+           document.getElementById("transactions_table").style.visibility="hidden"
+           var no_trx = document.createElement("h2")
+           no_trx.innerHTML="No transactions found"
+           no_trx.style.cssText = 'text-align:center;';
+           document.getElementById("details_div").appendChild(no_trx)
+       }
+       else
+       {
+           data = JSON.parse(localStorage.getItem("BANKS"))
+           trx = data["TRANSACTIONS"]
+           trx.forEach(add)
+       }
+   }
+   function add(item)
+   {
+       var newRow = document.createElement("tr")
+       var newDate = document.createElement("td")
+       date = `${item["Date"].split("-")[2]}-${item["Date"].split("-")[1]}-${item["Date"].split("-")[0]}`
+       newDate.innerHTML=date
+       var newParticulars = document.createElement("td")
+       newParticulars.innerHTML=item["Particulars"]
+       var newBank = document.createElement("td")
+       newBank.innerHTML=(item["BankAccount"]).split(" - ")[0]
+       var newType = document.createElement("td")
+       newType.innerHTML=item["Type"]
+       var newAmount = document.createElement("td")
+       newAmount.innerHTML=item["Amount"]
+       var newNarration = document.createElement("td")
+       newNarration.innerHTML=item["Narration"]
+       newRow.appendChild(newDate)
+       newRow.appendChild(newParticulars)
+       newRow.appendChild(newBank)
+       newRow.appendChild(newType)
+       newRow.appendChild(newAmount)
+       newRow.appendChild(newNarration)
+       document.getElementById("transactions_table").appendChild(newRow)
+   }
+
+</script>
+</body>
+</html>
