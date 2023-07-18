@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-   <title>Bank</title>
+   <title>Credit Card</title>
    <link rel="icon" href="../Assets/main-icon.png">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -44,6 +44,7 @@
    <p class="centre" id="cur_balance" style="font-size: 20px;"></p>
    <form class="centre">
       <button class="button" onclick="money_in()">Bill Payment of a card</button>
+      <br><br>
       <button class="button" onclick="money_out()">Transaction using a card</button>
    </form>
    <div id="details_div" class="margin: auto;
@@ -60,8 +61,8 @@
             <th style="margin-left: 10px; margin-right:10px;">Paid using Account</th>
             <th style="margin-left: 10px; margin-right:10px;">Narration</th>
          </tr>
-        
       </table>
+      
    </div>
 </body>
 <script>    
@@ -431,22 +432,7 @@
    }
    else
    {
-       data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
-       let sortedData = Object.entries(data)
-  .filter(([key]) => key !== "NO_OF_CARDS" && key !== "TRANSACTIONS")
-  .sort((a, b) => {
-    const dueDateA = a[1]["DueDate"];
-    const dueDateB = b[1]["DueDate"];
-    return parseInt(dueDateA) - parseInt(dueDateB);
-  });
-
-
-  for (let [key, value] of sortedData) {
-  document.getElementById("cur_balance").innerHTML+=`${key} - Balance Outstanding => ${value["BalanceOutstanding"]} - Due on ${value["DueDate"]}`
-}
-
-
-       
+           
        if(data["TRANSACTIONS"].length==0)
        {
            document.getElementById("transactions_table").style.visibility="hidden"
@@ -454,6 +440,7 @@
            no_trx.innerHTML="No transactions found"
            no_trx.style.cssText = 'text-align:center;';
            document.getElementById("details_div").appendChild(no_trx)
+           
        }
        else
        {
@@ -503,10 +490,58 @@
        newRow.appendChild(newAmount)
        newRow.appendChild(newAccount)
        newRow.appendChild(newNarration)
-       document.getElementById("transactions_table").appendChild(newRow)
-       
+       document.getElementById("transactions_table").appendChild(newRow)   
    }
+   var recommend = document.createElement("h2")
+    recommend.innerHTML="Recommended card to use:"
+    recommend.style.cssText = 'text-align:center;';
+    document.getElementById("details_div").appendChild(recommend)
+    var card_to_use = document.createElement("p")
+    card_to_use.style.cssText="text-align:center;";
+    card_to_use.id="card_to_use"
+    document.getElementById("details_div").appendChild(card_to_use)
+   
 
+    data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+    const cardDetails = Object.entries(data)
+    .filter(([key]) => key !== "NO_OF_CARDS" && key !== "TRANSACTIONS")
+    .map(([card, details]) => ({
+        card,
+        dueDate: new Date(details.DueDate.split("-").reverse().join("-")),
+        balance: details.BalanceOutstanding
+    }));
+    // another = cardDetails
+
+    cardDetails.sort((a, b) => a.dueDate - b.dueDate);
+       function determineCard(item, dda)
+       {
+        const today = new Date();
+        dda.setMonth(today.getMonth());
+        if(today>=dda)
+        {
+            document.getElementById("card_to_use").innerHTML+=`Statement for ${item} has been generated, and thus can be used<br><br>`
+        }
+        else
+        {
+
+            document.getElementById("card_to_use").innerHTML+=`Statement for ${item} has not been generated, and we recommend you not to use it until ${dda.toLocaleDateString("en-IN")}. If you use ${item} now, you will have to pay the amount on the bill generating on ${dda.toLocaleDateString("en-IN")}<br><br>`
+        }
+    }
+
+
+cardDetails.forEach(({ card, dueDate }) => {
+const formattedDate = dueDate.toLocaleDateString("en-IN");
+document.getElementById("cur_balance").innerHTML+=`${card}: ${formattedDate}<br>`
+
+});
+another = cardDetails
+
+another.sort((a, b) => new Date(b.dueDate) - new Date(a.dueDate));
+another.forEach(({card, dueDate})=>{
+    determineCard(card, dueDate)
+})
 </script>
 </body>
+
+
 </html>

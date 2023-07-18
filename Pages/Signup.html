@@ -130,6 +130,12 @@
                     objeee.TRANSACTIONS = []
                     oobb = new Object()
                     oobb.DueDate = `${(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)}-${new Date().getMonth()+1}-${new Date().getFullYear()}`
+                    tempDate = new Date(`-${new Date().getFullYear()}-${new Date().getMonth()+1}-${(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)}`)
+                    todayDate = new Date()
+                    if (todayDate>=tempDate)
+                    {
+                        oobb.DueDate = `${(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)}-${new Date().getMonth()+2}-${new Date().getFullYear()}`
+                    }
                     oobb.BalanceOutstanding = 0
                     objeee[strrr] = oobb
                     towrite = JSON.stringify(objeee)
@@ -147,8 +153,13 @@
                     {
                         data["NO_OF_CARDS"]+=1
                         oobb = new Object()
-                        oobb.DueDate = oobb.DueDate = document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text
-                        oobb.BalanceOutstanding = 0
+                        oobb.DueDate = `${(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)}-${new Date().getMonth()+1}-${new Date().getFullYear()}`
+                        tempDate = new Date(`-${new Date().getFullYear()}-${new Date().getMonth()+1}-${(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)}`)
+                        todayDate = new Date()
+                        if (todayDate>=tempDate)
+                        {
+                            oobb.DueDate = `${(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)}-${new Date().getMonth()+2}-${new Date().getFullYear()}`
+                        }                        oobb.BalanceOutstanding = 0
                         data[`${creditcard_entry.value} (${nickname_entry.value})`] = oobb
                         towrite = JSON.stringify(data)
                         localStorage.setItem("CREDIT CARDS", towrite)
