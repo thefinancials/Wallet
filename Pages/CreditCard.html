@@ -3,6 +3,7 @@
    <title>Credit Card</title>
    <link rel="icon" href="../Assets/main-icon.png">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 </head>
 <style>
    .centre
@@ -524,13 +525,13 @@
         else
         {
 
-            document.getElementById("card_to_use").innerHTML+=`Statement for ${item} has not been generated, and we recommend you not to use it until ${dda.toLocaleDateString("en-IN")}. If you use ${item} now, you will have to pay the amount on the bill generating on ${dda.toLocaleDateString("en-IN")}<br><br>`
+            document.getElementById("card_to_use").innerHTML+=`Statement for ${item} has not been generated, and we recommend you not to use it until ${dda.getDate()}-${dda.getMonth()+1}-${dda.getFullYear()}. If you use ${item} now, you will have to pay the amount on the bill generating on ${dda.getDate()}-${dda.getMonth()+1}-${dda.getFullYear()}<br><br>`
         }
     }
 
 
 cardDetails.forEach(({ card, dueDate }) => {
-const formattedDate = dueDate.toLocaleDateString("en-IN");
+const formattedDate = `${dueDate.getDate()}-${dueDate.getMonth()+1}-${dueDate.getFullYear()}`
 document.getElementById("cur_balance").innerHTML+=`${card}: ${formattedDate}<br>`
 
 });
