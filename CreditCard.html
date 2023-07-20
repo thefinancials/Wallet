@@ -450,20 +450,13 @@
            trx.forEach(add)
        }
    }
-   function formatDate(dateString) {
-    console.log(moment(dateString, "DD-MM-YYYY").format("DD-MM-YYYY"))
-  return moment(dateString, "DD-MM-YYYY").format("DD-MM-YYYY");
-}
-
-
-
    function add(item)
    {
        var newRow = document.createElement("tr")
        var newDate = document.createElement("td")
        try{
-        var formattedDate = formatDate(item["Date"]);
-        newDate.innerHTML = formattedDate;
+        date = `${item["Date"].split("-")[2]}-${item["Date"].split("-")[1]}-${item["Date"].split("-")[0]}`
+        newDate.innerHTML=date
        }
        catch
        {
@@ -532,13 +525,13 @@
         else
         {
 
-            document.getElementById("card_to_use").innerHTML+=`Statement for ${item} has not been generated, and we recommend you not to use it until ${dda}. If you use ${item} now, you will have to pay the amount on the bill generating on ${dda}<br><br>`
+            document.getElementById("card_to_use").innerHTML+=`Statement for ${item} has not been generated, and we recommend you not to use it until ${dda.getDate()}-${dda.getMonth()+1}-${dda.getFullYear()}. If you use ${item} now, you will have to pay the amount on the bill generating on ${dda.getDate()}-${dda.getMonth()+1}-${dda.getFullYear()}<br><br>`
         }
     }
 
 
 cardDetails.forEach(({ card, dueDate }) => {
-const formattedDate = (dueDate)
+const formattedDate = `${dueDate.getDate()}-${dueDate.getMonth()+1}-${dueDate.getFullYear()}`
 document.getElementById("cur_balance").innerHTML+=`${card}: ${formattedDate}<br>`
 
 });
