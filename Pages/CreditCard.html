@@ -450,12 +450,18 @@
            trx.forEach(add)
        }
    }
+   function parseDate(dateString) {
+  var parts = dateString.split("-");
+  return new Date(parts[2], parts[1] - 1, parts[0]);
+}
+
    function add(item)
    {
        var newRow = document.createElement("tr")
        var newDate = document.createElement("td")
        try{
-        date = `${item["Date"].split("-")[2]}-${item["Date"].split("-")[1]}-${item["Date"].split("-")[0]}`
+        date = parseDate(item["Date"])
+        const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
         newDate.innerHTML=date
        }
        catch
