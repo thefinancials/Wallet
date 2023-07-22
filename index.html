@@ -79,6 +79,7 @@ align-items: center;
     {
         document.getElementById("welcome_message").innerHTML=`Welcome, <span style="text-decoration: underline;" >${localStorage.getItem("NameUser")}</span>`
         document.getElementById("welcome_message").addEventListener("click", function(){window.location.href="Pages/Signup.html"})
+        initialise()
     }
     function initialise()
     {
