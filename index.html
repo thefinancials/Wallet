@@ -38,10 +38,14 @@ align-items: center;
       font-weight: bold;
       font-size: 20px;
     }
+    .required::after {
+  color: red;
+
+}
 </style>
 <body>
     <h1 class="centre">Wallet</h1>
-    <p class="centre" id="welcome_message"></p>
+    <p class="centre required" id="welcome_message"></p>
     <div style="display: flex; justify-content: center;">
         <div class="rectangle center" id="credit_card" onclick="window.location='Pages/CreditCard.html'">
             <div>Credit Cards</div>
@@ -73,9 +77,8 @@ align-items: center;
     }
     else
     {
-        document.getElementById("welcome_message").innerHTML=`Welcome, ${localStorage.getItem("NameUser")}`    
-        initialise()
-
+        document.getElementById("welcome_message").innerHTML=`Welcome, <span style="text-decoration: underline;" >${localStorage.getItem("NameUser")}</span>`
+        document.getElementById("welcome_message").addEventListener("click", function(){window.location.href="Pages/Signup.html"})
     }
     function initialise()
     {
