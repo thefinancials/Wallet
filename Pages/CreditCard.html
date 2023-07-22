@@ -508,11 +508,11 @@
     .filter(([key]) => key !== "NO_OF_CARDS" && key !== "TRANSACTIONS")
     .map(([card, details]) => ({
         card,
-        dueDate: new Date(details.DueDate.split("-").reverse().join("-")),
+        dueDate: new Date(details.DueDate),
         balance: details.BalanceOutstanding
     }));
     // another = cardDetails
-
+    console.log(cardDetails)
     cardDetails.sort((a, b) => a.dueDate - b.dueDate);
        function determineCard(item, dda)
        {
