@@ -162,6 +162,7 @@
                     todayDate = new Date()
                     tempDate = new Date()
                     tempDate.setDate(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)
+                    tempDate.setHours(0,0,0)
                     if (todayDate>=tempDate)
                     {
                         tempDate.setMonth(tempDate.getMonth()+1)
@@ -192,6 +193,7 @@
                         todayDate = new Date()
                         tempDate = new Date()   
                         tempDate.setDate(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)
+                        tempDate.setHours(0,0,0)
                         if (todayDate>=tempDate)
                         {
                             tempDate.setMonth(tempDate.getMonth()+1)
