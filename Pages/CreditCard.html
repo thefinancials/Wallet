@@ -77,51 +77,39 @@
         else
         {
             currentDate = data[keeey]["DueDate"]
-            oridate = currentDate
             curre = new Date();
             cccc = new Date(currentDate);
-            if(curre>cccc)
+            if(curre>=cccc)
             {
-                if(currentMonth=currentDate.split("-")[1]=="12")
+                cccc.setMonth(cccc.getMonth()+1)
+                if(cccc.getMonth()==0)
                 {
-                    currentMonth="1"
-                    currentYear = (parseInt(currentDate.split("-")[2])+1).toString()
+                    cccc.setFullYear(cccc.getFullYear()+1)
                 }
-                else
-                {
-                    currentMonth=(parseInt(currentDate.split("-")[1])+1).toString()
-                    currentYear=currentDate.split("-")[2]
-                }
-                currentDate=`${currentDate.split("-")[0]}-${currentMonth}-${currentYear}`
-                console.log(currentDate)
-                data[keeey]["DueDate"]=currentDate
-                alert(`Statement for ${keeey} generated. Amount to be paid is ${data[keeey]["BalanceOutstanding"]}`)
-                const filteredTransactions = data["TRANSACTIONS"].filter(transaction => {
-  return transaction.Particulars === "Statement generated" && transaction.Date === oridate;
-        });
-        if (filteredTransactions.length > 0) {
-        
-        } else {
-            new_object = new Object()
-            tobewritten = `${oridate.split("-")[2]}-${oridate.split("-")[1]}-${oridate.split("-")[0]}`
-            new_object.Date = tobewritten
-            new_object.Particulars = "Statement generated"
-            new_object.CreditCard = keeey
-            new_object.Amount = data[keeey]["BalanceOutstanding"]
-            new_object.Type=""
-            new_object.Narration=""
-            data["TRANSACTIONS"].push(new_object)
-            localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
-        }
-
-                if(parseInt(data[keeey]["BalanceOutstanding"])<=0)
-                {
-                    alert("You don't have to pay anything for the above card")
-                }
+                trrr = data["TRANSACTIONS"]
+                trrr.forEach(element => {
+                    if(element["Date"]==currentDate&&element["Particulars"]=="Statement generated"&&element["CreditCard"]==keeey)
+                    {
+                        console.log("Statement generated")
+                    }
+                    else
+                    {
+                        new_object = new Object()
+                        tobewritten = cccc.toString()
+                        new_object.Date = tobewritten
+                        new_object.Particulars = "Statement generated"
+                        new_object.CreditCard = keeey
+                        new_object.Amount = data[keeey]["BalanceOutstanding"]
+                        new_object.Type=""
+                        new_object.Narration=""
+                        data["TRANSACTIONS"].push(new_object)
+                        localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
+                        alert(`Statement generated for ${keeey}. Amount to be paid is ₹${parseInt(data[keeey]["BalanceOutstanding"])}`)
+                    }
+                })
             }
         }
     }
-    
     selected = ""
    function isStringInList(string, list) {
        var lowercaseString = string.toLowerCase();
@@ -382,6 +370,7 @@
                 var newElement = document.createElement("option")
                 newElement.innerHTML = keey
                 document.getElementById("bank_select").add(newElement)
+                console.log("DONE")
             }
             
         }
@@ -501,18 +490,15 @@
     card_to_use.style.cssText="text-align:center;";
     card_to_use.id="card_to_use"
     document.getElementById("details_div").appendChild(card_to_use)
-   
-
     data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
     const cardDetails = Object.entries(data)
     .filter(([key]) => key !== "NO_OF_CARDS" && key !== "TRANSACTIONS")
     .map(([card, details]) => ({
         card,
-        dueDate: new Date(details.DueDate.split("-").reverse().join("-")),
+        dueDate: new Date(details.DueDate),
         balance: details.BalanceOutstanding
     }));
     // another = cardDetails
-    console.log(cardDetails)
     cardDetails.sort((a, b) => a.dueDate - b.dueDate);
        function determineCard(item, dda)
        {
@@ -524,7 +510,6 @@
         }
         else
         {
-            console.log(dda.getDate())
             document.getElementById("card_to_use").innerHTML+=`Statement for ${item} has not been generated, and we recommend you not to use it until ${dda.getDate()}-${dda.getMonth()+1}-${dda.getFullYear()}. If you use ${item} now, you will have to pay the amount on the bill generating on ${dda.getDate()}-${dda.getMonth()+1}-${dda.getFullYear()}<br><br>`
         }
     }

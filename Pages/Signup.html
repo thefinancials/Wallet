@@ -28,10 +28,12 @@
         <br>
         <br>
         <button onclick="submitName()">Submit</button>
+
         <br>
         <!-- <label for="password_user">Enter a strong password</label>
             <input id="password_user" type="password"> -->
         <!-- <br> -->
+
         <h2 style="visibility: hidden;" id="add_details_1">Add your details</h2>
         <select style="visibility: hidden;" id="type_of_finance" onchange="change_option()">
             <option>Select a financial option</option>
@@ -41,8 +43,36 @@
         </select>
     </form>
     <div class="centre" id="to_delete"></div>
+    <br><br>
+    <button onclick="del_data()" id="delButton">Delete data and logout</button>
 </body>
 <script>
+   
+    if(localStorage.getItem("NameUser")==null)
+    {
+        document.getElementById("delButton").style.visibility="hidden"
+    }
+    function del_data()
+    {
+
+    
+        if(confirm("Are you sure you wish to delete all the data stored on the device? Doing so, will log you out!"))
+        {
+            try
+            {
+                localStorage.removeItem("NameUser")
+                localStorage.removeItem("CASH")
+                localStorage.removeItem("CREDIT CARDS")
+                localStorage.removeItem("setup")
+                localStorage.removeItem("particulars_ai")
+                window.location.reload()
+            }
+        catch
+        {
+
+        }
+        }
+    }
    
     if(localStorage.getItem("NameUser")!=null)
     {
@@ -129,13 +159,18 @@
                     strrr = `${creditcard_entry.value} (${nickname_entry.value})`
                     objeee.TRANSACTIONS = []
                     oobb = new Object()
-                    oobb.DueDate = `${new Date().getFullYear()}-${new Date().getMonth()+1}-${(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)}-`
-                    tempDate = new Date(`-${new Date().getFullYear()}-${new Date().getMonth()+1}-${(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)}`)
                     todayDate = new Date()
+                    tempDate = new Date()
+                    tempDate.setDate(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)
                     if (todayDate>=tempDate)
                     {
-                        oobb.DueDate = `${new Date().getFullYear()}-${new Date().getMonth()+2}-${(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)}-`
-                    }
+                        tempDate.setMonth(tempDate.getMonth()+1)
+                        oobb.DueDate = tempDate.toString()
+                    }            
+                    else
+                    {
+                        oobb.DueDate = tempDate.toString()
+                    }   
                     oobb.BalanceOutstanding = 0
                     objeee[strrr] = oobb
                     towrite = JSON.stringify(objeee)
@@ -153,17 +188,24 @@
                     {
                         data["NO_OF_CARDS"]+=1
                         oobb = new Object()
-                        oobb.DueDate = `${new Date().getFullYear()}-${new Date().getMonth()+1}-${(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)}-`
-                    tempDate = new Date(`-${new Date().getFullYear()}-${new Date().getMonth()+1}-${(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)}`)
-                    todayDate = new Date()
-                    if (todayDate>=tempDate)
-                    {
-                        oobb.DueDate = `${new Date().getFullYear()}-${new Date().getMonth()+2}-${(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)}-`
-                    }                   oobb.BalanceOutstanding = 0
+
+                        todayDate = new Date()
+                        tempDate = new Date()   
+                        tempDate.setDate(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)
+                        if (todayDate>=tempDate)
+                        {
+                            tempDate.setMonth(tempDate.getMonth()+1)
+                            oobb.DueDate = tempDate.toString()
+                        }             
+                        else
+                        {
+                            oobb.DueDate = tempDate.toString()
+                        }         
+                        oobb.BalanceOutstanding = 0
                         data[`${creditcard_entry.value} (${nickname_entry.value})`] = oobb
                         towrite = JSON.stringify(data)
                         localStorage.setItem("CREDIT CARDS", towrite)
-                    }
+                        }
     
     
                 }
