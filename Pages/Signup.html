@@ -46,6 +46,28 @@
     <br><br>
     <button onclick="del_data()" id="delButton">Delete data and logout</button>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+<script>
+    function addDarkmodeWidget() {
+      const options = {
+    bottom: '32px', // default: '32px'
+    right: '32px', // default: '32px'
+    left: 'unset', // default: 'unset'
+    time: '0.5s', // default: '0.3s'
+    mixColor: '#fff', // default: '#fff'
+    backgroundColor: '#fff',  // default: '#fff'
+    buttonColorDark: '#100f2c',  // default: '#100f2c'
+    buttonColorLight: '#fff', // default: '#fff'
+    saveInCookies: true, // default: true,
+    label: '🌓', // default: ''
+    autoMatchOsTheme: true // default: true
+  }
+  
+  const darkmode = new Darkmode(options);
+  darkmode.showWidget();
+    }
+    window.addEventListener('load', addDarkmodeWidget);
+  </script>
 <script>
    
     if(localStorage.getItem("NameUser")==null)
@@ -189,7 +211,6 @@
                     {
                         data["NO_OF_CARDS"]+=1
                         oobb = new Object()
-
                         todayDate = new Date()
                         tempDate = new Date()   
                         tempDate.setDate(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)
@@ -402,7 +423,6 @@
                             data["NO_OF_BANKACCOUNTS"]+=1
                             data[`${creditcard_entry.value} (${nickname_entry.value})`] = parseFloat(balance_entry.value)
                             towrite = JSON.stringify(data)
-                            console.log(towrite)
                             localStorage.setItem("BANKS", towrite)
                             
                             localStorage.setItem("setup", "DONE")
