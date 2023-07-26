@@ -531,18 +531,18 @@ function isStatementGeneratedForMonth(transactions, month, year) {
     cardDetails.sort((a, b) => a.dueDate - b.dueDate);
        function determineCard(item, dda)
        {
-        const today = new Date()
-       console.log(today)
-        dda.setMonth(today.getMonth());
-          console.log(dda)
-        if(today>=dda)
-        {
-            document.getElementById("card_to_use").innerHTML+=`Statement for ${item} has been generated, and thus can be used<br><br>`
-        }
-        else
-        {
-            document.getElementById("card_to_use").innerHTML+=`Statement for ${item} has not been generated, and we recommend you not to use it until ${dda.getDate()}-${dda.getMonth()+1}-${dda.getFullYear()}. If you use ${item} now, you will have to pay the amount on the bill generating on ${dda.getDate()}-${dda.getMonth()+1}-${dda.getFullYear()}<br><br>`
-        }
+        function determineCard(item, dda) {
+  const today = new Date();
+
+  // Check if today's date is greater than or equal to the due date of the current month
+  // or the due date of the next month.
+  if (today >= dda || today >= new Date(dda.getFullYear(), dda.getMonth() + 1, dda.getDate())) {
+    document.getElementById("card_to_use").innerHTML += `Statement for ${item} has been generated, and thus can be used<br><br>`;
+  } else {
+    document.getElementById("card_to_use").innerHTML += `Statement for ${item} has not been generated, and we recommend you not to use it until ${dda.getDate()}-${dda.getMonth() + 1}-${dda.getFullYear()}. If you use ${item} now, you will have to pay the amount on the bill generating on ${dda.getDate()}-${dda.getMonth() + 1}-${dda.getFullYear()}<br><br>`;
+  }
+}
+
     }
 
 
