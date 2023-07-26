@@ -531,7 +531,7 @@ function isStatementGeneratedForMonth(transactions, month, year) {
     cardDetails.sort((a, b) => a.dueDate - b.dueDate);
        function determineCard(item, dda)
        {
-        const today = new Date();
+        const today = new Date("2023-08-05");
         dda.setMonth(today.getMonth());
         if(today>=dda)
         {
