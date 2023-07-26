@@ -529,8 +529,7 @@ function isStatementGeneratedForMonth(transactions, month, year) {
     }));
     // another = cardDetails
     cardDetails.sort((a, b) => a.dueDate - b.dueDate);
-       function determineCard(item, dda)
-       {
+   
         function determineCard(item, dda) {
   const today = new Date();
 
@@ -543,7 +542,7 @@ function isStatementGeneratedForMonth(transactions, month, year) {
   }
 }
 
-    }
+    
 
 
 cardDetails.forEach(({ card, dueDate }) => {
