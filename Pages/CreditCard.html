@@ -39,6 +39,20 @@
    align-items: center;  
    padding: 10px;
    }   
+   .card {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        width: 40%;
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
+
+    .container {
+        padding: 2px 16px;
+    }
+
 </style>
 <body>
    <h2 class="centre">Wallet: Credit Cards</h2>
@@ -511,14 +525,7 @@ function isStatementGeneratedForMonth(transactions, month, year) {
        newRow.appendChild(newNarration)
        document.getElementById("transactions_table").appendChild(newRow)   
    }
-   var recommend = document.createElement("h2")
-    recommend.innerHTML="Recommended card to use:"
-    recommend.style.cssText = 'text-align:center;';
-    document.getElementById("details_div").appendChild(recommend)
-    var card_to_use = document.createElement("p")
-    card_to_use.style.cssText="text-align:center;";
-    card_to_use.id="card_to_use"
-    document.getElementById("details_div").appendChild(card_to_use)
+   
     data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
     const cardDetails = Object.entries(data)
     .filter(([key]) => key !== "NO_OF_CARDS" && key !== "TRANSACTIONS")
@@ -530,32 +537,27 @@ function isStatementGeneratedForMonth(transactions, month, year) {
     // another = cardDetails
     cardDetails.sort((a, b) => b.dueDate - a.dueDate);
    
-        function determineCard(item, dda) {
-  const today = new Date();
-
-  // Check if today's date is greater than or equal to the due date of the current month
-  // or the due date of the next month.
-  if (today >= dda || today >= new Date(dda.getFullYear(), dda.getMonth() + 1, dda.getDate())) {
-    document.getElementById("card_to_use").innerHTML += `Statement for ${item} has been generated, and thus can be used<br><br>`;
-  } else {
-    document.getElementById("card_to_use").innerHTML += `Statement for ${item} has not been generated, and we recommend you not to use it until ${dda.getDate()}-${dda.getMonth() + 1}-${dda.getFullYear()}. If you use ${item} now, you will have to pay the amount on the bill generating on ${dda.getDate()}-${dda.getMonth() + 1}-${dda.getFullYear()}<br><br>`;
-  }
-}
-
-    
-
-
 cardDetails.forEach(({ card, dueDate }) => {
-const formattedDate = `${dueDate.getDate()}-${dueDate.getMonth()+1}-${dueDate.getFullYear()}`
-document.getElementById("cur_balance").innerHTML+=`${card}: ${formattedDate}<br>`
+    var nickname = card.substring(card.indexOf("(") + 1, card.lastIndexOf(")"))
+    const formattedDate = `${dueDate.getDate()}-${dueDate.getMonth()+1}-${dueDate.getFullYear()}`
+    var daystogo = (new Date().getTime()-dueDate.getTime())/(1000*60*60*24)
+    htmlcard = document.createElement("div")
+    htmlcard.classList.add("card")
+    htmlcard.classList.add("card")
+    htmlcontainer = document.createElement("div")
+    htmlcontainer.classList.add("container")
+    htmlcardname = document.createElement("h4")
+    sss =cardName.replace(`(${nickname})`, "")
+    htmlcardname.innerHTML = sss
+    htmlcontainer.appendChild(htmlcardname)
+    htmlnickname = document.createElement("p")
+    htmlnickname.innerHTML = mySubString
+    htmlcontainer.appendChild(htmlnickname)
+    htmlcard.appendChild(htmlcontainer)
+    document.getElementById("cur_balance").innerHTML+=htmlcard
 
 });
-another = cardDetails
 
-another.sort((a, b) => new Date(b.dueDate) - new Date(a.dueDate));
-another.forEach(({card, dueDate})=>{
-    determineCard(card, dueDate)
-})
 </script>
 </body>
 
