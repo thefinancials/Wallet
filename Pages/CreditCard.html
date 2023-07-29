@@ -550,9 +550,9 @@ th_nickname=document.createElement("th")
 th_nickname.innerHTML = "Nick Name"
 th_duedays=document.createElement("th")
 th_duedays.innerHTML = "Due in"
-th_duedate=document.createElement("th")
-th_duedate.innerHTML = "Due Date"
-tr.append(th_name,th_nickname,th_duedays,th_duedate)
+// th_duedate=document.createElement("th")
+// th_duedate.innerHTML = "Due Date"
+tr.append(th_name,th_nickname,th_duedays)
 thead.append(tr)
 table.append(thead)
 tbody=document.createElement("tbody")
@@ -590,9 +590,9 @@ cardDetails.forEach(({ card, dueDate }) => {
     th_nickname.innerHTML = nickname
     th_duedays=document.createElement("td")
     th_duedays.innerHTML = `${daystogo} days`
-    th_duedate=document.createElement("td")
-    th_duedate.innerHTML = formattedDate
-    tr.append(th_name,th_nickname,th_duedays,th_duedate)
+    // th_duedate=document.createElement("td")
+    // th_duedate.innerHTML = formattedDate
+    tr.append(th_name,th_nickname,th_duedays)
     tbody.append(tr)
     //document.getElementById("cur_balance").innerHTML+=htmlcard.innerHTML
 
