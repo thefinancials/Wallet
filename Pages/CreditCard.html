@@ -28,6 +28,9 @@
    box-shadow: 0 5px #666;
    transform: translateY(4px);
    }
+   .dotted{
+      border-style: solid;
+   }
    .content {
    padding: 0 18px;
    display: none;
@@ -42,7 +45,7 @@
    .card {
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
         transition: 0.3s;
-        width: 40%;
+        /*width: 40%;*/
     }
 
     .card:hover {
@@ -466,21 +469,21 @@ function isStatementGeneratedForMonth(transactions, month, year) {
    else
    {
            
-       if(data["TRANSACTIONS"].length==0)
-       {
-           document.getElementById("transactions_table").style.visibility="hidden"
-           var no_trx = document.createElement("h2")
-           no_trx.innerHTML="No transactions found"
-           no_trx.style.cssText = 'text-align:center;';
-           document.getElementById("details_div").appendChild(no_trx)
+       // if(data["TRANSACTIONS"].length==0)
+       // {
+       //     document.getElementById("transactions_table").style.visibility="hidden"
+       //     var no_trx = document.createElement("h2")
+       //     no_trx.innerHTML="No transactions found"
+       //     no_trx.style.cssText = 'text-align:center;';
+       //     document.getElementById("details_div").appendChild(no_trx)
            
-       }
-       else
-       {
-           data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
-           trx = data["TRANSACTIONS"]
-           trx.forEach(add)
-       }
+       // }
+       // else
+       // {
+       //     data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+       //     trx = data["TRANSACTIONS"]
+       //     trx.forEach(add)
+       // }
    }
    function add(item)
    {
@@ -536,27 +539,67 @@ function isStatementGeneratedForMonth(transactions, month, year) {
     }));
     // another = cardDetails
     cardDetails.sort((a, b) => b.dueDate - a.dueDate);
-   
+
+table=document.createElement("table")
+table.classList.add("card")
+thead=document.createElement("thead")
+tr=document.createElement("tr")
+
+th_name=document.createElement("th")
+th_name.innerHTML = "Card Name"
+th_nickname=document.createElement("th")
+th_nickname.innerHTML = "Nick Name"
+th_duedays=document.createElement("th")
+th_duedays.innerHTML = "Due in"
+th_duedate=document.createElement("th")
+th_duedate.innerHTML = "Due Date"
+tr.append(th_name,th_nickname,th_duedays,th_duedate)
+thead.append(tr)
+table.append(thead)
+tbody=document.createElement("tbody")
+
 cardDetails.forEach(({ card, dueDate }) => {
+
     var nickname = card.substring(card.indexOf("(") + 1, card.lastIndexOf(")"))
     const formattedDate = `${dueDate.getDate()}-${dueDate.getMonth()+1}-${dueDate.getFullYear()}`
-    var daystogo = (new Date().getTime()-dueDate.getTime())/(1000*60*60*24)
+    var daystogo = parseInt((dueDate.getTime()-new Date().getTime())/(1000*60*60*24)+1)
+
     htmlcard = document.createElement("div")
     htmlcard.classList.add("card")
-    htmlcard.classList.add("card")
+    htmlcard.classList.add("dotted")
     htmlcontainer = document.createElement("div")
     htmlcontainer.classList.add("container")
     htmlcardname = document.createElement("h4")
-    sss =cardName.replace(`(${nickname})`, "")
+    sss =card.replace(`(${nickname})`, "")
     htmlcardname.innerHTML = sss
     htmlcontainer.appendChild(htmlcardname)
     htmlnickname = document.createElement("p")
-    htmlnickname.innerHTML = mySubString
+    htmlnickname.innerHTML = nickname
     htmlcontainer.appendChild(htmlnickname)
+    htmlduein = document.createElement("p")
+    htmlduein.innerHTML = `Due in ${daystogo} days`
+    htmlcontainer.appendChild(htmlduein)
+    htmlduedate = document.createElement("p")
+    htmlduedate.innerHTML = `Statement generating on ${formattedDate}`
+    htmlcontainer.appendChild(htmlduedate)
     htmlcard.appendChild(htmlcontainer)
-    document.getElementById("cur_balance").innerHTML+=htmlcard
+
+    tr=document.createElement("tr")
+    th_name=document.createElement("td")
+    th_name.innerHTML = sss
+    th_nickname=document.createElement("td")
+    th_nickname.innerHTML = nickname
+    th_duedays=document.createElement("td")
+    th_duedays.innerHTML = daystogo
+    th_duedate=document.createElement("td")
+    th_duedate.innerHTML = formattedDate
+    tr.append(th_name,th_nickname,th_duedays,th_duedate)
+    tbody.append(tr)
+    //document.getElementById("cur_balance").innerHTML+=htmlcard.innerHTML
 
 });
+table.append(tbody)
+document.getElementById("cur_balance").append(table)
 
 </script>
 </body>
