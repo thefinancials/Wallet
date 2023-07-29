@@ -468,22 +468,21 @@ function isStatementGeneratedForMonth(transactions, month, year) {
    }
    else
    {
+       if(data["TRANSACTIONS"].length==0)
+       {
+           document.getElementById("transactions_table").style.visibility="hidden"
+           var no_trx = document.createElement("h2")
+           no_trx.innerHTML="No transactions found"
+           no_trx.style.cssText = 'text-align:center;';
+           document.getElementById("details_div").appendChild(no_trx)
            
-       // if(data["TRANSACTIONS"].length==0)
-       // {
-       //     document.getElementById("transactions_table").style.visibility="hidden"
-       //     var no_trx = document.createElement("h2")
-       //     no_trx.innerHTML="No transactions found"
-       //     no_trx.style.cssText = 'text-align:center;';
-       //     document.getElementById("details_div").appendChild(no_trx)
-           
-       // }
-       // else
-       // {
-       //     data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
-       //     trx = data["TRANSACTIONS"]
-       //     trx.forEach(add)
-       // }
+       }
+       else
+       {
+           data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+           trx = data["TRANSACTIONS"]
+           trx.forEach(add)
+       }
    }
    function add(item)
    {
@@ -590,7 +589,7 @@ cardDetails.forEach(({ card, dueDate }) => {
     th_nickname=document.createElement("td")
     th_nickname.innerHTML = nickname
     th_duedays=document.createElement("td")
-    th_duedays.innerHTML = daystogo
+    th_duedays.innerHTML = `${daystogo} days`
     th_duedate=document.createElement("td")
     th_duedate.innerHTML = formattedDate
     tr.append(th_name,th_nickname,th_duedays,th_duedate)
