@@ -528,7 +528,7 @@ function isStatementGeneratedForMonth(transactions, month, year) {
         balance: details.BalanceOutstanding
     }));
     // another = cardDetails
-    cardDetails.sort((a, b) => a.dueDate - b.dueDate);
+    cardDetails.sort((a, b) => b.dueDate - a.dueDate);
    
         function determineCard(item, dda) {
   const today = new Date();
