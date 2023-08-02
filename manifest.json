@@ -59,7 +59,7 @@
 	},
 
 	"share_target": {
-		"action": "/shared-content-receiver/",
+		"action": "/Wallet/Pages/shared-content-receiver/",
 		"params": {
 			"name": "sms",
 			"description": "Shared SMS message"
