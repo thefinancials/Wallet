@@ -60,6 +60,8 @@
 
 	"share_target": {
 		"action": "/Wallet/Pages/shared-content-receiver.html",
+		"method": "GET",
+    		"enctype": "application/x-www-form-urlencoded",
 		"params": {
 			"name": "sms",
 			"description": "Shared SMS message"
