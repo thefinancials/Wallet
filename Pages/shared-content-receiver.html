@@ -1,24 +1,35 @@
+<!-- share-target.html -->
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Shared Content Receiver</title>
+  <title>Share Target Page</title>
 </head>
 <body>
-  <h1>Shared Content Receiver</h1>
-  <p>This is the page that will be displayed when your PWA is launched as a share target.</p>
-  <p>The shared content is:</p>
-  <p id="shared-content"></p>
-
   <script>
-    // Get URL search parameters
-    const urlParams = new URLSearchParams(window.location.search);
+    document.addEventListener("DOMContentLoaded", function () {
+      // Get the URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
 
-    // Retrieve the values for "name" and "description" parameters
-    const name = urlParams.get("name");
-    const description = urlParams.get("description");
+      // Extract the shared data from the URL parameters
+      const sharedTitle = urlParams.get("title");
+      const sharedText = urlParams.get("text");
+      const sharedUrl = urlParams.get("url");
 
-    // Update the content of the "shared-content" paragraph with the received values
-    document.getElementById("shared-content").innerText = `${name}: ${description}`;
+      // Perform actions with the shared data
+      // For example, you can display the shared content in your PWA or store it in local storage
+      // You can also redirect the user to a specific page within your PWA to handle the shared data
+
+      // Example: Display the shared data in the page
+      const sharedContentElement = document.getElementById("shared-content");
+      sharedContentElement.innerHTML = `
+        <h2>${sharedTitle}</h2>
+        <p>${sharedText}</p>
+        <a href="${sharedUrl}" target="_blank">Visit Shared URL</a>
+      `;
+    });
   </script>
+
+  <!-- Add any necessary HTML elements to display the shared content -->
+  <div id="shared-content"></div>
 </body>
 </html>
