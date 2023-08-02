@@ -7,6 +7,18 @@
   <h1>Shared Content Receiver</h1>
   <p>This is the page that will be displayed when your PWA is launched as a share target.</p>
   <p>The shared content is:</p>
-  <p>{{name}}: {{description}}</p>
+  <p id="shared-content"></p>
+
+  <script>
+    // Get URL search parameters
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // Retrieve the values for "name" and "description" parameters
+    const name = urlParams.get("name");
+    const description = urlParams.get("description");
+
+    // Update the content of the "shared-content" paragraph with the received values
+    document.getElementById("shared-content").innerText = `${name}: ${description}`;
+  </script>
 </body>
 </html>
