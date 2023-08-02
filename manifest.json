@@ -1,74 +1,80 @@
 {
-    "display_override": ["window-controls-overlay"], 
-    "protocol_handlers": [{"protocol":"wallet","url":"cash"}], 
-    "screenshots": [
-      {
-        "src": "https://www.pwabuilder.com/assets/screenshots/screen1.png",
-        "sizes": "2880x1800",
-        "type": "image/png",
-        "description": "PWABuilder Home Screen"
-      }
-    ], 
-      "theme_color": "#f69435",
-      "background_color": "#f69435",
-      "display":"minimal-ui",
-      "scope": ".",
-      "start_url": "/Wallet/",
-      "name": "Wallet",
-      "orientation":"any",
-      "short_name": "Wallet",
-      "description": "Wallet - The app designed and developed to keep track of your Cash, Bank, Debit Card and Credit Card Transactions",
-      "icons": [
-        {
-          "src": "/Wallet/Assets/icon-192x192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        },
-        {
-          "src": "/Wallet/Assets/icon-256x256.png",
-          "sizes": "256x256",
-          "type": "image/png"
-        },
-        {
-          "src": "/Wallet/Assets/icon-384x384.png",
-          "sizes": "384x384",
-          "type": "image/png"
-        },
-        {
-          "src": "/Wallet/Assets/icon-512x512.png",
-          "sizes": "512x512",
-          "type": "image/png",
-          "purpose": "any"
-        }
-      ],
-      "launch_handler": {
-        "client_mode": "navigate-existing"
-      },
-        "url_handlers": [
-          {
-            "origin": "https://thefinancials.github.io/Wallet"
-          }
-        ],
-      
-      "dir": "ltr",
-      "lang": "en",
-      "categories": [
-        "finance",
-        "utilities"
-      ],
-      "edge_side_panel": {
-        "preferred_width": 70
-      },
-      "shortcuts": [
-        {
-          "name": "Cash",
-          "url": "/Wallet/Pages/Cash.html",
-          "description": "Quickly get access to cash page"
-        },
-        {
-          "name": "Bank",
-          "url": "/Wallet/Pages/Bank.html",
-          "description": "Quickly get access to bank page"
-        }
-      ]
-    }
+	"display_override": ["window-controls-overlay"],
+	"protocol_handlers": [{
+		"protocol": "wallet",
+		"url": "cash"
+	}],
+	"screenshots": [{
+		"src": "https://www.pwabuilder.com/assets/screenshots/screen1.png",
+		"sizes": "2880x1800",
+		"type": "image/png",
+		"description": "PWABuilder Home Screen"
+	}],
+	"theme_color": "#f69435",
+	"background_color": "#f69435",
+	"display": "minimal-ui",
+	"scope": ".",
+	"start_url": "/Wallet/",
+	"name": "Wallet",
+	"orientation": "any",
+	"short_name": "Wallet",
+	"description": "Wallet - The app designed and developed to keep track of your Cash, Bank, Debit Card and Credit Card Transactions",
+	"icons": [{
+			"src": "/Wallet/Assets/icon-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "/Wallet/Assets/icon-256x256.png",
+			"sizes": "256x256",
+			"type": "image/png"
+		},
+		{
+			"src": "/Wallet/Assets/icon-384x384.png",
+			"sizes": "384x384",
+			"type": "image/png"
+		},
+		{
+			"src": "/Wallet/Assets/icon-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any"
+		}
+	],
+	"launch_handler": {
+		"client_mode": "navigate-existing"
+	},
+	"url_handlers": [{
+		"origin": "https://thefinancials.github.io/Wallet"
+	}],
+
+	"dir": "ltr",
+	"lang": "en",
+	"categories": [
+		"finance",
+		"utilities"
+	],
+	"edge_side_panel": {
+		"preferred_width": 70
+	},
+
+	"share_target": {
+		"action": "/shared-content-receiver/",
+		"params": {
+			"name": "sms",
+			"description": "Shared SMS message"
+		}
+	},
+
+	"shortcuts": [{
+			"name": "Cash",
+			"url": "/Wallet/Pages/Cash.html",
+			"description": "Quickly get access to cash page"
+		},
+		{
+			"name": "Bank",
+			"url": "/Wallet/Pages/Bank.html",
+			"description": "Quickly get access to bank page"
+		}
+	]
+}
