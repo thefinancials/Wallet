@@ -59,12 +59,12 @@
 	},
 
 	"share_target": {
-		"action": "/Wallet/Pages/shared-content-receiver.html",
+		"action": "/Wallet/index.html",
 		"method": "GET",
     		"enctype": "application/x-www-form-urlencoded",
 		"params": {
-			"name": "sms",
-			"description": "Shared SMS message"
+			"title": "sms",
+			"text": "Shared SMS message"
 		}
 	},
 
