@@ -2,7 +2,7 @@
 	"display_override": ["window-controls-overlay"],
 	"protocol_handlers": [{
 		"protocol": "wallet",
-		"url": "cash"
+		"url": "/Wallet/Pages/Cash.html"
 	}],
 	"screenshots": [{
 		"src": "https://www.pwabuilder.com/assets/screenshots/screen1.png",
@@ -56,16 +56,6 @@
 	],
 	"edge_side_panel": {
 		"preferred_width": 70
-	},
-
-	"share_target": {
-		"action": "/Wallet/index.html",
-		"method": "GET",
-    		"enctype": "application/x-www-form-urlencoded",
-		"params": {
-			"title": "sms",
-			"text": "Shared SMS message"
-		}
 	},
 
 	"shortcuts": [{
