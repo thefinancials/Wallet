@@ -121,11 +121,29 @@ body{
 .wrapper .sidebar ul li a.active:before{
     display: block;
 }
+.collapsible {
+    display: none;
+}
+
+.collapsible.active {
+    display: block;
+}
+
+.collapsible-button {
+    background-color: transparent;
+    border: none;
+    color: #000;
+    font-size: 24px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
 
 </style>
 <body>
     <h1 class="centre">Wallet</h1>
-    <!-- <p class="centre required" id="welcome_message"></p>
+   
     <div style="display: flex; justify-content: center;">
         <div class="rectangle center" id="credit_card" onclick="window.location='Pages/CreditCard.html'">
             <div>Credit Cards</div>
@@ -147,10 +165,15 @@ body{
         </div>
     </div>
    
-    <br> -->
+    <br>
+    <button class="collapsible-button">&#9776;</button>
+    <div class="collapsible">
+        
     <div class="wrapper">
         <!--Top menu -->
         <div class="sidebar">
+            <button class="collapsible-button" id="dis-collapsible-button" style="color:white">&#9776;</button>
+            <br>
             <div class="profile">
                 <!-- <img src="https://1.bp.blogspot.com/-vhmWFWO2r8U/YLjr2A57toI/AAAAAAAACO4/0GBonlEZPmAiQW4uvkCTm5LvlJVd_-l_wCNcBGAsYHQ/s16000/team-1-2.jpg" alt="profile_picture"> -->
                 <h3>Abhinav Satheesh</h3>
@@ -167,32 +190,55 @@ body{
                 </li>
                 <li>
                     <a href="Pages/CreditCard.html">
-                        <span class="icon"><i class="fas fa-desktop"></i></span>
+                        <span class="icon"><i class="fas fa-credit-card"></i></span>
                         <span class="item">Credit Cards</span>
                     </a>
                 </li>
                 <li>
                     <a href="Pages/Bank.html">
-                        <span class="icon"><i class="fas fa-user-friends"></i></span>
+                        <span class="icon"><i class="fas fa-piggy-bank"></i></span>
                         <span class="item">Banks</span>
                     </a>
                 </li>
                 <li>
                     <a href="Pages/Cash.html">
-                        <span class="icon"><i class="fas fa-tachometer-alt"></i></span>
+                        <span class="icon"><i class="fas fa-money-bill-wave"></i></span>
                         <span class="item">Cash</span>
                     </a>
                 </li>
-
+                <li>
+                    <a href="Pages/Signup.html">
+                        <span class="icon"><i class="fas fa-child"></i></span>
+                        <span class="item">Settings</span>
+                    </a>
+                </li>
             </ul>
         </div>
         </div>
 
     </div>
 
+</div>
+
 </body>
 <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
 <script>
+    const collapsibleButton = document.querySelector('.collapsible-button');
+const menu = document.querySelector('.collapsible');
+
+collapsibleButton.addEventListener('click', () => {
+    menu.classList.toggle('active');
+});
+
+
+const discollapisbleButton = document.getElementById("dis-collapsible-button");
+discollapisbleButton.addEventListener('click', () => {
+    menu.classList.remove('active')
+});
+
+
+
+
   function addDarkmodeWidget() {
     const options = {
   bottom: '32px', // default: '32px'
@@ -215,22 +261,13 @@ darkmode.showWidget();
 </script>
 
 <script>
-    window.addEventListener('DOMContentLoaded', () => {
-    url = new URL(window.location);
-    const sharedTitle = url.searchParams.get('title');
-    const sharedText = url.searchParams.get('text');
-    alert(sharedTitle)
-    alert(sharedText)
-});
-
     if(localStorage.getItem("setup")==null)
     {
         window.location="Pages/Signup.html"
     }
     else
     {
-        document.getElementById("welcome_message").innerHTML=`Welcome, <span style="text-decoration: underline;" >${localStorage.getItem("NameUser")}</span>`
-        document.getElementById("welcome_message").addEventListener("click", function(){window.location.href="Pages/Signup.html"})
+        
         initialise()
     }
     function initialise()
