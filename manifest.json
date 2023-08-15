@@ -1,6 +1,6 @@
 {
     "display_override": ["window-controls-overlay"], 
-    "protocol_handlers": [{"protocol":"web+wallet","url":"/Wallet/Pages/Cash.html"}], 
+    "protocol_handlers": [{"protocol":"wallet","url":"/Wallet/Pages/Cash.html?type=%s"}], 
     "screenshots": [
       {
         "src": "https://www.pwabuilder.com/assets/screenshots/screen1.png",
