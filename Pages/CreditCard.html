@@ -292,60 +292,7 @@
     window.addEventListener('load', addDarkmodeWidget);
   </script>
 <script>    
-function isStatementGeneratedForMonth(transactions, month, year) {
-  for (const transaction of transactions) {
-    if (
-      transaction.Particulars === "Statement generated" &&
-      transaction.Date.startsWith(`${year}-${month}`)
-    ) {
-      return true;
-    }
-  }
-  return false;
-}
 
-    data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
-    for(var keeey in data)
-    {
-        if(keeey=="TRANSACTIONS"||keeey=="NO_OF_CARDS")
-        {
-            
-        }
-        else
-        {
-            currentDate = data[keeey]["DueDate"]
-            curre = new Date();
-            orrr = new Date(currentDate)
-            cccc = new Date(currentDate);
-            if(curre>=cccc)
-            {
-                cccc.setMonth(cccc.getMonth()+1)
-                if(cccc.getMonth()==0)
-                {
-                    cccc.setFullYear(cccc.getFullYear()+1)
-                }
-
-                trrr = data["TRANSACTIONS"]           
-                let statementGenerated = isStatementGeneratedForMonth(trrr, new Date().getMonth()+1, new Date().getFullYear())
-                if(statementGenerated==false)
-                {
-                    new_object = new Object()
-                    tobewritten = `${orrr.getFullYear()}-${orrr.getMonth()+1}-${orrr.getDate()}`
-                    new_object.Date = tobewritten
-                    new_object.Particulars = "Statement generated"
-                    new_object.CreditCard = keeey
-                    new_object.Amount = data[keeey]["BalanceOutstanding"]
-                    new_object.Type=""
-                    new_object.Narration=""
-                    data["TRANSACTIONS"].push(new_object)
-                    data[keeey]["DueDate"]=cccc.toString()
-                    localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
-                    alert(`Statement generated for ${keeey}. Amount to be paid is ₹${parseInt(data[keeey]["BalanceOutstanding"])}`)
-                    break;
-                }
-            }
-        }
-    }
     selected = ""
    function isStringInList(string, list) {
        var lowercaseString = string.toLowerCase();
