@@ -204,6 +204,9 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
 <script>
+    Notification.requestPermission().then((result) => {});
+
+
     document.getElementById("name_ussser").innerHTML = localStorage.getItem("NameUser")
    const collapsibleButton = document.querySelector('.collapsible-button');
    const menu = document.querySelector('.collapsible');
