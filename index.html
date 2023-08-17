@@ -261,11 +261,11 @@ darkmode.showWidget();
 </script>
 
 <script>
-    function isStatementGeneratedForMonth(transactions, month, year) {
+    function isStatementGeneratedForMonth(transactions, month, year, cardname) {
   for (const transaction of transactions) {
     if (
       transaction.Particulars === "Statement generated" &&
-      transaction.Date.startsWith(`${year}-${month}`)
+      transaction.Date.startsWith(`${year}-${month}`) && transaction.CreditCard ==cardname
     ) {
       return true;
     }
@@ -276,12 +276,14 @@ darkmode.showWidget();
     data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
     for(var keeey in data)
     {
+        
         if(keeey=="TRANSACTIONS"||keeey=="NO_OF_CARDS")
         {
             
         }
         else
         {
+            
             currentDate = data[keeey]["DueDate"]
             curre = new Date();
             orrr = new Date(currentDate)
@@ -293,9 +295,9 @@ darkmode.showWidget();
                 {
                     cccc.setFullYear(cccc.getFullYear()+1)
                 }
-
+                
                 trrr = data["TRANSACTIONS"]           
-                let statementGenerated = isStatementGeneratedForMonth(trrr, new Date().getMonth()+1, new Date().getFullYear())
+                let statementGenerated = isStatementGeneratedForMonth(trrr, new Date().getMonth()+1, new Date().getFullYear(), keeey)  
                 if(statementGenerated==false)
                 {
                     new_object = new Object()
@@ -309,8 +311,7 @@ darkmode.showWidget();
                     data["TRANSACTIONS"].push(new_object)
                     data[keeey]["DueDate"]=cccc.toString()
                     localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
-                    const notification = new Notification("Credit Card Payment Due", { body: "HDFC Bank Credit Card (Personal) is due today. Amount to be paid is ₹500"});
-                    break;
+                    const notification = new Notification("Credit Card Payment Due", { body: `Statement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`});
                 }
             }
         }
