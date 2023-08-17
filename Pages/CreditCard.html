@@ -602,6 +602,7 @@
    }
    else
    {
+           data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
        if(data["TRANSACTIONS"].length==0)
        {
            document.getElementById("transactions_table").style.visibility="hidden"
@@ -613,7 +614,7 @@
        }
        else
        {
-           data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+
            trx = data["TRANSACTIONS"]
            trx.forEach(add)
        }
