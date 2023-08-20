@@ -262,6 +262,18 @@ darkmode.showWidget();
 </script>
 
 <script>
+    function showNotification(messagee) {
+        Notification.requestPermission().then((result) => {
+            if (result === "granted") {
+            navigator.serviceWorker.ready.then((registration) => {
+                registration.showNotification("Statement generated", {
+                body: messagee,
+                vibrate: [200, 100, 200, 100, 200, 100, 200],
+                });
+            });
+            }
+        });
+    }
     function isStatementGeneratedForMonth(transactions, month, year, cardname) {
   for (const transaction of transactions) {
     if (
@@ -314,8 +326,8 @@ darkmode.showWidget();
                     localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
                     try
                     {
-                        const notification = new Notification("Credit Card Payment Due", { body: `Statement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`});
-                    } 
+                        showNotification(`Statement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
+                    }
                     catch{
                         swal("Statement generated", `Statement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
                     }
