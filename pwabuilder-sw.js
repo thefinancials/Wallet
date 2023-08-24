@@ -24,12 +24,30 @@ self.addEventListener('periodicsync', event => {
 function getDailyNewsInCache()
 {
   const openRequest = indexedDB.open("WalletDatabase", 1);
+
   openRequest.onsuccess = function(event) {
-    db = event.target.result;
-    const transaction = db.transaction("cards", "readwrite");
+    const db = event.target.result;
+    const transaction = db.transaction("cards", "readonly");
     const cardStore = transaction.objectStore("cards");
-    console.log(cardStore)
-  }
+
+    // Assuming you have an index named "dueDateIndex"
+    const dueDateIndex = cardStore.index("dueDate");
+    const datedd = new Date()
+    datedd.setHours(0,0,0)
+      datedd.toString()
+    const request = dueDateIndex.openCursor(IDBKeyRange.only("Fri Aug 25 2023 00:00:00 GMT+0530 (India Standard Time)"	));
+
+    request.onsuccess = function(event) {
+      const cursor = event.target.result;
+      if (cursor) {
+        const cardData = cursor.value;
+        // Handle cardData, which contains the card details
+        console.log(cardData); // Modify this to handle the data as needed
+        cursor.continue();
+      }
+    };
+  };
+
 
 }
 
