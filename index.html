@@ -13,8 +13,7 @@
     <link rel='manifest' href='manifest.json'>
     <meta name="apple-mobile-web-app-status-bar" content="#f69435" />
     <meta name="theme-color" content="#f69435" />
-    <script>navigator.serviceWorker.register("/Wallet/pwabuilder-sw.js")
-    registerPeriodicSync();</script> 
+    <script>navigator.serviceWorker.register("/Wallet/pwabuilder-sw.js")</script> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <style>
@@ -289,6 +288,8 @@ darkmode.showWidget();
           console.log('Periodic background sync is not supported.');
         }
       }
+
+      registerPeriodicSync();
 
     function showNotification(messagee) {
         Notification.requestPermission().then((result) => {
