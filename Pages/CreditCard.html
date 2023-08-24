@@ -293,6 +293,9 @@
     window.addEventListener('load', addDarkmodeWidget);
   </script>
 <script>    
+    const dbName = "WalletDatabase";
+   const dbVersion = 1;
+
 
     selected = ""
    function isStringInList(string, list) {
@@ -372,14 +375,33 @@
             new_object.Narration = document.getElementById("narration").value
             data["TRANSACTIONS"].push(new_object)
             data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
-            balance_outstanding = parseFloat(document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ₹")[1])-parseFloat(document.getElementById("amount_transaction").value)
-            
+            balance_outstanding = data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]-parseFloat(document.getElementById("amount_transaction").value)
             data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]=balance_outstanding
+            
             localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
-            alert("Added!")
-            window.location.reload();
-           
-           
+            const openRequest = indexedDB.open(dbName, dbVersion);
+           openRequest.onsuccess = function(event) {
+            db = event.target.result;
+            const transaction = db.transaction("cards", "readwrite");
+            const cardStore = transaction.objectStore("cards");
+            const getRequest = cardStore.get(document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0])
+            getRequest.onsuccess = function(event) {
+                const existingCardData = event.target.result;
+                existingCardData.balanceOutstanding=balance_outstanding
+                const updateRequest = cardStore.put(existingCardData);
+                updateRequest.onsuccess = function(event) {
+                    alert("Added!");
+                    window.location.reload()
+                };
+                updateRequest.onerror = function(event) {
+                    alert("Error!")
+                };
+            }
+            getRequest.onerror = function(event)
+            {
+                alert("Error!")
+            }
+        }; 
        }
    }
    function money_in()
@@ -522,8 +544,30 @@
            cur_balance+=parseFloat(document.getElementById("amount_transaction").value)
            data[bankname]["BalanceOutstanding"] = cur_balance
            localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
-           alert("Added!")
-           window.location.reload();
+           const openRequest = indexedDB.open(dbName, dbVersion);
+           openRequest.onsuccess = function(event) {
+            db = event.target.result;
+            const transaction = db.transaction("cards", "readwrite");
+            const cardStore = transaction.objectStore("cards");
+            const getRequest = cardStore.get(creditcardd)
+            getRequest.onsuccess = function(event) {
+                const existingCardData = event.target.result;
+                existingCardData.balanceOutstanding=cur_balance
+                const updateRequest = cardStore.put(existingCardData);
+                updateRequest.onsuccess = function(event) {
+                    alert("Added!");
+                    window.location.reload()
+                };
+                updateRequest.onerror = function(event) {
+                    alert("Error!")
+                };
+            }
+            getRequest.onerror = function(event)
+            {
+                alert("Error!")
+            }
+        };
+           
        }
    }
    function money_out()

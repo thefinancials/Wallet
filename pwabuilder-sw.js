@@ -15,7 +15,29 @@ self.addEventListener("install", function (event) {
   );
 });
 
-// If any fetch fails, it will look for the request in the cache and serve it from there first
+self.addEventListener('periodicsync', event => {
+  if (event.tag === 'creditcard-duedatechecker') {
+      event.waitUntil(getDailyNewsInCache());
+  }
+});
+
+function getDailyNewsInCache()
+{
+  const openRequest = indexedDB.open("WalletDatabase", 1);
+  openRequest.onsuccess = function(event) {
+    db = event.target.result;
+    const transaction = db.transaction("cards", "readwrite");
+    const cardStore = transaction.objectStore("cards");
+    const getRequest = cardStore.get(creditcardd)
+    getRequest.onsuccess = function(event) {
+      const existingCardData = event.target.result;
+      console.log(existingCardData)
+    }
+  }
+
+}
+
+
 self.addEventListener("fetch", function (event) {
   if (event.request.method !== "GET") return;
   event.respondWith(

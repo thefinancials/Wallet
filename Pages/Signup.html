@@ -386,34 +386,73 @@
                    towrite = JSON.stringify(objeee)
                    localStorage.setItem("CREDIT CARDS", towrite)
                    localStorage.setItem("setup", "DONE")
-                    if (localStorage.getItem("NameUser")==null) 
-                    {
-                        swal("Enter your name and username", "Please enter your name and username to proceed", "info")
+                   const openRequest = indexedDB.open("WalletDatabase", 1);
+                   openRequest.onupgradeneeded = function(event) {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains("cards")) {
+                        const cardStore = db.createObjectStore("cards", { keyPath: "cardName", autoIncrement: false });
+                        cardStore.createIndex("dueDate", "dueDate", { unique: false });
+                        cardStore.createIndex("balanceOutstanding", "balanceOutstanding", { unique: false });
                     }
-                    else
-                    {
-                        swal("Done", "Added successfully! Return to main page?", "success",{
-  buttons: {
-    cancel: "No, stay here",
-    ok: true,
-  },
-  
-})
-.then((value) => {
-  switch (value) {
- 
-    case "ok":
-      window.location.href="../index.html"
-      break;
- 
-    case "cancel":
+                    };
 
-      break;
-  }
-});
+                    openRequest.onsuccess = function(event) {
+                        const db = event.target.result;
+                        const transaction = db.transaction("cards", "readwrite");
+                        const cardStore = transaction.objectStore("cards");
+                        const cardData = {}
+                        cardData["cardName"]=strrr
+                        cardData["dueDate"]=oobb.DueDate
+                        cardData["balanceOutstanding"]=0
+                        console.log(cardData)
+                        const addRequest = cardStore.add(cardData);
+                        addRequest.onsuccess = function() {
+                            if (localStorage.getItem("NameUser")==null) 
+                            {
+                                swal("Enter your name and username", "Please enter your name and username to proceed", "info")
+                            }
+                            else
+                            {
+                                swal("Done", "Added successfully! Return to main page?", "success",{
+                                buttons: {
+                                    cancel: "No, stay here",
+                                    ok: true,
+                                },
+                                
+                                })
+                                .then((value) => {
+                                switch (value) {
+                                
+                                    case "ok":
+                                    window.location.href="../index.html"
+                                    break;
+                                
+                                    case "cancel":
 
-               }
+                                    break;
+                                }
+                                });
+
+                            }
                    
+                        };
+
+                        addRequest.onerror = function(event) {
+                            alert("You already have a card with the same nickname", event.target.error);
+                        };
+
+                        transaction.oncomplete = function() {};
+
+                        transaction.onerror = function(event) {
+                            console.error("Transaction error:", event.target.error);
+                        };
+                    };
+
+                    openRequest.onerror = function(event) {
+                        console.error("Error opening database:", event.target.error);
+                    };
+
+                    
                }
                else
                {
@@ -443,39 +482,71 @@
                        data[`${creditcard_entry.value} (${nickname_entry.value})`] = oobb
                        towrite = JSON.stringify(data)
                        localStorage.setItem("CREDIT CARDS", towrite)
-                       if (localStorage.getItem("NameUser")==null) 
-                    {
-                        swal("Enter your name and username", "Please enter your name and username to proceed", "info")
-                    }
-                    else
-                    {
-                        swal("Done", "Added successfully! Return to main page?", "success",{
-  buttons: {
-    cancel: "No, stay here",
-    ok: true,
-  },
-  
-})
-.then((value) => {
-  switch (value) {
- 
-    case "ok":
-      window.location.href="../index.html"
-      break;
- 
-    case "cancel":
-    document.getElementById("type_of_finance").value = "Select a financial option"
-   document.getElementById("to_delete").replaceChildren()
-      break;
-  }
-});
+                       const openRequest = indexedDB.open("WalletDatabase", 1);
+                        openRequest.onupgradeneeded = function(event) {
+                        const db = event.target.result;
+                        if (!db.objectStoreNames.contains("cards")) {
+                            const cardStore = db.createObjectStore("cards", { keyPath: "cardName", autoIncrement: false });
+                            cardStore.createIndex("dueDate", "dueDate", { unique: false });
+                            cardStore.createIndex("balanceOutstanding", "balanceOutstanding", { unique: false });
+                        }
+                        };
 
-                       }
-   
-   
-               
-               
-               
+                    openRequest.onsuccess = function(event) {
+                        const db = event.target.result;
+                        const transaction = db.transaction("cards", "readwrite");
+                        const cardStore = transaction.objectStore("cards");
+                        const cardData = {}
+                        cardData["cardName"]=`${creditcard_entry.value} (${nickname_entry.value})`
+                        cardData["dueDate"]=oobb.DueDate
+                        cardData["balanceOutstanding"]=0
+                        console.log(cardData)
+                        const addRequest = cardStore.add(cardData);
+                        addRequest.onsuccess = function() {
+                            if (localStorage.getItem("NameUser")==null) 
+                            {
+                                swal("Enter your name and username", "Please enter your name and username to proceed", "info")
+                            }
+                            else
+                            {
+                                swal("Done", "Added successfully! Return to main page?", "success",{
+                                buttons: {
+                                    cancel: "No, stay here",
+                                    ok: true,
+                                },
+                                
+                                })
+                                .then((value) => {
+                                switch (value) {
+                                
+                                    case "ok":
+                                    window.location.href="../index.html"
+                                    break;
+                                
+                                    case "cancel":
+
+                                    break;
+                                }
+                                });
+
+                            }
+                   
+                        };
+
+                        addRequest.onerror = function(event) {
+                            console.error("Error adding card data:", event.target.error);
+                        };
+
+                        transaction.oncomplete = function() {};
+
+                        transaction.onerror = function(event) {
+                            console.error("Transaction error:", event.target.error);
+                        };
+                    };
+
+                    openRequest.onerror = function(event) {
+                        console.error("Error opening database:", event.target.error);
+                    };
                     }}}
                
            })
