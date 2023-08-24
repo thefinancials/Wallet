@@ -268,7 +268,7 @@ darkmode.showWidget();
         if ('periodicSync' in registration) {
           // Request permission
           const status = await navigator.permissions.query({
-            name: 'credit-card-duedate-checker',
+            name: 'periodic-background-sync',
           });
 
           if (status.state === 'granted') {

@@ -28,11 +28,7 @@ function getDailyNewsInCache()
     db = event.target.result;
     const transaction = db.transaction("cards", "readwrite");
     const cardStore = transaction.objectStore("cards");
-    const getRequest = cardStore.get(creditcardd)
-    getRequest.onsuccess = function(event) {
-      const existingCardData = event.target.result;
-      console.log(existingCardData)
-    }
+    console.log(cardStore)
   }
 
 }
