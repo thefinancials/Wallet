@@ -526,12 +526,9 @@
            cur_balance+=parseFloat(document.getElementById("amount_transaction").value)
            data[bankname]["BalanceOutstanding"] = cur_balance
            localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
-           console.log(data)
            localforage.setItem("CREDIT CARDS", data, function(err, value){console.log("Saved successfully")})
-           console.log(data)
-           console.log("BOOM")
-           
-           //window.location.reload()     
+           alert("Added!")
+           window.location.reload()     
        }
    }
    function money_out()

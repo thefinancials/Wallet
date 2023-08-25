@@ -16,10 +16,80 @@ self.addEventListener('periodicsync', event => {
   }
 });
 
+function isStatementGeneratedForMonth(transactions, month, year, cardname) {
+  for (const transaction of transactions) {
+    if (
+      transaction.Particulars === "Statement generated" &&
+      transaction.Date.startsWith(`${year}-${month}`) && transaction.CreditCard ==cardname
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function showNotification(messagee) {
+  Notification.requestPermission().then((result) => {
+      if (result === "granted") {
+      navigator.serviceWorker.ready.then((registration) => {
+          registration.showNotification("Statement generated", {
+          body: messagee,
+          vibrate: [200, 100, 200, 100, 200, 100, 200],
+          });
+      });
+      }
+  });
+}
+
 function getDailyNewsInCache() {
   localforage.getItem("CREDIT CARDS", function(err, value) {
     if (!err) {
-      console.log("Retrieved data from LocalForage:", value);
+      data = value
+      for(var keeey in data)
+      {
+          if(keeey=="TRANSACTIONS"||keeey=="NO_OF_CARDS")
+          {
+              
+          }
+          else
+          {
+              currentDate = data[keeey]["DueDate"]
+              curre = new Date();
+              orrr = new Date(currentDate)
+              cccc = new Date(currentDate);
+              if(curre>=cccc)
+              {
+                  cccc.setMonth(cccc.getMonth()+1)
+                  if(cccc.getMonth()==0)
+                  {
+                      cccc.setFullYear(cccc.getFullYear()+1)
+                  }
+                  
+                  trrr = data["TRANSACTIONS"]           
+                  let statementGenerated = isStatementGeneratedForMonth(trrr, new Date().getMonth()+1, new Date().getFullYear(), keeey)  
+                  if(statementGenerated==false)
+                  {
+                      new_object = new Object()
+                      tobewritten = `${orrr.getFullYear()}-${orrr.getMonth()+1}-${orrr.getDate()}`
+                      new_object.Date = tobewritten
+                      new_object.Particulars = "Statement generated"
+                      new_object.CreditCard = keeey
+                      new_object.Amount = data[keeey]["BalanceOutstanding"]
+                      new_object.Type=""
+                      new_object.Narration=""
+                      data["TRANSACTIONS"].push(new_object)
+                      data[keeey]["DueDate"]=cccc.toString()
+                      localforage.setItem("CREDIT CARDS", JSON.stringify(data))
+                      try
+                      {
+                          showNotification(`Statement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
+                      }
+                      catch{}
+                  }
+              }
+          }
+      }
+      
     } else {
       console.error("Error retrieving data from LocalForage:", err);
     }
