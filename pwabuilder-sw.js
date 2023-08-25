@@ -87,6 +87,10 @@ function getDailyNewsInCache() {
                       catch{}
                   }
               }
+              else
+              {
+                console.log("No statements generated")
+              }
           }
       }
       
