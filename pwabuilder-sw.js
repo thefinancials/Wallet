@@ -30,15 +30,13 @@ function isStatementGeneratedForMonth(transactions, month, year, cardname) {
 
 function showNotification(messagee) {
   if(Notification.permission==='granted'){
-    navigator.serviceWorker.ready.then((registration) => {
-      registration.showNotification("Statement generated", {
+    const options = {
       body: messagee,
-      vibrate: [200, 100, 200, 100, 200, 100, 200],
-      });
-  });
+    };
+
+    self.registration.showNotification('Statement generated', options)
   }
 }
-
 function getDailyNewsInCache() {
   localforage.getItem("CREDIT CARDS", function(err, value) {
     if (!err) {
