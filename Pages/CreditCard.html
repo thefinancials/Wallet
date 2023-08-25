@@ -7,6 +7,7 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 </head>
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
    .centre
    {
    text-align: center;
@@ -81,7 +82,7 @@
    .required::after {
    color: red;
    }
-   @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+   
    *{
    list-style: none;
    text-decoration: none;
@@ -253,6 +254,7 @@
    </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+<script src="../localforage.js"></script>
 <script>
     document.getElementById("name_ussser").innerHTML = localStorage.getItem("NameUser")
     const collapsibleButton = document.querySelector('.collapsible-button');
@@ -379,29 +381,9 @@
             data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]=balance_outstanding
             
             localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
-            const openRequest = indexedDB.open(dbName, dbVersion);
-           openRequest.onsuccess = function(event) {
-            db = event.target.result;
-            const transaction = db.transaction("cards", "readwrite");
-            const cardStore = transaction.objectStore("cards");
-            const getRequest = cardStore.get(document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0])
-            getRequest.onsuccess = function(event) {
-                const existingCardData = event.target.result;
-                existingCardData.balanceOutstanding=balance_outstanding
-                const updateRequest = cardStore.put(existingCardData);
-                updateRequest.onsuccess = function(event) {
-                    alert("Added!");
-                    window.location.reload()
-                };
-                updateRequest.onerror = function(event) {
-                    alert("Error!")
-                };
-            }
-            getRequest.onerror = function(event)
-            {
-                alert("Error!")
-            }
-        }; 
+           localforage.setItem("CREDIT CARDS", data, function(err, value){
+            console.log("Saved successfully")})
+           
        }
    }
    function money_in()
@@ -544,30 +526,12 @@
            cur_balance+=parseFloat(document.getElementById("amount_transaction").value)
            data[bankname]["BalanceOutstanding"] = cur_balance
            localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
-           const openRequest = indexedDB.open(dbName, dbVersion);
-           openRequest.onsuccess = function(event) {
-            db = event.target.result;
-            const transaction = db.transaction("cards", "readwrite");
-            const cardStore = transaction.objectStore("cards");
-            const getRequest = cardStore.get(creditcardd)
-            getRequest.onsuccess = function(event) {
-                const existingCardData = event.target.result;
-                existingCardData.balanceOutstanding=cur_balance
-                const updateRequest = cardStore.put(existingCardData);
-                updateRequest.onsuccess = function(event) {
-                    alert("Added!");
-                    window.location.reload()
-                };
-                updateRequest.onerror = function(event) {
-                    alert("Error!")
-                };
-            }
-            getRequest.onerror = function(event)
-            {
-                alert("Error!")
-            }
-        };
+           console.log(data)
+           localforage.setItem("CREDIT CARDS", data, function(err, value){console.log("Saved successfully")})
+           console.log(data)
+           console.log("BOOM")
            
+           //window.location.reload()     
        }
    }
    function money_out()
