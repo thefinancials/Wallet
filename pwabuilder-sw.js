@@ -29,6 +29,7 @@ function isStatementGeneratedForMonth(transactions, month, year, cardname) {
 }
 
 function showNotification(messagee) {
+  console.log("SETTING")
   Notification.requestPermission().then((result) => {
       if (result === "granted") {
       navigator.serviceWorker.ready.then((registration) => {
@@ -69,6 +70,7 @@ function getDailyNewsInCache() {
                   let statementGenerated = isStatementGeneratedForMonth(trrr, new Date().getMonth()+1, new Date().getFullYear(), keeey)  
                   if(statementGenerated==false)
                   {
+                    
                       new_object = new Object()
                       tobewritten = `${orrr.getFullYear()}-${orrr.getMonth()+1}-${orrr.getDate()}`
                       new_object.Date = tobewritten
@@ -80,11 +82,10 @@ function getDailyNewsInCache() {
                       data["TRANSACTIONS"].push(new_object)
                       data[keeey]["DueDate"]=cccc.toString()
                       localforage.setItem("CREDIT CARDS", JSON.stringify(data))
-                      try
-                      {
-                          showNotification(`Statement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
-                      }
-                      catch{}
+                        console.log("SETTING UP")
+                        showNotification(`Statement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
+                        // console.log(`Couldn't send, but here's message\nStatement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
+                      
                   }
               }
               else
