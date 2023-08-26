@@ -182,11 +182,11 @@
             <button class="collapsible-button" id="dis-collapsible-button" style="color:white">&#9776;</button>
             <br>
             <div class="profile">
-               <!-- <img src="https://1.bp.blogspot.com/-vhmWFWO2r8U/YLjr2A57toI/AAAAAAAACO4/0GBonlEZPmAiQW4uvkCTm5LvlJVd_-l_wCNcBGAsYHQ/s16000/team-1-2.jpg" alt="profile_picture"> -->
-               <h3>Abhinav Satheesh</h3>
-               <p>abhinavsatheesh</p>
-               <br>
-               <button>Logout</button>
+                <!-- <img src="https://1.bp.blogspot.com/-vhmWFWO2r8U/YLjr2A57toI/AAAAAAAACO4/0GBonlEZPmAiQW4uvkCTm5LvlJVd_-l_wCNcBGAsYHQ/s16000/team-1-2.jpg" alt="profile_picture"> -->
+                <h3 id="name_ussser"></h3>
+                <p id="user_name"></p>
+                <br>
+                <button>Logout</button>
             </div>
             <ul>
                <li>
@@ -246,16 +246,14 @@
             <th style="margin-left: 10px; margin-right:10px;">Particulars</th>
             <th style="margin-left: 10px; margin-right:10px;">Bank</th>
             <th style="margin-left: 10px; margin-right:10px;">Type</th>
-            
             <th style="margin-left: 10px; margin-right:10px;">Amount</th>
-            <th style="margin-left: 10px; margin-right:10px;">Narration</th>
+            <th style="margin-left: 10px; margin-right:10px;">Actions</th>
          </tr>
       </table>
    </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
 <script>
-    document.getElementById("name_ussser").innerHTML = localStorage.getItem("NameUser")
     const collapsibleButton = document.querySelector('.collapsible-button');
    const menu = document.querySelector('.collapsible');
    
@@ -291,6 +289,7 @@
   darkmode.showWidget();
     }
     window.addEventListener('load', addDarkmodeWidget);
+    document.getElementById("name_ussser").innerHTML = localStorage.getItem("NameUser")
   </script>
 <script>
    function isStringInList(string, list) {
@@ -332,14 +331,15 @@
            new_object.Type = "Cr"
            new_object.Amount = document.getElementById("amount_transaction").value
            bankkk = document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text
-           new_object.BankAccount = bankkk
-           bankname = bankkk.split(" - ")[0]
+           new_object.BankAccount = bankkk.split(" - ")[0]
            new_object.Narration = document.getElementById("narration").value
            data["TRANSACTIONS"].push(new_object)
+           data["TRXNUM"]+=1
+           new_object.TRXNUM=data["TRXNUM"]
            data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
            cash_balance = parseFloat(bankkk.split("₹")[1])
            cash_balance+=parseFloat(document.getElementById("amount_transaction").value)
-           data[bankname]=cash_balance
+           data[bankkk.split(" - ")[0]]=cash_balance
            localStorage.setItem("BANKS", JSON.stringify(data))
            alert("Added!")
            window.location.reload();
@@ -363,7 +363,7 @@
         
         for (keey in data)
         {
-            if(keey == "NO_OF_BANKACCOUNTS"|| keey=="TRANSACTIONS")
+            if(keey == "NO_OF_BANKACCOUNTS"|| keey=="TRANSACTIONS"||keey=="TRXNUM")
             {
 
             }
@@ -444,13 +444,6 @@
             else
             {
                 new_object.Particulars = document.getElementById("particulars_transaction").value
-            }
-            if(document.getElementById("particulars_transaction").value="CASH")
-            {
-
-            }
-            else
-            {
                 if(localStorage.getItem("particulars_ai")==null)
                 {
                     array_part =[]
@@ -472,10 +465,11 @@
            new_object.Type = "Dr"
            new_object.Amount = document.getElementById("amount_transaction").value
            bankkk = document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text
-           new_object.BankAccount = bankkk
-           bankname = bankkk.split(" - ")[0]
+           new_object.BankAccount = bankkk.split(" - ")[0]
            new_object.Narration = document.getElementById("narration").value
            data["TRANSACTIONS"].push(new_object)
+           data["TRXNUM"]+=1
+           new_object.TRXNUM=data["TRXNUM"]
            data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
            bankbalance = parseFloat(bankkk.split("₹")[1])
            if (bankbalance<parseFloat(document.getElementById("amount_transaction").value))
@@ -485,18 +479,22 @@
            else
            {
                 bankbalance-=parseFloat(document.getElementById("amount_transaction").value)
-                data[bankname]=bankbalance
+                data[bankkk.split(" - ")[0]]=bankbalance
                 localStorage.setItem("BANKS", JSON.stringify(data))
                 if(document.getElementById("particulars_transaction").value=='CASH')
                 {
                     cashdata = JSON.parse(localStorage.getItem("CASH"))
+                    cashdata["TRXNUM"]+=1
+                    
                     new_cashobject = new Object()
                     new_cashobject.Date = document.getElementById("date_transaction").value
                     new_cashobject.Particulars = "Cash withdrawn from Bank"
                     new_cashobject.Type = "Cr"
+                    new_cashobject.TRXNUM=cashdata["TRXNUM"]
                     new_cashobject.Amount = document.getElementById("amount_transaction").value
                     new_cashobject.Narration = document.getElementById("narration").value
                     cashdata["TRANSACTIONS"].push(new_cashobject)
+                    
                     cashdata["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
                     cash_balance = parseFloat(cashdata["CASH_BALANCE"])
                     cash_balance+=parseFloat(document.getElementById("amount_transaction").value)
@@ -543,7 +541,7 @@
         
         for (keey in data)
         {
-            if(keey == "NO_OF_BANKACCOUNTS"|| keey=="TRANSACTIONS")
+            if(keey == "NO_OF_BANKACCOUNTS"|| keey=="TRANSACTIONS" || keey=="TRXNUM")
             {
 
             }
@@ -607,7 +605,7 @@
        data = JSON.parse(localStorage.getItem("BANKS"))
        for (var key in data)
        {
-        if(key=="NO_OF_BANKACCOUNTS"||key=="TRANSACTIONS")
+        if(key=="NO_OF_BANKACCOUNTS"||key=="TRANSACTIONS"||key=="TRXNUM")
         {
 
         }
@@ -630,11 +628,25 @@
            data = JSON.parse(localStorage.getItem("BANKS"))
            trx = data["TRANSACTIONS"]
            trx.forEach(add)
+           if(document.getElementById("transactions_table").rows.length==1)
+           {
+            document.getElementById("transactions_table").style.visibility="hidden"
+           var no_trx = document.createElement("h2")
+           no_trx.innerHTML="No transactions found"
+           no_trx.style.cssText = 'text-align:center;';
+           document.getElementById("details_div").appendChild(no_trx)
+           }
        }
    }
    function add(item)
    {
-       var newRow = document.createElement("tr")
+        if(item["Particulars"]=="Modifying Entry"&&item["Narration"]=="Being modification entry passed")
+       {
+        
+       }
+       else
+       {
+        var newRow = document.createElement("tr")
        var newDate = document.createElement("td")
        date = `${item["Date"].split("-")[2]}-${item["Date"].split("-")[1]}-${item["Date"].split("-")[0]}`
        newDate.innerHTML=date
@@ -646,15 +658,26 @@
        newType.innerHTML=item["Type"]
        var newAmount = document.createElement("td")
        newAmount.innerHTML=item["Amount"]
-       var newNarration = document.createElement("td")
-       newNarration.innerHTML=item["Narration"]
        newRow.appendChild(newDate)
        newRow.appendChild(newParticulars)
        newRow.appendChild(newBank)
        newRow.appendChild(newType)
        newRow.appendChild(newAmount)
-       newRow.appendChild(newNarration)
+       if(item["Particulars"].includes("Payment of") && item["Particulars"].includes("Credit Card"))
+       {
+        var newButton = document.createElement("button")
+        newButton.innerHTML="No Actions"
+       }
+       else
+       {
+        var newButton = document.createElement("button")
+        newButton.innerHTML="🔍\nActions:\nView and Delete"
+        newButton.addEventListener("click", function(){window.location.href=`ViewTransaction.html?type=B&trxnum=${item["TRXNUM"]}`})
+       }
+       newRow.appendChild(newButton)
        document.getElementById("transactions_table").appendChild(newRow)
+       }
+       
    }
 
 </script>

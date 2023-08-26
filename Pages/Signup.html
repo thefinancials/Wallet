@@ -248,6 +248,115 @@
    document.getElementById("delButton").style.visibility = "hidden"
 }
 
+var urlparams = window.location.search
+if(urlparams=="")
+{
+   if (localStorage.getItem("NameUser") != null) {
+   document.getElementById("name_user").value = localStorage.getItem("NameUser")
+   document.getElementById("add_details_1").style.visibility = "visible";
+   document.getElementById("type_of_finance").style.visibility = "visible";
+}
+}
+else
+{
+   document.getElementById("name_user").value = localStorage.getItem("NameUser") 
+   creditcard = (urlparams.split("?CC=")[1]).replace(/%20/g, ' ');
+   document.getElementById("add_details_1").style.visibility = "visible";
+   document.getElementById("add_details_1").innerHTML="Edit Credit Card"
+    var spacer = document.createElement("br")
+      document.getElementById("details_form").appendChild(spacer)
+      var creditcard_entry = document.createElement("input")
+      creditcard_entry.id = "creditcard_entry"
+      creditcard_entry.placeholder = "Enter your credit card bank"
+      creditcard_entry.width = "150px"
+      creditcard_entry.type = "text"
+      var nickname_entry = document.createElement("input")
+      nickname_entry.id = "nickname_entry"
+      nickname_entry.placeholder = "Enter a nickname for your card"
+      nickname_entry.width = "150px"
+      nickname_entry.type = "text"
+      var spacer = document.createElement("br")
+      var due_date = document.createElement("select")
+      due_date.id = "due_date_checker"
+      var options = ["Monthly Billing Date?", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
+      for (var i = 0; i < options.length; i++) {
+         var option = document.createElement("option");
+         option.value = options[i];
+         option.text = options[i];
+         due_date.appendChild(option);
+      }
+      var nickname = creditcard.substring(creditcard.indexOf("(") + 1, creditcard.lastIndexOf(")"))
+      sss =creditcard.replace(`(${nickname})`, "")
+      document.getElementById("to_delete").appendChild(creditcard_entry)
+      creditcard_entry.value=sss
+      document.getElementById("to_delete").appendChild(spacer)
+      document.getElementById("to_delete").appendChild(nickname_entry)
+      nickname_entry.value=nickname
+      document.getElementById("to_delete").appendChild(spacer)
+      document.getElementById("to_delete").appendChild(due_date)
+      data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+      details = data[creditcard]
+      datedue = new Date(details.DueDate)
+      dd = datedue.getDate()
+      due_date.value=dd
+      var submit_btn = document.createElement("button")
+      submit_btn.id = "submit_btn"
+      submit_btn.innerHTML = "Add details"
+      submit_btn.addEventListener("click", function () {
+         if (nickname_entry.value == "" || creditcard_entry.value == "" || document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text == "Monthly Billing Date?") {
+            swal("Please fill all the fields", "Please fill out all the fields - Nickname, Credit Card Name and Monthly Bill Date", "info");
+         } else {
+            let newKey=creditcard_entry.value
+            data[`${creditcard_entry.value} (${nickname_entry.value})`]=data[creditcard]
+            delete data[creditcard]
+            todayDate = new Date()
+            tempDate = new Date()
+            tempDate.setDate(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)
+            tempDate.setHours(0, 0, 0)
+            if (todayDate >= tempDate) {
+               tempDate.setMonth(tempDate.getMonth() + 1)
+               data[`${creditcard_entry.value} (${nickname_entry.value})`]["DueDate"] = tempDate.toString()
+            } else {
+               data[`${creditcard_entry.value} (${nickname_entry.value})`]["DueDate"] = tempDate.toString()
+            }
+            transactions = data.TRANSACTIONS
+            for (let i = 0; i < transactions.length; i++) {
+               if (transactions[i].CreditCard === creditcard) {
+                  transactions[i].CreditCard = `${creditcard_entry.value} (${nickname_entry.value})`;
+               }
+            }  
+            towrite = JSON.stringify(data)
+            localStorage.setItem("CREDIT CARDS", towrite)
+            localforage.setItem("CREDIT CARDS", data, function(err, value){console.log("Saved successfully")})
+            alert("Modified card details successfully!")
+            history.back()
+         }})
+         document.getElementById("to_delete").appendChild(spacer)
+         document.getElementById("to_delete").appendChild(submit_btn)
+         document.getElementById("to_delete").appendChild(spacer)
+         var del_btn = document.createElement("button")
+         del_btn.id = "del_btn"
+         del_btn.innerHTML = "Delete Card"
+         del_btn.addEventListener("click", function(){
+            if(confirm("Warning! Do you wish to delete this card?"))
+            {
+               for (let i = 0; i < data.TRANSACTIONS.length; i++) {
+                  if (data.TRANSACTIONS[i].CreditCard === creditcard) {
+                     data.TRANSACTIONS.splice(i, 1);
+                  }
+                }  
+               delete data[creditcard]
+               data.NO_OF_CARDS-=1
+               towrite = JSON.stringify(data)
+               localStorage.setItem("CREDIT CARDS", towrite)
+               localforage.setItem("CREDIT CARDS", data, function(err, value){console.log("Saved successfully")})
+               alert("Deleted card successfully!")
+               history.back()
+            }
+         })
+         document.getElementById("to_delete").appendChild(del_btn)
+}
+
 function del_data() {
    event.preventDefault()
    swal("Warning", "Are you sure you wish to delete all the data stored on the device? Doing so, will log you out!", "warning", {
@@ -267,6 +376,7 @@ function del_data() {
                   localStorage.removeItem("CREDIT CARDS")
                   localStorage.removeItem("setup")
                   localStorage.removeItem("particulars_ai")
+                  localforage.removeItem("CREDIT CARDS")
                   window.location.reload()
                } catch {
 
@@ -281,11 +391,7 @@ function del_data() {
 
 }
 
-if (localStorage.getItem("NameUser") != null) {
-   document.getElementById("name_user").value = localStorage.getItem("NameUser")
-   document.getElementById("add_details_1").style.visibility = "visible";
-   document.getElementById("type_of_finance").style.visibility = "visible";
-}
+
 
 function submitName() {
    event.preventDefault();
@@ -349,6 +455,7 @@ function change_option() {
             if (localStorage.getItem("CREDIT CARDS") == null) {
                objeee = new Object()
                objeee.NO_OF_CARDS = 1
+               objeee.TRXNUM = 0
                strrr = `${creditcard_entry.value} (${nickname_entry.value})`
                objeee.TRANSACTIONS = []
                oobb = new Object()
@@ -414,6 +521,7 @@ function change_option() {
                      oobb.DueDate = tempDate.toString()
                   }
                   oobb.BalanceOutstanding = 0
+
                   data[`${creditcard_entry.value} (${nickname_entry.value})`] = oobb
                   towrite = JSON.stringify(data)
                   localStorage.setItem("CREDIT CARDS", towrite)
@@ -485,6 +593,7 @@ function change_option() {
                         case "ok":
                            objeee = new Object()
                            objeee.CASH_BALANCE = creditcard_entry.value
+                           objeee.TRXNUM = 0
                            objeee.TRANSACTIONS = []
                            towrite = JSON.stringify(objeee)
                            localStorage.setItem("CASH", towrite)
@@ -517,6 +626,7 @@ function change_option() {
             } else {
                objeee = new Object()
                objeee.CASH_BALANCE = creditcard_entry.value
+               objeee.TRXNUM = 0
                objeee.TRANSACTIONS = []
                towrite = JSON.stringify(objeee)
                localStorage.setItem("CASH", towrite)
@@ -599,6 +709,7 @@ function change_option() {
             if (localStorage.getItem("BANKS") == null) {
                objeee = new Object()
                objeee.NO_OF_BANKACCOUNTS = 1
+               objeee.TRXNUM = 0
                strrr = `${creditcard_entry.value} (${nickname_entry.value})`
                objeee[strrr] = parseFloat(balance_entry.value)
                objeee.TRANSACTIONS = []

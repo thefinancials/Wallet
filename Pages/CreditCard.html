@@ -246,8 +246,7 @@
             <th style="margin-left: 10px; margin-right:10px;">Credit Card</th>
             <th style="margin-left: 10px; margin-right:10px;">Type</th>
             <th style="margin-left: 10px; margin-right:10px;">Amount</th>
-            <th style="margin-left: 10px; margin-right:10px;">Paid using Account</th>
-            <th style="margin-left: 10px; margin-right:10px;">Narration</th>
+            <th style="margin-left: 10px; margin-right:10px;">Actions</th>
          </tr>
       </table>
       
@@ -341,9 +340,21 @@
                     new_cashobject.Amount = document.getElementById("amount_transaction").value
                     new_cashobject.Narration = document.getElementById("narration").value
                     data_cash["TRANSACTIONS"].push(new_cashobject)
+                    data_cash["TRXNUM"]+=1
                     data_cash["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
                     data_cash["CASH_BALANCE"]=new_cashbalance
+                    new_object["TRXNUM"]=data_cash["TRXNUM"]
                     localStorage.setItem("CASH", JSON.stringify(data_cash))
+                    data["TRANSACTIONS"].push(new_object)
+                    data["TRXNUM"]+=1
+                    new_object.TRXNUM=data["TRXNUM"]
+                    data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+                    balance_outstanding = data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]-parseFloat(document.getElementById("amount_transaction").value)
+                    data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]=balance_outstanding
+                    
+                    localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
+                    localforage.setItem("CREDIT CARDS", data, function(err, value){
+                    alert("Saved successfully")})
                 }
            }
            else
@@ -368,21 +379,25 @@
                     new_cashobject.Amount = document.getElementById("amount_transaction").value
                     new_cashobject.Narration = document.getElementById("narration").value
                     data_banks["TRANSACTIONS"].push(new_cashobject)
+                    data_banks["TRXNUM"]+=1
                     data_banks["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+                    new_object["TRXNUM"]=data_banks["TRXNUM"]
                     data_banks[bankname]=new_bankbalance
                     localStorage.setItem("BANKS", JSON.stringify(data_banks))
+                    new_object.Narration = document.getElementById("narration").value
+                    data["TRANSACTIONS"].push(new_object)
+                    data["TRXNUM"]+=1
+                    new_object.TRXNUM=data["TRXNUM"]
+                    data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+                    balance_outstanding = data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]-parseFloat(document.getElementById("amount_transaction").value)
+                    data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]=balance_outstanding
+                    localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
+                    localforage.setItem("CREDIT CARDS", data, function(err, value){
+                    alert("Saved successfully")})
                 }
            }
            
-            new_object.Narration = document.getElementById("narration").value
-            data["TRANSACTIONS"].push(new_object)
-            data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
-            balance_outstanding = data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]-parseFloat(document.getElementById("amount_transaction").value)
-            data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]=balance_outstanding
             
-            localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
-           localforage.setItem("CREDIT CARDS", data, function(err, value){
-            console.log("Saved successfully")})
            
        }
    }
@@ -404,7 +419,7 @@
         
         for (keey in data)
         {
-            if(keey == "NO_OF_CARDS"|| keey=="TRANSACTIONS")
+            if(keey == "NO_OF_CARDS"|| keey=="TRANSACTIONS" ||keey=="TRXNUM")
             {
 
             }
@@ -445,7 +460,7 @@
          {
             for (var kkkeey in try_bank)
             {
-                if(kkkeey=="NO_OF_BANKACCOUNTS"||kkkeey=="TRANSACTIONS")
+                if(kkkeey=="NO_OF_BANKACCOUNTS"||kkkeey=="TRANSACTIONS"||kkkeey=="TRXNUM")
                 {
                     
                 }
@@ -515,6 +530,8 @@
                }
            }
            new_object.Type = "Dr"
+           data["TRXNUM"]+=1
+           new_object.TRXNUM=data["TRXNUM"]
            new_object.Amount = document.getElementById("amount_transaction").value
            creditcardd = (document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text)
            new_object.CreditCard = creditcardd
@@ -548,7 +565,7 @@
        data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
         for (keey in data)
         {
-            if(keey == "NO_OF_CARDS"|| keey=="TRANSACTIONS")
+            if(keey == "NO_OF_CARDS"|| keey=="TRANSACTIONS" || keey=="TRXNUM")
             {
 
             }
@@ -624,11 +641,25 @@
 
            trx = data["TRANSACTIONS"]
            trx.forEach(add)
+           if(document.getElementById("transactions_table").rows.length==1)
+           {
+            document.getElementById("transactions_table").style.visibility="hidden"
+           var no_trx = document.createElement("h2")
+           no_trx.innerHTML="No transactions found"
+           no_trx.style.cssText = 'text-align:center;';
+           document.getElementById("details_div").appendChild(no_trx)
+           }
        }
    }
    function add(item)
    {
-       var newRow = document.createElement("tr")
+        if(item["Particulars"]=="Modifying Entry"&&item["Narration"]=="Being modification entry passed")
+       {
+        
+       }
+       else
+       {
+        var newRow = document.createElement("tr")
        var newDate = document.createElement("td")
        try{
         date = `${item["Date"].split("-")[2]}-${item["Date"].split("-")[1]}-${item["Date"].split("-")[0]}`
@@ -643,36 +674,27 @@
        newParticulars.innerHTML=item["Particulars"]
        var newBank = document.createElement("td")
        newBank.innerHTML=(item["CreditCard"]).split(" - ")[0]
-
        var newType = document.createElement("td")
        newType.innerHTML=item["Type"]
        var newAmount = document.createElement("td")
        newAmount.innerHTML=item["Amount"]
-       var newAccount = document.createElement("td")
-       if(item["Account"]==undefined)
-       
-       {
-        newAccount.innerHTML="N/A"
-       }
-       else
-       {
-        newAccount.innerHTML=item["Account"]
-       }
-       var newNarration = document.createElement("td")
-       newNarration.innerHTML=item["Narration"]
+       var newButton = document.createElement("button")
+       newButton.innerHTML="🔍\nActions:\nView and Delete"
+       newButton.addEventListener("click", function(){window.location.href=`ViewTransaction.html?type=CC&trxnum=${item["TRXNUM"]}`})
        newRow.appendChild(newDate)
        newRow.appendChild(newParticulars)
        newRow.appendChild(newBank)
        newRow.appendChild(newType)
        newRow.appendChild(newAmount)
-       newRow.appendChild(newAccount)
-       newRow.appendChild(newNarration)
+       newRow.appendChild(newButton)
        document.getElementById("transactions_table").appendChild(newRow)   
+       }
+       
    }
    
     data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
     const cardDetails = Object.entries(data)
-    .filter(([key]) => key !== "NO_OF_CARDS" && key !== "TRANSACTIONS")
+    .filter(([key]) => key !== "NO_OF_CARDS" && key !== "TRANSACTIONS" && key!="TRXNUM")
     .map(([card, details]) => ({
         card,
         dueDate: new Date(details.DueDate),
@@ -693,15 +715,16 @@ th_nickname=document.createElement("th")
 th_nickname.innerHTML = "Nick Name"
 th_duedays=document.createElement("th")
 th_duedays.innerHTML = "Due in"
+th_actions=document.createElement("th")
+th_actions.innerHTML = "Edit Card"
 // th_duedate=document.createElement("th")
 // th_duedate.innerHTML = "Due Date"
-tr.append(th_name,th_nickname,th_duedays)
+tr.append(th_name,th_nickname,th_duedays, th_actions)
 thead.append(tr)
 table.append(thead)
 tbody=document.createElement("tbody")
 
 cardDetails.forEach(({ card, dueDate }) => {
-
     var nickname = card.substring(card.indexOf("(") + 1, card.lastIndexOf(")"))
     const formattedDate = `${dueDate.getDate()}-${dueDate.getMonth()+1}-${dueDate.getFullYear()}`
     var daystogo = parseInt((dueDate.getTime()-new Date().getTime())/(1000*60*60*24)+1)
@@ -739,7 +762,10 @@ cardDetails.forEach(({ card, dueDate }) => {
     th_duedays.innerHTML = `${daystogo} days`
     // th_duedate=document.createElement("td")
     // th_duedate.innerHTML = formattedDate
-    tr.append(th_name,th_nickname,th_duedays)
+    th_action = document.createElement("button")
+    th_action.innerHTML="✏️ Edit Card"
+    th_action.addEventListener("click", function(){window.location.href=`Signup.html?CC=${card}`})
+    tr.append(th_name,th_nickname,th_duedays,th_action)
     tbody.append(tr)
     //document.getElementById("cur_balance").innerHTML+=htmlcard.innerHTML
 
