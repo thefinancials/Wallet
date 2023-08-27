@@ -3,6 +3,7 @@
    <title>Cash</title>
    <link rel="icon" href="../Assets/main-icon.png">
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+   <script src="https://kit.fontawesome.com/420eab8243.js" crossorigin="anonymous"></script>
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <style>
@@ -182,7 +183,8 @@
             <button class="collapsible-button" id="dis-collapsible-button" style="color:white">&#9776;</button>
             <br>
             <div class="profile">
-                <!-- <img src="https://1.bp.blogspot.com/-vhmWFWO2r8U/YLjr2A57toI/AAAAAAAACO4/0GBonlEZPmAiQW4uvkCTm5LvlJVd_-l_wCNcBGAsYHQ/s16000/team-1-2.jpg" alt="profile_picture"> -->
+                <i class="fa-regular fa-user fa-2xl" style="color: #f7f9fd;"></i>
+                <br>    
                 <h3 id="name_ussser"></h3>
                 <p id="user_name"></p>
                 <br>
@@ -196,26 +198,26 @@
                     </a>
                 </li>
                 <li>
-                    <a href="Pages/CreditCard.html">
-                        <span class="icon"><i class="fas fa-credit-card"></i></span>
+                    <a href="CreditCard.html">
+                        <span class="icon"><i class="fa-regular fa-credit-card"></i></span>
                         <span class="item">Credit Cards</span>
                     </a>
                 </li>
                 <li>
-                    <a href="Pages/Bank.html">
-                        <span class="icon"><i class="fas fa-piggy-bank"></i></span>
+                    <a href="Bank.html">
+                        <span class="icon"><i class="fa-solid fa-building-columns"></i></span>
                         <span class="item">Banks</span>
                     </a>
                 </li>
                 <li>
-                    <a href="Pages/Cash.html" class="active">
-                        <span class="icon"><i class="fas fa-money-bill-wave"></i></span>
+                    <a href="#" class="active">
+                        <span class="icon"><i class="fa-solid fa-sack-dollar"></i></span>
                         <span class="item">Cash</span>
                     </a>
                 </li>
                 <li>
-                    <a href="Pages/Signup.html">
-                        <span class="icon"><i class="fas fa-child"></i></span>
+                    <a href="Signup.html">
+                        <span class="icon"><i class="fa-solid fa-gear"></i></span>
                         <span class="item">Settings</span>
                     </a>
                 </li>
@@ -250,8 +252,13 @@
       </table>
    </div>
 </body>
+<script src="../localforage.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
 <script>
+    function localStorageGetItem(vallue)
+    {
+        return JSON.parse(localStorage.getItem("Wallet"))[vallue]
+    }
     const collapsibleButton = document.querySelector('.collapsible-button');
 const menu = document.querySelector('.collapsible');
 
@@ -264,7 +271,7 @@ const discollapisbleButton = document.getElementById("dis-collapsible-button");
 discollapisbleButton.addEventListener('click', () => {
     menu.classList.remove('active')
 });
-document.getElementById("name_ussser").innerHTML = localStorage.getItem("NameUser")
+document.getElementById("name_ussser").innerHTML = localStorageGetItem("NameUser")
 
 
 
@@ -304,25 +311,31 @@ document.getElementById("name_ussser").innerHTML = localStorage.getItem("NameUse
        }
        else
        {
-           data = JSON.parse(localStorage.getItem("CASH"))
+           data = (localStorageGetItem("CASH"))
            new_object = new Object()
            new_object.Date = document.getElementById("date_transaction").value
            new_object.Particulars = document.getElementById("particulars_transaction").value
-           if(localStorage.getItem("particulars_ai")==null)
+           if(localStorageGetItem("particulars_ai")==null)
            {
                array_part =[]
                array_part.push(document.getElementById("particulars_transaction").value)
-               localStorage.setItem("particulars_ai", JSON.stringify(array_part))
+               oridata = JSON.parse(localStorage.getItem("Wallet"))
+               oridata["particulars_ai"]=array_part
+               localStorage.setItem("Wallet", JSON.stringify(oridata))
+               localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
            }
            else
            {
-               array_part=JSON.parse(localStorage.getItem("particulars_ai"))
+               array_part=(localStorageGetItem("particulars_ai"))
                if(isStringInList(document.getElementById("particulars_transaction").value, array_part)==true)
                {}
                else
                {
                    array_part.push(document.getElementById("particulars_transaction").value)
-                   localStorage.setItem("particulars_ai", JSON.stringify(array_part))
+                   oridata = JSON.parse(localStorage.getItem("Wallet"))
+                    oridata["particulars_ai"]=array_part
+                    localStorage.setItem("Wallet", JSON.stringify(oridata))
+                    localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
                }
            }
            data["TRXNUM"]+=1
@@ -331,12 +344,14 @@ document.getElementById("name_ussser").innerHTML = localStorage.getItem("NameUse
            new_object.Amount = parseInt(document.getElementById("amount_transaction").value)
            new_object.Narration = document.getElementById("narration").value
            data["TRANSACTIONS"].push(new_object)
-           
            data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
            cash_balance = parseFloat(data["CASH_BALANCE"])
            cash_balance+=parseFloat(document.getElementById("amount_transaction").value)
            data["CASH_BALANCE"]=cash_balance
-           localStorage.setItem("CASH", JSON.stringify(data))
+           oridata = JSON.parse(localStorage.getItem("Wallet"))
+           oridata["CASH"]=data
+           localStorage.setItem("Wallet", JSON.stringify(oridata))
+           localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
            alert("Added!")
            window.location.reload();
        }
@@ -354,13 +369,13 @@ document.getElementById("name_ussser").innerHTML = localStorage.getItem("NameUse
        <br><input id="amount_transaction" class="margin: auto; display: block;" type="number" placeholder="Enter the amount">\
        <br><input id="narration" class="margin: auto; display: block;" type="text" placeholder="Enter narration"></p>\
        <br><button onclick="moneyadded_in()">Add transaction</button>'
-       if (localStorage.getItem("particulars_ai")==null)
+       if (localStorageGetItem("particulars_ai")==null)
        {
    
        }
        else
        {
-           var listItems = JSON.parse(localStorage.getItem("particulars_ai"))
+           var listItems = (localStorageGetItem("particulars_ai"))
    var listElement = document.getElementById('list');
    var searchInput = document.getElementById('particulars_transaction');
    
@@ -408,25 +423,31 @@ document.getElementById("name_ussser").innerHTML = localStorage.getItem("NameUse
        }
        else
        {
-           data = JSON.parse(localStorage.getItem("CASH"))
+           data = (localStorageGetItem("CASH"))
            new_object = new Object()
            new_object.Date = document.getElementById("date_transaction").value
            new_object.Particulars = document.getElementById("particulars_transaction").value
-           if(localStorage.getItem("particulars_ai")==null)
+           if(localStorageGetItem("particulars_ai")==null)
            {
                array_part =[]
                array_part.push(document.getElementById("particulars_transaction").value)
-               localStorage.setItem("particulars_ai", JSON.stringify(array_part))
+               oridata = JSON.parse(localStorage.getItem("Wallet"))
+               oridata["particulars_ai"]=array_part
+               localStorage.setItem("Wallet", JSON.stringify(oridata))
+               localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
            }
            else
            {
-               array_part=JSON.parse(localStorage.getItem("particulars_ai"))
+               array_part=(localStorageGetItem("particulars_ai"))
                if(isStringInList(document.getElementById("particulars_transaction").value, array_part)==true)
                {}
                else
                {
                    array_part.push(document.getElementById("particulars_transaction").value)
-                   localStorage.setItem("particulars_ai", JSON.stringify(array_part))
+                   oridata = JSON.parse(localStorage.getItem("Wallet"))
+                    oridata["particulars_ai"]=array_part
+                    localStorage.setItem("Wallet", JSON.stringify(oridata))
+                    localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
                }
            }
            data["TRXNUM"]+=1
@@ -435,12 +456,14 @@ document.getElementById("name_ussser").innerHTML = localStorage.getItem("NameUse
            new_object.Amount = parseInt(document.getElementById("amount_transaction").value)
            new_object.Narration = document.getElementById("narration").value
            data["TRANSACTIONS"].push(new_object)
-           
            data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
            cash_balance = parseFloat(data["CASH_BALANCE"])
            cash_balance-=parseFloat(document.getElementById("amount_transaction").value)
            data["CASH_BALANCE"]=cash_balance
-           localStorage.setItem("CASH", JSON.stringify(data))
+           oridata = JSON.parse(localStorage.getItem("Wallet"))
+           oridata["CASH"]=data
+           localStorage.setItem("Wallet", JSON.stringify(oridata))
+           localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
            alert("Added!")
            window.location.reload();
        }
@@ -458,13 +481,13 @@ document.getElementById("name_ussser").innerHTML = localStorage.getItem("NameUse
        <br><input id="amount_transaction" class="margin: auto; display: block;" type="number" placeholder="Enter the amount">\
        <br><input id="narration" class="margin: auto; display: block;" type="text" placeholder="Enter narration"></p>\
        <br><button onclick="moneyadded_out()">Add transaction</button>'
-       if (localStorage.getItem("particulars_ai")==null)
+       if (localStorageGetItem("particulars_ai")==null)
        {
    
        }
        else
        {
-           var listItems = JSON.parse(localStorage.getItem("particulars_ai"))
+           var listItems = (localStorageGetItem("particulars_ai"))
    var listElement = document.getElementById('list');
    var searchInput = document.getElementById('particulars_transaction');
    
@@ -499,14 +522,14 @@ document.getElementById("name_ussser").innerHTML = localStorage.getItem("NameUse
    renderList(listItems);
        }
    }
-   if(localStorage.getItem("CASH")==null)
+   if(localStorageGetItem("CASH")==null)
    {
        alert("You have not setup cash. Please add Cash account first")
-       window.location.href="Signup.html"
+       window.location.href="Signup.html?addType=C"
    }
    else
    {
-       data = JSON.parse(localStorage.getItem("CASH"))
+       data = (localStorageGetItem("CASH"))
        document.getElementById("cur_balance").innerHTML = `Balance : ₹ ${data["CASH_BALANCE"]}`
        if(data["TRANSACTIONS"].length==0)
        {
@@ -518,7 +541,7 @@ document.getElementById("name_ussser").innerHTML = localStorage.getItem("NameUse
        }
        else
        {
-           data = JSON.parse(localStorage.getItem("CASH"))
+           data = (localStorageGetItem("CASH"))
            trx = data["TRANSACTIONS"]
            trx.forEach(add)
            if(document.getElementById("transactions_table").rows.length==1)
@@ -549,22 +572,20 @@ document.getElementById("name_ussser").innerHTML = localStorage.getItem("NameUse
         newType.innerHTML=item["Type"]
         var newAmount = document.createElement("td")
         newAmount.innerHTML=item["Amount"]
+        var newButton = document.createElement("button")
+        newButton.innerHTML="🔍\nActions:\nView\n and Delete"
+        newButton.addEventListener("click", function(){window.location.href=`ViewTransaction.html?type=C&trxnum=${item["TRXNUM"]}`})
+        if(item["Particulars"].includes("Payment of") && item["Particulars"].includes("Credit Card"))
+       {
+        newButton.disabled=true
+       }
         newRow.appendChild(newDate)
         newRow.appendChild(newParticulars)
         newRow.appendChild(newType)
         newRow.appendChild(newAmount)
-        if(item["Particulars"].includes("Payment of") && item["Particulars"].includes("Credit Card"))
-       {
-        var newButton = document.createElement("button")
-        newButton.innerHTML="No Actions"
-       }
-       else
-       {
-        var newButton = document.createElement("button")
-        newButton.innerHTML="🔍\nActions:\nView\n and Delete"
-        newButton.addEventListener("click", function(){window.location.href=`ViewTransaction.html?type=C&trxnum=${item["TRXNUM"]}`})
-       }
-       newRow.appendChild(newButton)
+        newRow.appendChild(newButton)
+       
+       
         document.getElementById("transactions_table").appendChild(newRow)
     }
        

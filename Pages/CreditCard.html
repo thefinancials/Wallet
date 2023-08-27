@@ -4,6 +4,7 @@
    <link rel="icon" href="../Assets/main-icon.png">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+   <script src="https://kit.fontawesome.com/420eab8243.js" crossorigin="anonymous"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 </head>
 <style>
@@ -182,53 +183,54 @@
             <button class="collapsible-button" id="dis-collapsible-button" style="color:white">&#9776;</button>
             <br>
             <div class="profile">
-               <!-- <img src="https://1.bp.blogspot.com/-vhmWFWO2r8U/YLjr2A57toI/AAAAAAAACO4/0GBonlEZPmAiQW4uvkCTm5LvlJVd_-l_wCNcBGAsYHQ/s16000/team-1-2.jpg" alt="profile_picture"> -->
-               <h3 id="name_ussser"></h3>
-               <p id="user_name"></p>
-               <br>
-               <button>Logout</button>
+                <i class="fa-regular fa-user fa-2xl" style="color: #f7f9fd;"></i>
+                <br>    
+                <h3 id="name_ussser"></h3>
+                <p id="user_name"></p>
+                <br>
+                <button>Logout</button>
             </div>
             <ul>
-               <li>
-                  <a href="../index.html">
-                  <span class="icon"><i class="fas fa-home"></i></span>
-                  <span class="item">Home</span>
-                  </a>
-               </li>
-               <li>
-                  <a href="CreditCard.html" class="active">
-                  <span class="icon"><i class="fas fa-credit-card"></i></span>
-                  <span class="item">Credit Cards</span>
-                  </a>
-               </li>
-               <li>
-                  <a href="Bank.html">
-                  <span class="icon"><i class="fas fa-piggy-bank"></i></span>
-                  <span class="item">Banks</span>
-                  </a>
-               </li>
-               <li>
-                  <a href="Cash.html">
-                  <span class="icon"><i class="fas fa-money-bill-wave"></i></span>
-                  <span class="item">Cash</span>
-                  </a>
-               </li>
-               <li>
-                  <a href="Signup.html">
-                  <span class="icon"><i class="fas fa-child"></i></span>
-                  <span class="item">Settings</span>
-                  </a>
-               </li>
+                <li>
+                    <a href="../index.html">
+                        <span class="icon"><i class="fas fa-home"></i></span>
+                        <span class="item">Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="active">
+                        <span class="icon"><i class="fa-regular fa-credit-card"></i></span>
+                        <span class="item">Credit Cards</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Bank.html">
+                        <span class="icon"><i class="fa-solid fa-building-columns"></i></span>
+                        <span class="item">Banks</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Cash.html">
+                        <span class="icon"><i class="fa-solid fa-sack-dollar"></i></span>
+                        <span class="item">Cash</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Signup.html">
+                        <span class="icon"><i class="fa-solid fa-gear"></i></span>
+                        <span class="item">Settings</span>
+                    </a>
+                </li>
             </ul>
-         </div>
+        </div>
       </div>
    </div>
    <br>
    <p class="centre" id="cur_balance" style="font-size: 20px;"></p>
    <br>
    <form class="centre">
-    
-      <button class="button" onclick="goto()">Manage Cards</button>
+
+      <button class="button" onclick="goto()">Add Credit Card</button>
       <br><br>
       <button class="button" onclick="money_in()">Bill Payment of a card</button>
       <br><br>
@@ -255,7 +257,7 @@
 <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
 <script src="../localforage.js"></script>
 <script>
-    document.getElementById("name_ussser").innerHTML = localStorage.getItem("NameUser")
+    document.getElementById("name_ussser").innerHTML = localStorageGetItem("NameUser")
     const collapsibleButton = document.querySelector('.collapsible-button');
    const menu = document.querySelector('.collapsible');
    
@@ -268,11 +270,6 @@
    discollapisbleButton.addEventListener('click', () => {
    menu.classList.remove('active')
    });
-    function goto()
-    {
-       event.preventDefault()
-        window.location.href="Signup.html"
-    }
     function addDarkmodeWidget() {
       const options = {
     bottom: '32px', // default: '32px'
@@ -292,11 +289,18 @@
   darkmode.showWidget();
     }
     window.addEventListener('load', addDarkmodeWidget);
+    function localStorageGetItem(vallue)
+        {
+            return JSON.parse(localStorage.getItem("Wallet"))[vallue]
+        }
   </script>
 <script>    
-    const dbName = "WalletDatabase";
-   const dbVersion = 1;
-
+    
+    function goto()
+   {
+    event.preventDefault()
+    window.location.href="Signup.html?addType=CC"
+   }
 
     selected = ""
    function isStringInList(string, list) {
@@ -314,15 +318,14 @@
        }
        else
        {
-           data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+           data = (localStorageGetItem("CREDIT CARDS"))
            new_object = new Object()
-           
            new_object.Type = "Cr"
            new_object.Particulars="Payment made to Card"
            new_object.Amount = document.getElementById("amount_transaction").value
            if(selected=="Cash")
            {
-                data_cash = JSON.parse(localStorage.getItem("CASH"))
+                data_cash = (localStorageGetItem("CASH"))
                 cash_balance_to = parseFloat(data_cash["CASH_BALANCE"])
                 if (cash_balance_to<parseFloat(document.getElementById("amount_transaction").value))
                 {
@@ -344,27 +347,27 @@
                     data_cash["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
                     data_cash["CASH_BALANCE"]=new_cashbalance
                     new_object["TRXNUM"]=data_cash["TRXNUM"]
-                    localStorage.setItem("CASH", JSON.stringify(data_cash))
+                    oridata = JSON.parse(localStorage.getItem("Wallet"))
+                    oridata["CASH"]=data_cash
                     data["TRANSACTIONS"].push(new_object)
                     data["TRXNUM"]+=1
                     new_object.TRXNUM=data["TRXNUM"]
                     data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
                     balance_outstanding = data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]-parseFloat(document.getElementById("amount_transaction").value)
                     data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]=balance_outstanding
-                    
-                    localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
-                    localforage.setItem("CREDIT CARDS", data, function(err, value){
-                    alert("Saved successfully")})
+                    oridata["CREDIT CARDS"]=data
+                    localStorage.setItem("Wallet", JSON.stringify(oridata))
+                    localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){alert("Saved successfully")})
                 }
            }
            else
            {
                 bankname = selected.split(" - ")[0]
-                data_banks = JSON.parse(localStorage.getItem("BANKS"))
+                data_banks = (localStorageGetItem("BANKS"))
                 bank_balance = parseFloat(data_banks[bankname])
                 if (bank_balance<parseFloat(document.getElementById("amount_transaction").value))
                 {
-                        alert(`Insufficient balance in ${bankname}`)
+                    alert(`Insufficient balance in ${bankname}`)
                 }
                 else
                 {
@@ -383,7 +386,8 @@
                     data_banks["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
                     new_object["TRXNUM"]=data_banks["TRXNUM"]
                     data_banks[bankname]=new_bankbalance
-                    localStorage.setItem("BANKS", JSON.stringify(data_banks))
+                    oridata = JSON.parse(localStorage.getItem("Wallet"))
+                    oridata["BANKS"]=data_banks
                     new_object.Narration = document.getElementById("narration").value
                     data["TRANSACTIONS"].push(new_object)
                     data["TRXNUM"]+=1
@@ -391,14 +395,11 @@
                     data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
                     balance_outstanding = data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]-parseFloat(document.getElementById("amount_transaction").value)
                     data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]=balance_outstanding
-                    localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
-                    localforage.setItem("CREDIT CARDS", data, function(err, value){
-                    alert("Saved successfully")})
+                    oridata["CREDIT CARDS"]=data
+                    localStorage.setItem("Wallet", JSON.stringify(oridata))
+                    localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){alert("Saved successfully")})
                 }
            }
-           
-            
-           
        }
    }
    function money_in()
@@ -415,7 +416,7 @@
        <br><ul id="list"></ul>\
        <br><input id="narration" class="margin: auto; display: block;" type="text" placeholder="Enter narration"></p>\
        <br><button id="add_btn"onclick="moneyadded_in()">Add transaction</button>'
-       data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+       data = (localStorageGetItem("CREDIT CARDS"))
         
         for (keey in data)
         {
@@ -430,14 +431,14 @@
                 document.getElementById("bank_select").add(newElement)
             }
         }
-       if (localStorage.getItem("CASH")==null && localStorage.getItem("BANKS")==null)
+       if (localStorageGetItem("CASH")==null && localStorageGetItem("BANKS")==null)
        {
         document.getElementById("list").innerHTML="You don't have any payment options set up"
         document.getElementById("add_btn").disabled = true
        }
        else
        {
-         try_cash = JSON.parse(localStorage.getItem("CASH"))
+         try_cash = (localStorageGetItem("CASH"))
          if(try_cash==null)
          {
 
@@ -451,7 +452,7 @@
             document.getElementById("list").appendChild(document.createElement("br"))
             document.getElementById("list").appendChild(document.createElement("br"))
          }
-         try_bank = JSON.parse(localStorage.getItem("BANKS"))
+         try_bank = (localStorageGetItem("BANKS"))
          if(try_bank==null)
          {
 
@@ -479,7 +480,7 @@
     }
     function doTask()
     {
-        data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+        data = (localStorageGetItem("CREDIT CARDS"))
         
         for (keey in data)
         {
@@ -508,25 +509,31 @@
        }
        else
        {
-           data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+           data = (localStorageGetItem("CREDIT CARDS"))
            new_object = new Object()
            new_object.Date = document.getElementById("date_transaction").value
            new_object.Particulars = document.getElementById("particulars_transaction").value
-           if(localStorage.getItem("particulars_ai")==null)
+           if(localStorageGetItem("particulars_ai")==null)
            {
                array_part =[]
                array_part.push(document.getElementById("particulars_transaction").value)
-               localStorage.setItem("particulars_ai", JSON.stringify(array_part))
+               oridata = JSON.parse(localStorage.getItem("Wallet"))
+               oridata["particulars_ai"]=array_part
+               localStorage.setItem("Wallet", JSON.stringify(oridata))
+               localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
            }
            else
            {
-               array_part=JSON.parse(localStorage.getItem("particulars_ai"))
+               array_part=(localStorageGetItem("particulars_ai"))
                if(isStringInList(document.getElementById("particulars_transaction").value, array_part)==true)
                {}
                else
                {
                    array_part.push(document.getElementById("particulars_transaction").value)
-                   localStorage.setItem("particulars_ai", JSON.stringify(array_part))
+                   oridata = JSON.parse(localStorage.getItem("Wallet"))
+                    oridata["particulars_ai"]=array_part
+                    localStorage.setItem("Wallet", JSON.stringify(oridata))
+                    localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
                }
            }
            new_object.Type = "Dr"
@@ -542,8 +549,10 @@
            cur_balance = data[bankname]["BalanceOutstanding"]
            cur_balance+=parseFloat(document.getElementById("amount_transaction").value)
            data[bankname]["BalanceOutstanding"] = cur_balance
-           localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
-           localforage.setItem("CREDIT CARDS", data, function(err, value){console.log("Saved successfully")})
+           oridata = JSON.parse(localStorage.getItem("Wallet"))
+           oridata["CREDIT CARDS"]=data
+           localStorage.setItem("Wallet", JSON.stringify(oridata))
+           localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
            alert("Added!")
            window.location.reload()     
        }
@@ -562,7 +571,7 @@
        <br><select id="bank_select" class="margin: auto; display: block;"><option>Select a credit card</option></select>\
        <br><input id="narration" class="margin: auto; display: block;" type="text" placeholder="Enter narration"></p>\
        <br><button onclick="moneyadded_out()">Add transaction</button>'
-       data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+       data = (localStorageGetItem("CREDIT CARDS"))
         for (keey in data)
         {
             if(keey == "NO_OF_CARDS"|| keey=="TRANSACTIONS" || keey=="TRXNUM")
@@ -571,62 +580,61 @@
             }
             else
             {
-
                 var newElement = document.createElement("option")
                 newElement.innerHTML = keey
                 document.getElementById("bank_select").add(newElement)
             }
             
         }
-       if (localStorage.getItem("particulars_ai")==null)
+       if (localStorageGetItem("particulars_ai")==null)
        {
    
        }
        else
        {
-           var listItems = JSON.parse(localStorage.getItem("particulars_ai"))
-   var listElement = document.getElementById('list');
-   var searchInput = document.getElementById('particulars_transaction');
+           var listItems = (localStorageGetItem("particulars_ai"))
+            var listElement = document.getElementById('list');
+             var searchInput = document.getElementById('particulars_transaction');
    
    // Function to filter the list based on search input
-   function filterList() {
-     var searchValue = searchInput.value.toLowerCase();
-     var filteredList = listItems.filter(function(item) {
-       return item.toLowerCase().includes(searchValue);
-     });
-     renderList(filteredList);
-   }
-   function addText(text)
-   {
-       document.getElementById("particulars_transaction").value = text
-   }
-   // Function to render the list
-   function renderList(items) {
-     listElement.innerHTML = '';
-     items.forEach(function(item) {
-       var li = document.createElement('li');
-       li.textContent = item;
-       li.addEventListener("click", function(){addText(li.textContent)})
-       listElement.appendChild(li);
-     });
-   }
-   
-   // Event listener for search input
-   searchInput.addEventListener('input', filterList);
-   
-   // Initial list rendering
-   renderList(listItems);
+            function filterList() {
+                var searchValue = searchInput.value.toLowerCase();
+                var filteredList = listItems.filter(function(item) {
+                return item.toLowerCase().includes(searchValue);
+                });
+                renderList(filteredList);
+            }
+            function addText(text)
+            {
+                document.getElementById("particulars_transaction").value = text
+            }
+            // Function to render the list
+            function renderList(items) {
+                listElement.innerHTML = '';
+                items.forEach(function(item) {
+                var li = document.createElement('li');
+                li.textContent = item;
+                li.addEventListener("click", function(){addText(li.textContent)})
+                listElement.appendChild(li);
+                });
+            }
+            
+            // Event listener for search input
+            searchInput.addEventListener('input', filterList);
+            
+            // Initial list rendering
+            renderList(listItems);
        }
    }
    
-   if(localStorage.getItem("CREDIT CARDS")==null)
+   if(localStorageGetItem("CREDIT CARDS")==null)
    {
        alert("You have not setup a credit card. Please add atleast 1 credit card")
-       window.location.href="Signup.html"
+       window.location.href="Signup.html?addType=CC"
    }
    else
    {
-           data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+           data = (localStorageGetItem("CREDIT CARDS"))
        if(data["TRANSACTIONS"].length==0)
        {
            document.getElementById("transactions_table").style.visibility="hidden"
@@ -692,7 +700,7 @@
        
    }
    
-    data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+    data = (localStorageGetItem("CREDIT CARDS"))
     const cardDetails = Object.entries(data)
     .filter(([key]) => key !== "NO_OF_CARDS" && key !== "TRANSACTIONS" && key!="TRXNUM")
     .map(([card, details]) => ({
@@ -700,6 +708,11 @@
         dueDate: new Date(details.DueDate),
         balance: details.BalanceOutstanding
     }));
+    if(cardDetails.length==0)
+    {
+        alert("You have not setup a credit card. Please add atleast 1 credit card")
+       window.location.href="Signup.html"
+    }
     // another = cardDetails
     cardDetails.sort((a, b) => b.dueDate - a.dueDate);
 
@@ -763,8 +776,8 @@ cardDetails.forEach(({ card, dueDate }) => {
     // th_duedate=document.createElement("td")
     // th_duedate.innerHTML = formattedDate
     th_action = document.createElement("button")
-    th_action.innerHTML="✏️ Edit Card"
-    th_action.addEventListener("click", function(){window.location.href=`Signup.html?CC=${card}`})
+    th_action.innerHTML="<i class='fa-solid fa-pen-to-square'></i> Edit Card"
+    th_action.addEventListener("click", function(){window.location.href=`Signup.html?modify=CC&${card}`})
     tr.append(th_name,th_nickname,th_duedays,th_action)
     tbody.append(tr)
     //document.getElementById("cur_balance").innerHTML+=htmlcard.innerHTML

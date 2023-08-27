@@ -5,7 +5,9 @@
     <meta name="keywords" content="wallet, finance, measurement, credit cards, cash, bank">
     <meta name="author" content="Abhinav Satheesh">
     <link rel="apple-touch-icon" href="Assets/apple-touch-icon-iphone-60x60.png">
+    
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <script src="https://kit.fontawesome.com/420eab8243.js" crossorigin="anonymous"></script>
     <link rel="apple-touch-icon" sizes="60x60" href="Assets/apple-touch-icon-ipad-76x76.png">
     <link rel="apple-touch-icon" sizes="114x114" href="Assets/apple-touch-icon-iphone-retina-120x120.png">
     <link rel="apple-touch-icon" sizes="144x144" href="Assets/apple-touch-icon-ipad-retina-152x152.png">
@@ -176,7 +178,8 @@ body{
             <button class="collapsible-button" id="dis-collapsible-button" style="color:white">&#9776;</button>
             <br>
             <div class="profile">
-                <!-- <img src="https://1.bp.blogspot.com/-vhmWFWO2r8U/YLjr2A57toI/AAAAAAAACO4/0GBonlEZPmAiQW4uvkCTm5LvlJVd_-l_wCNcBGAsYHQ/s16000/team-1-2.jpg" alt="profile_picture"> -->
+                <i class="fa-regular fa-user fa-2xl" style="color: #f7f9fd;"></i>
+                <br>    
                 <h3 id="name_ussser"></h3>
                 <p id="user_name"></p>
                 <br>
@@ -191,25 +194,25 @@ body{
                 </li>
                 <li>
                     <a href="Pages/CreditCard.html">
-                        <span class="icon"><i class="fas fa-credit-card"></i></span>
+                        <span class="icon"><i class="fa-regular fa-credit-card"></i></span>
                         <span class="item">Credit Cards</span>
                     </a>
                 </li>
                 <li>
                     <a href="Pages/Bank.html">
-                        <span class="icon"><i class="fas fa-piggy-bank"></i></span>
+                        <span class="icon"><i class="fa-solid fa-building-columns"></i></span>
                         <span class="item">Banks</span>
                     </a>
                 </li>
                 <li>
                     <a href="Pages/Cash.html">
-                        <span class="icon"><i class="fas fa-money-bill-wave"></i></span>
+                        <span class="icon"><i class="fa-solid fa-sack-dollar"></i></span>
                         <span class="item">Cash</span>
                     </a>
                 </li>
                 <li>
                     <a href="Pages/Signup.html">
-                        <span class="icon"><i class="fas fa-child"></i></span>
+                        <span class="icon"><i class="fa-solid fa-gear"></i></span>
                         <span class="item">Settings</span>
                     </a>
                 </li>
@@ -239,10 +242,7 @@ discollapisbleButton.addEventListener('click', () => {
     menu.classList.remove('active')
 });
 
-
-
-
-  function addDarkmodeWidget() {
+function addDarkmodeWidget() {
     const options = {
   bottom: '32px', // default: '32px'
   right: '32px', // default: '32px'
@@ -264,6 +264,10 @@ darkmode.showWidget();
 </script>
 
 <script>
+    function localStorageGetItem(vallue)
+    {
+        return JSON.parse(localStorage.getItem("Wallet"))[vallue]
+    }
     async function registerPeriodicSync() {
         const registration = await navigator.serviceWorker.ready;
         // Check if periodicSync is supported
@@ -317,11 +321,11 @@ darkmode.showWidget();
   return false;
 }
 
-    data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+    data = localStorageGetItem("CREDIT CARDS")
     for(var keeey in data)
     {
         
-        if(keeey=="TRANSACTIONS"||keeey=="NO_OF_CARDS")
+        if(keeey=="TRANSACTIONS"||keeey=="NO_OF_CARDS"||keeey=="TRXNUM")
         {
             
         }
@@ -354,7 +358,10 @@ darkmode.showWidget();
                     new_object.Narration=""
                     data["TRANSACTIONS"].push(new_object)
                     data[keeey]["DueDate"]=cccc.toString()
-                    localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
+                    oridata = JSON.parse(localStorage.getItem("Wallet"))
+                    oridata["CREDIT CARDS"]=oridata
+                    localStorage.setItem("Wallet", JSON.stringify(oridata))
+                    localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
                     try
                     {
                         showNotification(`Statement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
@@ -366,43 +373,43 @@ darkmode.showWidget();
             }
         }
     }
-    if(localStorage.getItem("setup")==null)
+    if(localStorageGetItem("setup")==null)
     {
         window.location="Pages/Signup.html"
     }
     else
     {
-        document.getElementById("name_ussser").innerHTML = localStorage.getItem("NameUser")
+        document.getElementById("name_ussser").innerHTML = localStorageGetItem("NameUser")
         initialise()
     }
     function initialise()
     {
-        if(localStorage.getItem("CASH") == null)
+        if(localStorageGetItem("CASH") == null)
         {
             document.getElementById("cashbalance").innerHTML = "Not set up"
         }
         else
         {
-            data = JSON.parse(localStorage.getItem("CASH"))
+            data = localStorageGetItem("CASH")
             document.getElementById("cashbalance").innerHTML = `Rs. ${data["CASH_BALANCE"]}`
         }
 
-        if(localStorage.getItem("BANKS") == null)
+        if(localStorageGetItem("BANKS") == null)
         {
             document.getElementById("bankaccount_no").innerHTML = "Not set up"
         }
         else
         {
-            data = JSON.parse(localStorage.getItem("BANKS"))
+            data = localStorageGetItem("BANKS")
             document.getElementById("bankaccount_no").innerHTML = `${data["NO_OF_BANKACCOUNTS"]} Account(s)`
         }
-        if(localStorage.getItem("CREDIT CARDS") == null)
+        if(localStorageGetItem("CREDIT CARDS") == null)
         {
             document.getElementById("creditcard_no").innerHTML = "Not set up"
         }
         else
         {
-            data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+            data = localStorageGetItem("CREDIT CARDS")
             document.getElementById("creditcard_no").innerHTML = `${data["NO_OF_CARDS"]} Credit Card(s)`
         }
         

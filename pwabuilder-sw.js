@@ -43,7 +43,7 @@ function getDailyNewsInCache() {
       data = value
       for(var keeey in data)
       {
-          if(keeey=="TRANSACTIONS"||keeey=="NO_OF_CARDS")
+          if(keeey=="TRANSACTIONS"||keeey=="NO_OF_CARDS" ||keeey=="TRXNUM")
           {
               
           }

@@ -88,7 +88,12 @@
             <button onclick="delete_trx()">🗑 Delete Transactions</button>
         </form>
     </body>
+    <script src="../localforage.js"></script>
     <script>
+        function localStorageGetItem(vallue)
+        {
+            return JSON.parse(localStorage.getItem("Wallet"))[vallue]
+        }
         function delete_trx()
         {
             event.preventDefault()
@@ -148,18 +153,21 @@
                     transactions.splice(i, 1);
                     }
                 }
+                oridata = JSON.parse(localStorage.getItem("Wallet"))
                 if(type=="CC")
                 {
-                    localStorage.setItem("CREDIT CARDS",JSON.stringify(data))
+                    oridata["CREDIT CARDS"]=data
                 }
                 else if(type=="B")      
                 {
-                    localStorage.setItem("BANKS", JSON.stringify(data))
+                    oridata["BANKS"]=data
                 }
                 else
                 {
-                    localStorage.setItem("CASH", JSON.stringify(data))
+                    oridata["CASH"]=data
                 }
+                localStorage.setItem("Wallet", JSON.stringify(oridata))
+                localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
                 alert("Deleted transaction successfully")
                 history.back()
             }
@@ -213,8 +221,10 @@
                             }
                             data[document.getElementById("cc_transaction").innerHTML]["BalanceOutstanding"]=curbalance
                             transactions[i].Amount=document.getElementById("amount_transaction").value
-                            localStorage.setItem("CREDIT CARDS", JSON.stringify(data))
-                            localforage.setItem("CREDIT CARDS", data, function(err, value){console.log("Saved successfully")})
+                            oridata = JSON.parse(localStorage.getItem("Wallet"))
+                            oridata["CREDIT CARDS"]=data
+                            localStorage.setItem("Wallet", JSON.stringify(oridata))
+                            localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
                         }
                     }
                     else if(type=="B")
@@ -290,7 +300,10 @@
                             }
                             data[document.getElementById("cc_transaction").innerHTML]=curbalance
                             transactions[i].Amount=document.getElementById("amount_transaction").value
-                            localStorage.setItem("BANKS", JSON.stringify(data))
+                            oridata = JSON.parse(localStorage.getItem("Wallet"))
+                            oridata["BANKS"]=data
+                            localStorage.setItem("Wallet", JSON.stringify(oridata))
+                            localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
                         }
                     }
                     else
@@ -361,7 +374,11 @@
                             }
                             data["CASH_BALANCE"]=parseInt(curbalance)
                             transactions[i].Amount=parseInt(document.getElementById("amount_transaction").value)
-                            localStorage.setItem("CASH", JSON.stringify(data))
+                            console.log(data)
+                            oridata = JSON.parse(localStorage.getItem("Wallet"))
+                            oridata["CASH"]=data
+                            localStorage.setItem("Wallet", JSON.stringify(oridata))
+                            localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})                            
                         }   
                     }
                 }
@@ -376,16 +393,16 @@
 
         if(type=="CC")
         {
-            data = JSON.parse(localStorage.getItem("CREDIT CARDS"))
+            data = (localStorageGetItem("CREDIT CARDS"))
 
         }
         else if(type=="B")      
         {
-            data = JSON.parse(localStorage.getItem("BANKS"))
+            data = (localStorageGetItem("BANKS"))
         }
         else if(type=="C")
         {
-            data = JSON.parse(localStorage.getItem("CASH"))
+            data = (localStorageGetItem("CASH"))
             
         }
         else
@@ -417,7 +434,5 @@
             document.getElementById("narration_transaction").value=`${transactions[i].Narration}`
         }
         }
-
-
     </script>
 </html>
