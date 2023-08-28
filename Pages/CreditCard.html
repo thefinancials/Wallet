@@ -229,9 +229,9 @@
    <p class="centre" id="cur_balance" style="font-size: 20px;"></p>
    <br>
    <form class="centre">
-
       <button class="button" onclick="goto()">Add Credit Card</button>
       <br><br>
+      
       <button class="button" onclick="money_in()">Bill Payment of a card</button>
       <br><br>
       <button class="button" onclick="money_out()">Transaction using a card</button>
@@ -557,6 +557,11 @@
            window.location.reload()     
        }
    }
+   function sms()
+   {
+    event.preventDefault()
+    window.location.href="SMSTransaction.html?type=CC"
+   }
    function money_out()
    {
        event.preventDefault()
@@ -564,6 +569,9 @@
        document.getElementById("details_div").innerHTML+='\
        <br>\
        <h2 class="centre">Transaction made using card</h2>\
+       <br>\
+       <form class="centre"><button class="button" onclick="sms()">Read Transaction from SMS</button>\
+        <br><br></form>\
        <form><label>Enter the date of the transaction</form><input id="date_transaction" class="margin: auto; display: block;" type="date" placeholder="Enter the date of the transaction"></form>\
        <br><input id="particulars_transaction" class="margin: auto; display: block;" type="text" placeholder="Where did you spent this?">\
        <br><ul id="list"></ul>\

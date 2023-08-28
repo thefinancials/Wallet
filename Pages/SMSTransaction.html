@@ -7,80 +7,492 @@
     </head>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
-        .centre
-        {
-        text-align: center;
+       .centre
+       {
+       text-align: center;
+       }
+       .button {
+       padding: 15px 25px;
+       font-size: 20px;
+       text-align: center;
+       cursor: pointer;
+       outline: none;
+       color: #fff;
+       background-color: peru;
+       border: none;
+       border-radius: 15px;
+       box-shadow: 0 9px #999;
+       }
+       .button:hover {background-color: darkgoldenrod}
+       .button:active {
+       background-color: peru;
+       box-shadow: 0 5px #666;
+       transform: translateY(4px);
+       }
+       .dotted{
+          border-style: solid;
+       }
+       .content {
+       padding: 0 18px;
+       display: none;
+       overflow: hidden;
+       }
+       .center{
+       margin: auto;
+       width: 30%;
+       align-items: center;  
+       padding: 10px;
+       }   
+       .red
+       {
+        color:red;
+       }
+       .card {
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+            /*width: 40%;*/
         }
-        .button {
-        padding: 15px 25px;
-        font-size: 20px;
-        text-align: center;
-        cursor: pointer;
-        outline: none;
-        color: #fff;
-        background-color: peru;
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 9px #999;
+    
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
         }
-        .button:hover {background-color: darkgoldenrod}
-        .button:active {
-        background-color: peru;
-        box-shadow: 0 5px #666;
-        transform: translateY(4px);
+    
+        .container {
+            padding: 2px 16px;
         }
-        .dotted{
-           border-style: solid;
-        }
-        .content {
-        padding: 0 18px;
-        display: none;
-        overflow: hidden;
-        }
-        span{
-            font-weight: lighter;
-        }
-        .center{
-        margin: auto;
-        width: 30%;
-        align-items: center;  
-        padding: 10px;
-        }   
-        .red
-        {
-         color:red;
-        }
-        .card {
-             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-             transition: 0.3s;
-             /*width: 40%;*/
-         }
-     
-         .card:hover {
-             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-         }
-     
-         .container {
-             padding: 2px 16px;
-         }
-         .vertical-center {
+        .vertical-center {
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+    }
+    
+       .rectangle {
+       width: 200px;
+       height: 100px;
+       border: 1px solid black;
+       text-align: center;
+       display: inline-block;
+       line-height: 50px;
+       font-weight: bold;
+       font-size: 20px;
+       }
+       .required::after {
+       color: red;
+       }
+       
+       *{
+       list-style: none;
+       text-decoration: none;
        margin: 0;
+       padding: 0;
+       box-sizing: border-box;
+       font-family: 'Open Sans', sans-serif;
+       }
+       body{
+       background: #f5f6fa;
+       }
+       .wrapper .sidebar{
+       background: rgb(5, 68, 104);
+       position: fixed;
+       top: 0;
+       left: 0;
+       width: 225px;
+       height: 100%;
+       padding: 20px 0;
+       transition: all 0.5s ease;
+       }
+       .wrapper .sidebar .profile{
+       margin-bottom: 30px;
+       text-align: center;
+       }
+       .wrapper .sidebar .profile img{
+       display: block;
+       width: 100px;
+       height: 100px;
+       border-radius: 50%;
+       margin: 0 auto;
+       }
+       .wrapper .sidebar .profile h3{
+       color: #ffffff;
+       margin: 10px 0 5px;
+       }
+       .wrapper .sidebar .profile p{
+       color: rgb(206, 240, 253);
+       font-size: 14px;
+       }
+       .wrapper .sidebar ul li a{
+       display: block;
+       padding: 13px 30px;
+       border-bottom: 1px solid #10558d;
+       color: rgb(241, 237, 237);
+       font-size: 16px;
+       position: relative;
+       }
+       .wrapper .sidebar ul li a .icon{
+       color: #dee4ec;
+       width: 30px;
+       display: inline-block;
+       }
+       .wrapper .sidebar ul li a:hover,
+       .wrapper .sidebar ul li a.active{
+       color: #0c7db1;
+       background:white;
+       border-right: 2px solid rgb(5, 68, 104);
+       }
+       .wrapper .sidebar ul li a:hover .icon,
+       .wrapper .sidebar ul li a.active .icon{
+       color: #0c7db1;
+       }
+       .wrapper .sidebar ul li a:hover:before,
+       .wrapper .sidebar ul li a.active:before{
+       display: block;
+       }
+       .collapsible {
+       display: none;
+       }
+       .collapsible.active {
+       display: block;
+       }
+       .collapsible-button {
+       background-color: transparent;
+       border: none;
+       color: #000;
+       font-size: 24px;
+       cursor: pointer;
        position: absolute;
-       top: 50%;
-       -ms-transform: translateY(-50%);
-       transform: translateY(-50%);
-     }
-
-     
-     </style>
+       top: 10px;
+       left: 10px;
+       }
+        .centeer {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    </style>
     <body>
-        <h1 class="centre">Wallet: Add SMS as Transactions</h1>
+        <h1 class="centre">Wallet: Add SMS as Transaction</h1>
+        <br>
+        <form class="centre" id="ccb">
+            <div id="options">
+                <button class="button centre" onclick="creditcard()">Credit Card</button>
+                <br><br>
+                <button class="button centre" disabled="true">Bank Account</button>
+                <br><br>
+                <button class="button" disabled="true">Cash (BETA)</button>
+            </div>
+            
+            <div id="cc" style="visibility: hidden;">
+                <h3>Credit Card</h4>
+                <br>
+                <h4>Paste your SMS here:</h4>
+                <br>
+                <textarea id="sms_paste" style="width:100%; height:75px;"></textarea>
+                <br><br>
+                <button class="button" onclick="analyseCard()">Analyse Transaction</button>
+                <br><br>
+                <div id="ccsub" style="visibility: hidden;">
+                    <h4>Date of Transaction: <input id="date_transaction" class="margin: auto; display: block;" type="date"></h4>
+                    <br>
+                    <h4>Credit Card: <select id="cardSelect"></select></h4>
+                    <br>
+                    <h4>Particulars: <input id="particularsCard" type="text"></input></h4>
+                    <br>
+                    <h4>Amount: <input id="amountCard" type="number"></input></h4>
+                    <br>
+                    <button class="button" onclick="addTransactionCard()">Add Transaction</button>
+                </div>
+                
+            </div>
+            <div id="b" style="visibility: hidden;">
+            
+            </div>
+            <div id="c" style="visibility: hidden;">
+            
+            </div>
+        </form>
+        
     </body>
     <script src="../localforage.js"></script>
     <script>
+        var urlparams = window.location.search
+        if (urlparams!="")
+        {
+            type=(urlparams.split("?")[1]).split("=")[1]
+            if(type=="CC")
+            {
+                creditcard()
+            }
+        }
         function localStorageGetItem(vallue)
         {
             return JSON.parse(localStorage.getItem("Wallet"))[vallue]
+        }
+        function isStringInList(string, list) {
+        var lowercaseString = string.toLowerCase();
+        return list.map(item => item.toLowerCase()).includes(lowercaseString);
+       }
+        function addTransactionCard()
+        {
+            event.preventDefault()
+            data = localStorageGetItem("CREDIT CARDS")
+            new_object = new Object()
+           new_object.Date = document.getElementById("date_transaction").value
+           document.getElementById("particularsCard").value = (document.getElementById("particularsCard").value).trim()
+           new_object.Particulars = document.getElementById("particularsCard").value
+           if(localStorageGetItem("particulars_ai")==null)
+           {
+               array_part =[]
+               array_part.push(document.getElementById("particularsCard").value)
+               oridata = JSON.parse(localStorage.getItem("Wallet"))
+               oridata["particulars_ai"]=array_part
+               localStorage.setItem("Wallet", JSON.stringify(oridata))
+               localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+           }
+           else
+           {
+               array_part=(localStorageGetItem("particulars_ai"))
+               if(isStringInList(document.getElementById("particularsCard").value, array_part)==true)
+               {}
+               else
+               {
+                   array_part.push(document.getElementById("particularsCard").value)
+                   oridata = JSON.parse(localStorage.getItem("Wallet"))
+                    oridata["particulars_ai"]=array_part
+                    localStorage.setItem("Wallet", JSON.stringify(oridata))
+                    localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+               }
+           }
+           new_object.Type = "Dr"
+           data["TRXNUM"]+=1
+           new_object.TRXNUM=data["TRXNUM"]
+           new_object.Amount = parseFloat(document.getElementById("amountCard").value)
+           creditcardd = (document.getElementById("cardSelect").options[document.getElementById("cardSelect").selectedIndex].text)
+           new_object.CreditCard = creditcardd
+           bankname = creditcardd
+           new_object.Narration = `Being ${creditcardd} used at ${document.getElementById("particularsCard").value}`
+           data["TRANSACTIONS"].push(new_object)
+           data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+           cur_balance = data[bankname]["BalanceOutstanding"]
+           cur_balance+=parseFloat(document.getElementById("amountCard").value)
+           data[bankname]["BalanceOutstanding"] = cur_balance
+           oridata = JSON.parse(localStorage.getItem("Wallet"))
+           oridata["CREDIT CARDS"]=data
+           console.log(oridata)
+           localStorage.setItem("Wallet", JSON.stringify(oridata))
+           localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+           alert("Added!")
+           window.location.reload()     
+        }
+        function analyseCard()
+        {
+            event.preventDefault()
+            document.getElementById('date_transaction').valueAsDate = new Date();
+            smsPasted = document.getElementById("sms_paste").value
+            data = JSON.parse(localStorage.getItem("Wallet"))["CREDIT CARDS"]
+            options = []
+            if (smsPasted.includes("HDFC Bank CREDIT Card"))
+            {
+                for (var key in data)
+                {
+                    if (key.startsWith("HDFC Bank"))
+                    {
+                        options.push(key)
+                    }
+                }   
+                if (options.length==0)
+                {
+                    alert("You don't have an HDFC Bank Credit Card")
+                    window.location.reload()
+                }
+                else
+                {
+                    document.getElementById("ccsub").style.visibility="visible"
+                    for (var i = 0; i < options.length; i++) 
+                    {
+                        var newElement = document.createElement("option")
+                        newElement.innerHTML = options[i]
+                        document.getElementById("cardSelect").add(newElement)
+                    }
+                    particulars = (smsPasted.split("At")[1]).split("On")[0]
+                    document.getElementById("particularsCard").value=particulars
+                    amount = parseFloat(((smsPasted.split("You've spent")[1]).split("On")[0]).replace("Rs.", ""))
+                    document.getElementById("amountCard").value=amount
+                }
+                
+            }
+            else if (smsPasted.includes("IndusInd Card"))
+            {
+                //INR 1,005.03 spent on IndusInd Card XX8007 on 16-07-2023 05:54:03 pm at REL RETAIL LTD-FRESH. Avl Lmt: INR 891,715.48. To dispute, call 18602677777/SMS BLOCK 8007 to 5676757
+                for (var key in data)
+                {
+                    if (key.startsWith("IndusInd Bank"))
+                    {
+                        options.push(key)
+                    }
+                }   
+                if (options.length==0)
+                {
+                    alert("You don't have an IndusInd Bank Credit Card")
+                    window.location.reload()
+                }
+                else
+                {
+                    document.getElementById("ccsub").style.visibility="visible"
+                    for (var i = 0; i < options.length; i++) 
+                    {
+                        var newElement = document.createElement("option")
+                        newElement.innerHTML = options[i]
+                        document.getElementById("cardSelect").add(newElement)
+                    }
+                    particulars = (smsPasted.split("at")[1]).split(". Avl Lmt:")[0]
+                    document.getElementById("particularsCard").value=particulars
+                    amount = parseFloat(((smsPasted.split("INR")[1]).split("spent")[0]).replace(",", ""))
+                    document.getElementById("amountCard").value=amount
+                }
+            }
+            else if (smsPasted.includes("IDFC FIRST Bank Credit Card"))
+            {
+                //Transaction Successful! INR 708.00 spent on your IDFC FIRST Bank Credit Card ending XX1474 at A TO Z SUPERMARKET KAL on 27-AUG-2023 at 06:13 PM. Avbl limit: Rs.438959.60. If not done by you, call 180010888 for dispute or to block your card SMS CCBLOCK 1474 to 5676732
+                for (var key in data)
+                {
+                    if (key.startsWith("IDFC Bank"))
+                    {
+                        options.push(key)
+                    }
+                }   
+                if (options.length==0)
+                {
+                    alert("You don't have an IDFC Bank Credit Card")
+                    window.location.reload()
+                }
+                else
+                {
+                    document.getElementById("ccsub").style.visibility="visible"
+                    for (var i = 0; i < options.length; i++) 
+                    {
+                        var newElement = document.createElement("option")
+                        newElement.innerHTML = options[i]
+                        document.getElementById("cardSelect").add(newElement)
+                    }
+                    particulars = (smsPasted.split("at")[1]).split("on")[0]
+                    document.getElementById("particularsCard").value=particulars
+                    amount = parseFloat((smsPasted.split("INR")[1]).split("spent")[0])
+                    document.getElementById("amountCard").value=amount
+                }
+            }
+            else if (smsPasted.includes("SBI Credit Card"))
+            {
+                //Rs.486.00 spent on your SBI Credit Card ending 7888 at BUY AND SAVE SUPERMARK on 24/08/23. Trxn. not done by you? Report at https://sbicard.com/Dispute
+                for (var key in data)
+                {
+                    if (key.startsWith("SBI"))
+                    {
+                        options.push(key)
+                    }
+                }   
+                if (options.length==0)
+                {
+                    alert("You don't have an SBI Credit Card")
+                    window.location.reload()
+                }
+                else
+                {
+                    document.getElementById("ccsub").style.visibility="visible"
+                    for (var i = 0; i < options.length; i++) 
+                    {
+                        var newElement = document.createElement("option")
+                        newElement.innerHTML = options[i]
+                        document.getElementById("cardSelect").add(newElement)
+                    }
+                    particulars = (smsPasted.split("at")[1]).split("on")[0]
+                    document.getElementById("particularsCard").value=particulars
+                    amount = parseFloat((smsPasted.split("Rs.")[1]).split("spent")[0])
+                    document.getElementById("amountCard").value=amount
+                }
+            }
+            else if (smsPasted.includes("BoB Credit Card"))
+            {
+                //ALERT: INR 3,000.00 is spent on your BoB Credit Card ending 2611 at Iocl United Fuels on 01-08-2023. Available credit limit is Rs 479,788.87, Current outstanding is Rs 17,211.13. Not you?  Call 1800225100 (toll-free)
+                for (var key in data)
+                {
+                    if (key.startsWith("Bank of Baroda"))
+                    {
+                        options.push(key)
+                    }
+                }   
+                if (options.length==0)
+                {
+                    alert("You don't have a BoB Credit Card")
+                    window.location.reload()
+                }
+                else
+                {
+                    document.getElementById("ccsub").style.visibility="visible"
+                    for (var i = 0; i < options.length; i++) 
+                    {
+                        var newElement = document.createElement("option")
+                        newElement.innerHTML = options[i]
+                        document.getElementById("cardSelect").add(newElement)
+                    }
+                    particulars = (smsPasted.split("at")[1]).split("on")[0]
+                    document.getElementById("particularsCard").value=particulars
+                    amount = parseFloat(((smsPasted.split("INR")[1]).split("is")[0]).replace(",", ""))
+                    document.getElementById("amountCard").value=amount
+                }
+            }
+            else
+            {
+                //Rs. 813.00 spent on card 6346 on 24-AUG-23 at PZELECTRICITY. Limit available=Rs. 58,187.00.If not done by you, click www.citi.asia/DIS?cn=6346
+                if(confirm("Is this an SMS from Citibank?"))
+                {
+                    for (var key in data)
+                    {
+                        if (key.startsWith("Citibank"))
+                        {
+                            options.push(key)
+                        }
+                    }   
+                    if (options.length==0)
+                    {
+                        alert("You don't have a Citibank Credit Card")
+                        window.location.reload()
+                    }
+                    else
+                    {
+                        document.getElementById("ccsub").style.visibility="visible"
+                        for (var i = 0; i < options.length; i++) 
+                        {
+                            var newElement = document.createElement("option")
+                            newElement.innerHTML = options[i]
+                            document.getElementById("cardSelect").add(newElement)
+                        }
+                        particulars = (smsPasted.split("at")[1]).split(". Limit")[0]
+                        document.getElementById("particularsCard").value=particulars
+                        amount = parseFloat(((smsPasted.split("Rs. ")[1]).split("spent")[0]))
+                        document.getElementById("amountCard").value=amount
+                    }
+                }
+                
+            }
+        }
+        function creditcard()
+        {
+            try
+            {
+                event.preventDefault()
+            }
+            catch
+            {
+
+            }
+            document.getElementById("options").innerHTML=""
+            document.getElementById("cc").style.visibility="visible"
+        }
+        function bankaccount()
+        {
+
         }
     </script>
 </html>

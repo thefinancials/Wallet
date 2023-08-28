@@ -242,6 +242,14 @@ discollapisbleButton.addEventListener('click', () => {
     menu.classList.remove('active')
 });
 
+localforage.getItem("TOWRITE", function(err, value){
+    if (value!=null)
+    {
+        oridata = JSON.parse(value)
+        localStorage.setItem("Wallet", JSON.stringify(oridata))
+    }
+})
+
 function addDarkmodeWidget() {
     const options = {
   bottom: '32px', // default: '32px'

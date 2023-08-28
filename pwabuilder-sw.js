@@ -38,9 +38,9 @@ function showNotification(messagee) {
   }
 }
 function getDailyNewsInCache() {
-  localforage.getItem("CREDIT CARDS", function(err, value) {
+  localforage.getItem("Wallet", function(err, value) {
     if (!err) {
-      data = value
+      data = value["CREDIT CARDS"]
       for(var keeey in data)
       {
           if(keeey=="TRANSACTIONS"||keeey=="NO_OF_CARDS" ||keeey=="TRXNUM")
@@ -76,10 +76,10 @@ function getDailyNewsInCache() {
                       new_object.Narration=""
                       data["TRANSACTIONS"].push(new_object)
                       data[keeey]["DueDate"]=cccc.toString()
-                      localforage.setItem("CREDIT CARDS", JSON.stringify(data))
-                        showNotification(`Statement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
-                        // console.log(`Couldn't send, but here's message\nStatement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
-                      
+                      oridata["CREDIT CARDS"]=data
+                      localforage.setItem("Wallet", JSON.stringify(oridata))
+                      localforage.setItem("TOWRITE", JSON.stringify(oridata))
+                      showNotification(`Statement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)                      
                   }
               }
               else
