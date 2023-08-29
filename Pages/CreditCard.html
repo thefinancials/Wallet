@@ -242,21 +242,30 @@
       <br>
       <h2 class="centre">Transactions</h2>      
       <table id="transactions_table" class="center" border="1">
-         <tr>
+        
+         <thead>
             <th style="margin-left: 10px; margin-right:10px;">Date</th>
             <th style="margin-left: 10px; margin-right:10px;">Particulars</th>
             <th style="margin-left: 10px; margin-right:10px;">Credit Card</th>
             <th style="margin-left: 10px; margin-right:10px;">Type</th>
             <th style="margin-left: 10px; margin-right:10px;">Amount</th>
             <th style="margin-left: 10px; margin-right:10px;">Actions</th>
-         </tr>
+         </thead>
+         <tbody id="ttbody">
+
+         </tbody>
       </table>
       
    </div>
 </body>
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="../jquery.dataTables.min.js"></script>
+<link rel="stylesheet" src="../jquery.dataTables.min.css">
 <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
 <script src="../localforage.js"></script>
 <script>
+    
+
     document.getElementById("name_ussser").innerHTML = localStorageGetItem("NameUser")
     const collapsibleButton = document.querySelector('.collapsible-button');
    const menu = document.querySelector('.collapsible');
@@ -694,6 +703,7 @@
        newType.innerHTML=item["Type"]
        var newAmount = document.createElement("td")
        newAmount.innerHTML=item["Amount"]
+       var newB = document.createElement("td")
        var newButton = document.createElement("button")
        newButton.innerHTML="🔍\nActions:\nView and Delete"
        newButton.addEventListener("click", function(){window.location.href=`ViewTransaction.html?type=CC&trxnum=${item["TRXNUM"]}`})
@@ -702,8 +712,9 @@
        newRow.appendChild(newBank)
        newRow.appendChild(newType)
        newRow.appendChild(newAmount)
-       newRow.appendChild(newButton)
-       document.getElementById("transactions_table").appendChild(newRow)   
+       newB.appendChild(newButton)
+       newRow.appendChild(newB)
+       document.getElementById("ttbody").appendChild(newRow)   
        }
        
    }
@@ -793,7 +804,9 @@ cardDetails.forEach(({ card, dueDate }) => {
 });
 table.append(tbody)
 document.getElementById("cur_balance").append(table)
-
+$(document).ready(function() {
+    $('#transactions_table').DataTable();
+});
 </script>
 </body>
 

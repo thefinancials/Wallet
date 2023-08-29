@@ -304,7 +304,7 @@
                 if (options.length==0)
                 {
                     alert("You don't have an HDFC Bank Credit Card")
-                    window.location.reload()
+                    window.location.href="Signup.html?addType=CC"
                 }
                 else
                 {
@@ -335,7 +335,7 @@
                 if (options.length==0)
                 {
                     alert("You don't have an IndusInd Bank Credit Card")
-                    window.location.reload()
+                    window.location.href="Signup.html?addType=CC"
                 }
                 else
                 {
@@ -365,7 +365,7 @@
                 if (options.length==0)
                 {
                     alert("You don't have an IDFC Bank Credit Card")
-                    window.location.reload()
+                    window.location.href="Signup.html?addType=CC"
                 }
                 else
                 {
@@ -395,7 +395,7 @@
                 if (options.length==0)
                 {
                     alert("You don't have an SBI Credit Card")
-                    window.location.reload()
+                    window.location.href="Signup.html?addType=CC"
                 }
                 else
                 {
@@ -425,7 +425,7 @@
                 if (options.length==0)
                 {
                     alert("You don't have a BoB Credit Card")
-                    window.location.reload()
+                    window.location.href="Signup.html?addType=CC"
                 }
                 else
                 {
@@ -457,7 +457,7 @@
                     if (options.length==0)
                     {
                         alert("You don't have a Citibank Credit Card")
-                        window.location.reload()
+                        window.location.href="Signup.html?addType=CC"
                     }
                     else
                     {
@@ -487,8 +487,16 @@
             {
 
             }
-            document.getElementById("options").innerHTML=""
-            document.getElementById("cc").style.visibility="visible"
+            if(localStorageGetItem("CREDIT CARDS")!=null)
+            {
+                document.getElementById("options").innerHTML=""
+                document.getElementById("cc").style.visibility="visible"
+            }
+            else
+            {
+                alert("You have not setup a card. Please set up a card")
+                window.location.href="Signup.html?addType=CC"
+            }
         }
         function bankaccount()
         {

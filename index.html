@@ -367,7 +367,7 @@ darkmode.showWidget();
                     data["TRANSACTIONS"].push(new_object)
                     data[keeey]["DueDate"]=cccc.toString()
                     oridata = JSON.parse(localStorage.getItem("Wallet"))
-                    oridata["CREDIT CARDS"]=oridata
+                    oridata["CREDIT CARDS"]=data
                     localStorage.setItem("Wallet", JSON.stringify(oridata))
                     localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
                     try
