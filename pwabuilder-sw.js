@@ -65,7 +65,6 @@ function getDailyNewsInCache() {
                   let statementGenerated = isStatementGeneratedForMonth(trrr, new Date().getMonth()+1, new Date().getFullYear(), keeey)  
                   if(statementGenerated==false)
                   {
-                    
                       new_object = new Object()
                       tobewritten = `${orrr.getFullYear()}-${orrr.getMonth()+1}-${orrr.getDate()}`
                       new_object.Date = tobewritten
@@ -76,10 +75,14 @@ function getDailyNewsInCache() {
                       new_object.Narration=""
                       data["TRANSACTIONS"].push(new_object)
                       data[keeey]["DueDate"]=cccc.toString()
-                      oridata["CREDIT CARDS"]=data
-                      localforage.setItem("Wallet", JSON.stringify(oridata))
-                      localforage.setItem("TOWRITE", JSON.stringify(oridata))
-                      showNotification(`Statement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)                      
+                      localforage.getItem("Wallet", function(err, value){
+                        oridata = JSON.parse(value)
+                        oridata["CREDIT CARDS"]=data
+                        localforage.setItem("Wallet", JSON.stringify(oridata))
+                        localforage.setItem("TOWRITE", JSON.stringify(oridata))
+                        showNotification(`Statement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)                      
+                      })
+                      
                   }
               }
               else
