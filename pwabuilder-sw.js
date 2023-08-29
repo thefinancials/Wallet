@@ -40,7 +40,7 @@ function showNotification(messagee) {
 function getDailyNewsInCache() {
   localforage.getItem("Wallet", function(err, value) {
     if (!err) {
-      data = value["CREDIT CARDS"]
+      data = JSON.parse(value)["CREDIT CARDS"]
       for(var keeey in data)
       {
           if(keeey=="TRANSACTIONS"||keeey=="NO_OF_CARDS" ||keeey=="TRXNUM")
