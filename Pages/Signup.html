@@ -159,7 +159,7 @@
                 <h3 id="name_ussser"></h3>
                 <p id="user_name"></p>
                 <br>
-                <button>Logout</button>
+                <button onclick="logoutFunction()">Logout</button>
             </div>
             <ul>
                 <li>
@@ -212,17 +212,20 @@
       <input id="name_user" type="text">
       <br>
       <br>
-      <label for="usernamee">Username:</label>
-      <input id="usernamee" disabled="true" type="text">
+      <label for="usernamee_entry">Username:</label>
+      <input id="usernamee_entry" type="text">
       <br><br>
       <label for="password_user">Enter a strong password</label>
-      <input id="password_user" disabled="true" type="password">
+      <input id="password_user" type="password">
       <br><br>
       <button onclick="submitName()">Submit</button>
       <br>
       <br>
-      <button onclick="del_data()" id="delButton">Delete data and logout</button>
-      <br>
+      <button onclick="loginPage()">Already have an account? Sign in to Wallet</button>
+      
+      
+      <!-- <button onclick="del_data()" id="delButton">Delete data and logout</button>
+      <br> -->
        </div>
       
       
@@ -244,9 +247,85 @@
    
 </body>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="../Assets/functions.js"></script>
 <script src="../localforage.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
 <script>
+   function loginPage()
+   {
+      event.preventDefault()
+      window.location.href="Login.html"
+   }
+   function initialseset(data)
+   {
+      userName = JSON.parse(data)["user_id"]
+      localStorage.setItem("Wallet", data)
+      localforage.setItem("Wallet", data, function(err, value){})
+      fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${userName}`, {
+  method: "GET", // Specify the HTTP method
+  headers: {
+    "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your API key
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your access token
+    "Content-Type": "application/json",
+    "Prefer": "return=minimal",
+  }
+})
+.then(response => {
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+})
+.then(addata => {
+  if (addata.length==0)
+  {
+   fetch("https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData", {
+      method: "POST",
+      body: JSON.stringify({ "user_id": userName, "Details": data}),
+      headers: {
+      "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8",
+      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8",
+      "Content-Type": "application/json",
+      "Prefer": "return=minimal",
+   }
+   });
+  }
+  else
+  {
+   alert("Sorry, that username is not available. Try another")
+   document.getElementById("about_settings").classList.remove("active")
+      document.getElementById("logout_settings").classList.remove("active")
+      document.getElementById("financial_settings").classList.remove("active")
+      document.getElementById("personal_settings").classList.add("active")
+      var personalDiv = document.getElementById("personalsettingsform");
+      var otherDiv = document.getElementById("financialsettingsform");
+      personalDiv.style.display = "block";
+      otherDiv.style.display = "none";
+  }
+})
+.catch(error => {
+  console.error("Fetch error:", error);
+});
+
+   
+      
+   }
+   function setToStorage(data)
+   {
+      userName = JSON.parse(data)["user_id"]
+      localStorage.setItem("Wallet", data)
+      localforage.setItem("Wallet", data, function(err, value){})      
+      fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${userName}`, {
+      method: "PATCH",
+      body: JSON.stringify({ "user_id": userName, "Details": data}),
+      headers: {
+      "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8",
+      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8",
+      "Content-Type": "application/json",
+      "Prefer": "return=minimal",
+   }
+   });
+   }
    function localStorageGetItem(vallue)
    {
       return JSON.parse(localStorage.getItem("Wallet"))[vallue]
@@ -254,7 +333,7 @@
     try{Notification.requestPermission().then((result) => {});}
     catch{}
 
-    document.getElementById("name_ussser").innerHTML = localStorageGetItem("NameUser")
+    
    const collapsibleButton = document.querySelector('.collapsible-button');
    const menu = document.querySelector('.collapsible');
    
@@ -295,7 +374,7 @@
       document.getElementById("financial_settings").classList.remove("active")
       document.getElementById("personal_settings").classList.add("active")
       var personalDiv = document.getElementById("personalsettingsform");
-              var otherDiv = document.getElementById("financialsettingsform");
+      var otherDiv = document.getElementById("financialsettingsform");
       personalDiv.style.display = "block";
       otherDiv.style.display = "none";
    }
@@ -322,14 +401,14 @@
          
       }
    }
-   if (localStorageGetItem("NameUser") == null) {
-   document.getElementById("delButton").style.visibility = "hidden"
-}
-window.onload = function() {
-   if (localStorageGetItem("NameUser") != null) {
+   if (localStorage.getItem("Wallet") != null) {
       document.getElementById("name_user").value = localStorageGetItem("NameUser")  
-   }
+   document.getElementById("name_ussser").innerHTML = localStorageGetItem("NameUser")
+   document.getElementById("usernamee_entry").value = localStorageGetItem("user_id")  
+   document.getElementById("user_name").innerHTML = localStorageGetItem("user_id")
+   document.getElementById("password_user").value = localStorageGetItem("password_user")  
 }
+
 
    var urlparams = window.location.search
    if(urlparams=="")
@@ -441,8 +520,7 @@ window.onload = function() {
                }
                oridata = JSON.parse(localStorage.getItem("Wallet"))
                oridata["CREDIT CARDS"]=data
-               localStorage.setItem("Wallet", JSON.stringify(oridata))
-               localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+               setToStorage(JSON.stringify(oridata))
                alert("Modified card details successfully!")
                history.back()
          }})
@@ -471,8 +549,7 @@ window.onload = function() {
                {
                   oridata["CREDIT CARDS"]=data
                }
-               localStorage.setItem("Wallet", JSON.stringify(oridata))
-               localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+               setToStorage(JSON.stringify(oridata))
                alert("Deleted card successfully!")
                history.back()
           }
@@ -529,8 +606,7 @@ window.onload = function() {
             }  
             oridata = JSON.parse(localStorage.getItem("Wallet"))
             oridata["BANKS"]=data
-            localStorage.setItem("Wallet", JSON.stringify(oridata))
-            localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+            setToStorage(JSON.stringify(oridata))
             alert("Modified bank details successfully!")
             history.back()
          }})
@@ -559,8 +635,7 @@ window.onload = function() {
                {
                   oridata["BANKS"]=data
                }
-               localStorage.setItem("Wallet", JSON.stringify(oridata))
-               localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+               setToStorage(JSON.stringify(oridata))
                alert("Deleted bank successfully!")
                history.back()
             }
@@ -657,8 +732,7 @@ window.onload = function() {
                data = JSON.parse(localStorage.getItem("Wallet"))
                data["CREDIT CARDS"]=objeee
                data["setup"]="DONE"
-               localStorage.setItem("Wallet", JSON.stringify(data))
-               localforage.setItem("Wallet", JSON.stringify(data), function(err, value){})
+               setToStorage(JSON.stringify(oridata))
                if (localStorageGetItem("NameUser") == null) {
                         swal("Enter your name and username", "Please enter your name and username to proceed", "info")
                      } else {
@@ -703,8 +777,8 @@ window.onload = function() {
                   oobb.BalanceOutstanding = 0
                   data[`${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry.value})`] = oobb
                   oridata["CREDIT CARDS"]=data
-                  localStorage.setItem("Wallet", JSON.stringify(oridata))
-                  localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+                  setToStorage(JSON.stringify(oridata))
+
                   if (localStorageGetItem("NameUser") == null) {
                            swal("Enter your name and username", "Please enter your name and username to proceed", "info")
                         } else {
@@ -789,8 +863,7 @@ window.onload = function() {
                data = JSON.parse(localStorage.getItem("Wallet"))
                data["BANKS"]=objeee
                data["setup"]="DONE"
-               localStorage.setItem("Wallet", JSON.stringify(data))
-               localforage.setItem("Wallet", JSON.stringify(data), function(err, value){})
+               setToStorage(JSON.stringify(data))
                if (localStorageGetItem("NameUser") == null) {
                   swal("Enter your name and username", "Please enter your name and username to proceed", "info")
                } else {
@@ -822,9 +895,7 @@ window.onload = function() {
                   data[`${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry.value})`] = parseFloat(balance_entry.value)
                   oridata["BANKS"]=data
                   oridata["setup"]="DONE"
-                  localStorage.setItem("Wallet", JSON.stringify(oridata))
-                  localforage.setItem("Wallet", JSON.stringify(oridata), function(err,value){})
-
+                  setToStorage(JSON.stringify(oridata))
                   if (localStorageGetItem("NameUser") == null) {
                      swal("Enter your name and username", "Please enter your name and username to proceed", "info")
                   } else {
@@ -892,8 +963,7 @@ window.onload = function() {
                            data = JSON.parse(localStorage.getItem("Wallet"))
                            data["CASH"]=objeee
                            data["setup"]="DONE"
-                           localStorage.setItem("Wallet", JSON.stringify(data))
-                           localforage.setItem("Wallet", JSON.stringify(data), function(err, value){})
+                           setToStorage(JSON.stringify(data))
                            swal("Done", "Added successfully!", "success", {
                                  buttons: {
                                     ok: true,
@@ -923,8 +993,7 @@ window.onload = function() {
                objeee.TRANSACTIONS = []
                oridata["CASH"]=objeee
                oridata["setup"]="DONE"
-               localStorage.setItem("Wallet", JSON.stringify(oridata))
-               localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+               setToStorage(JSON.stringify(oridata))
                if (localStorageGetItem("NameUser") == null) {
                   swal("Enter your name and username", "Please enter your name and username to proceed", "info")
                } else {
@@ -991,8 +1060,8 @@ function submitName() {
    } else {
       var personalDiv = document.getElementById("personalsettingsform");
       var otherDiv = document.getElementById("financialsettingsform");
-      data = {"NameUser":name_user.value}
-      localStorage.setItem("Wallet", JSON.stringify(data))
+      data = {"NameUser":name_user.value, "user_id":usernamee_entry.value, "password_user":password_user.value}
+      initialseset(JSON.stringify(data))
       document.getElementById("financial_settings").classList.add("active")
       document.getElementById("personal_settings").classList.remove("active")
       document.getElementById("about_settings").classList.remove("active")
@@ -1093,8 +1162,7 @@ function change_option() {
                data = JSON.parse(localStorage.getItem("Wallet"))
                data["CREDIT CARDS"]=objeee
                data["setup"]="DONE"
-               localStorage.setItem("Wallet", JSON.stringify(data))
-               localforage.setItem("Wallet", JSON.stringify(data), function(err, value){})
+               setToStorage(JSON.stringify(data))
                if (localStorageGetItem("NameUser") == null) {
                         swal("Enter your name and username", "Please enter your name and username to proceed", "info")
                      } else {
@@ -1139,8 +1207,7 @@ function change_option() {
                   oobb.BalanceOutstanding = 0
                   data[`${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry.value})`] = oobb
                   oridata["CREDIT CARDS"]=data
-                  localStorage.setItem("Wallet", JSON.stringify(oridata))
-                  localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+                  setToStorage(JSON.stringify(oridata))
                   if (localStorageGetItem("NameUser") == null) {
                            swal("Enter your name and username", "Please enter your name and username to proceed", "info")
                         } else {
@@ -1208,8 +1275,7 @@ function change_option() {
                            data = JSON.parse(localStorage.getItem("Wallet"))
                            data["CASH"]=objeee
                            data["setup"]="DONE"
-                           localStorage.setItem("Wallet", JSON.stringify(data))
-                           localforage.setItem("Wallet", JSON.stringify(data), function(err, value){})
+                           setToStorage(JSON.stringify(data))
                            swal("Done", "Added successfully!", "success", {
                                  buttons: {
                                     ok: true,
@@ -1239,8 +1305,7 @@ function change_option() {
                objeee.TRANSACTIONS = []
                oridata["CASH"]=objeee
                oridata["setup"]="DONE"
-               localStorage.setItem("Wallet", JSON.stringify(oridata))
-               localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+               setToStorage(JSON.stringify(oridata))
                if (localStorageGetItem("NameUser") == null) {
                   swal("Enter your name and username", "Please enter your name and username to proceed", "info")
                } else {
@@ -1317,8 +1382,7 @@ function change_option() {
                data = JSON.parse(localStorage.getItem("Wallet"))
                data["BANKS"]=objeee
                data["setup"]="DONE"
-               localStorage.setItem("Wallet", JSON.stringify(data))
-               localforage.setItem("Wallet", JSON.stringify(data), function(err, value){})
+               setToStorage(JSON.stringify(data))
                if (localStorageGetItem("NameUser") == null) {
                   swal("Enter your name and username", "Please enter your name and username to proceed", "info")
                } else {
@@ -1350,8 +1414,7 @@ function change_option() {
                   data[`${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry.value})`] = parseFloat(balance_entry.value)
                   oridata["BANKS"]=data
                   oridata["setup"]="DONE"
-                  localStorage.setItem("Wallet", JSON.stringify(oridata))
-                  localforage.setItem("Wallet", JSON.stringify(oridata), function(err,value){})
+                  setToStorage(JSON.stringify(oridata))
 
                   if (localStorageGetItem("NameUser") == null) {
                      swal("Enter your name and username", "Please enter your name and username to proceed", "info")
@@ -1382,5 +1445,41 @@ function change_option() {
 
    }
 }
+
+try
+{
+   data = JSON.parse(localStorage.getItem("Wallet"))
+    userName = data["user_id"]
+    fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${userName}`, {
+  method: "GET", // Specify the HTTP method
+  headers: {
+    "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your API key
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your access token
+    "Content-Type": "application/json",
+    "Prefer": "return=minimal",
+  }
+})
+.then(response => {
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+})
+.then(addata => {
+    tocheck = JSON.parse(addata[0]["Details"])
+    if(deepEqual(tocheck, data)==true)
+    {
+        console.log("NO CHANGES")
+    } 
+    else
+    {
+        localStorage.setItem("Wallet", JSON.stringify(tocheck))
+        localforage.setItem("Wallet", JSON.stringify(tocheck), function(err, value){})
+        window.location.reload()
+    }
+})    
+}
+catch
+{}
 </script>
 </html>

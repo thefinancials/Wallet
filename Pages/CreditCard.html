@@ -5,7 +5,6 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
    <script src="https://kit.fontawesome.com/420eab8243.js" crossorigin="anonymous"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 </head>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
@@ -188,7 +187,7 @@
                 <h3 id="name_ussser"></h3>
                 <p id="user_name"></p>
                 <br>
-                <button>Logout</button>
+                <button onclick="logoutFunction()">Logout</button>
             </div>
             <ul>
                 <li>
@@ -242,7 +241,6 @@
       <br>
       <h2 class="centre">Transactions</h2>      
       <table id="transactions_table" class="center" border="1">
-        
          <thead>
             <th style="margin-left: 10px; margin-right:10px;">Date</th>
             <th style="margin-left: 10px; margin-right:10px;">Particulars</th>
@@ -259,14 +257,19 @@
    </div>
 </body>
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="../jquery.dataTables.min.js"></script>
-<link rel="stylesheet" src="../jquery.dataTables.min.css">
+<script src="../Assets/functions.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" src="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
 <script src="../localforage.js"></script>
 <script>
-    
+function localStorageGetItem(vallue)
+    {
+        return JSON.parse(localStorage.getItem("Wallet"))[vallue]
+    }    
 
     document.getElementById("name_ussser").innerHTML = localStorageGetItem("NameUser")
+    document.getElementById("user_name").innerHTML = localStorageGetItem("user_id")
     const collapsibleButton = document.querySelector('.collapsible-button');
    const menu = document.querySelector('.collapsible');
    
@@ -298,10 +301,7 @@
   darkmode.showWidget();
     }
     window.addEventListener('load', addDarkmodeWidget);
-    function localStorageGetItem(vallue)
-        {
-            return JSON.parse(localStorage.getItem("Wallet"))[vallue]
-        }
+    
   </script>
 <script>    
     
@@ -365,7 +365,7 @@
                     balance_outstanding = data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]-parseFloat(document.getElementById("amount_transaction").value)
                     data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]=balance_outstanding
                     oridata["CREDIT CARDS"]=data
-                    localStorage.setItem("Wallet", JSON.stringify(oridata))
+                    setToStorage(JSON.stringify(oridata))
                     localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){alert("Saved successfully")})
                 }
            }
@@ -405,7 +405,7 @@
                     balance_outstanding = data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]-parseFloat(document.getElementById("amount_transaction").value)
                     data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]=balance_outstanding
                     oridata["CREDIT CARDS"]=data
-                    localStorage.setItem("Wallet", JSON.stringify(oridata))
+                    setToStorage(JSON.stringify(oridata))
                     localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){alert("Saved successfully")})
                 }
            }
@@ -421,8 +421,7 @@
        <br><select id="bank_select" class="margin: auto; display: block;" onchange="doTask()"><option>Select a credit card</option></select>\
        <br><input id="amount_transaction" class="margin: auto; display: block;" type="number" placeholder="Enter the bill amount">\
        <br><ul id="list1"></ul>\
-       <br><label class="margin: auto; display: block;">How did you pay the amount?</label>\
-       <br><ul id="list"></ul>\
+       <br><select class="margin: auto; display: block;" id="payment_select"><option id="main_option">How did you pay the amount?</option></select>\
        <br><input id="narration" class="margin: auto; display: block;" type="text" placeholder="Enter narration"></p>\
        <br><button id="add_btn"onclick="moneyadded_in()">Add transaction</button>'
        data = (localStorageGetItem("CREDIT CARDS"))
@@ -442,7 +441,7 @@
         }
        if (localStorageGetItem("CASH")==null && localStorageGetItem("BANKS")==null)
        {
-        document.getElementById("list").innerHTML="You don't have any payment options set up"
+        document.getElementById("main_option").innerHTML="You don't have any payment options set up"
         document.getElementById("add_btn").disabled = true
        }
        else
@@ -454,12 +453,10 @@
          }
          else
          {
-            var li = document.createElement("button")
+            var li = document.createElement("option")
             li.innerHTML = `Cash - ₹${try_cash["CASH_BALANCE"]}`
             li.addEventListener("click", function(){selected="Cash"})
-            document.getElementById("list").appendChild(li)   
-            document.getElementById("list").appendChild(document.createElement("br"))
-            document.getElementById("list").appendChild(document.createElement("br"))
+            document.getElementById("payment_select").appendChild(li)   
          }
          try_bank = (localStorageGetItem("BANKS"))
          if(try_bank==null)
@@ -476,12 +473,10 @@
                 }
                 else
                 {
-                    var li = document.createElement("button")
+                    var li = document.createElement("option")
                     li.innerHTML = `${kkkeey} - ₹${try_bank[kkkeey]}`
-                    li.addEventListener("click", function(){selected=li.innerHTML})
-                    document.getElementById("list").appendChild(li)  
-                    document.getElementById("list").appendChild(document.createElement("br"))
-                    document.getElementById("list").appendChild(document.createElement("br"))   
+                    document.getElementById("payment_select").appendChild(li)  
+   
                 }
             }
          }
@@ -528,8 +523,8 @@
                array_part.push(document.getElementById("particulars_transaction").value)
                oridata = JSON.parse(localStorage.getItem("Wallet"))
                oridata["particulars_ai"]=array_part
-               localStorage.setItem("Wallet", JSON.stringify(oridata))
-               localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+               setToStorage(JSON.stringify(oridata))
+               
            }
            else
            {
@@ -541,8 +536,8 @@
                    array_part.push(document.getElementById("particulars_transaction").value)
                    oridata = JSON.parse(localStorage.getItem("Wallet"))
                     oridata["particulars_ai"]=array_part
-                    localStorage.setItem("Wallet", JSON.stringify(oridata))
-                    localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+                    setToStorage(JSON.stringify(oridata))
+                    
                }
            }
            new_object.Type = "Dr"
@@ -551,17 +546,16 @@
            new_object.Amount = document.getElementById("amount_transaction").value
            creditcardd = (document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text)
            new_object.CreditCard = creditcardd
-           bankname = creditcardd
            new_object.Narration = document.getElementById("narration").value
            data["TRANSACTIONS"].push(new_object)
            data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
-           cur_balance = data[bankname]["BalanceOutstanding"]
+           cur_balance = data[creditcardd]["BalanceOutstanding"]
            cur_balance+=parseFloat(document.getElementById("amount_transaction").value)
-           data[bankname]["BalanceOutstanding"] = cur_balance
+           data[creditcardd]["BalanceOutstanding"] = cur_balance
            oridata = JSON.parse(localStorage.getItem("Wallet"))
            oridata["CREDIT CARDS"]=data
-           localStorage.setItem("Wallet", JSON.stringify(oridata))
-           localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+           setToStorage(JSON.stringify(oridata))
+           
            alert("Added!")
            window.location.reload()     
        }
@@ -807,6 +801,40 @@ document.getElementById("cur_balance").append(table)
 $(document).ready(function() {
     $('#transactions_table').DataTable();
 });
+
+
+
+data = JSON.parse(localStorage.getItem("Wallet"))
+    userName = data["user_id"]
+    fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${userName}`, {
+  method: "GET", // Specify the HTTP method
+  headers: {
+    "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your API key
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your access token
+    "Content-Type": "application/json",
+    "Prefer": "return=minimal",
+  }
+})
+.then(response => {
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+})
+.then(addata => {
+    tocheck = JSON.parse(addata[0]["Details"])
+    if(deepEqual(tocheck, data)==true)
+    {
+        console.log("NO CHANGES")
+    } 
+    else
+    {
+        localStorage.setItem("Wallet", JSON.stringify(tocheck))
+        localforage.setItem("Wallet", JSON.stringify(tocheck), function(err, value){})
+        window.location.reload()
+    }
+})  
+
 </script>
 </body>
 

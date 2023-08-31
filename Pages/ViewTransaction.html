@@ -166,8 +166,8 @@
                 {
                     oridata["CASH"]=data
                 }
-                localStorage.setItem("Wallet", JSON.stringify(oridata))
-                localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+                setToStorage(JSON.stringify(oridata))
+                
                 alert("Deleted transaction successfully")
                 history.back()
             }
@@ -223,8 +223,8 @@
                             transactions[i].Amount=document.getElementById("amount_transaction").value
                             oridata = JSON.parse(localStorage.getItem("Wallet"))
                             oridata["CREDIT CARDS"]=data
-                            localStorage.setItem("Wallet", JSON.stringify(oridata))
-                            localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+                            setToStorage(JSON.stringify(oridata))
+                            
                         }
                     }
                     else if(type=="B")
@@ -302,8 +302,8 @@
                             transactions[i].Amount=document.getElementById("amount_transaction").value
                             oridata = JSON.parse(localStorage.getItem("Wallet"))
                             oridata["BANKS"]=data
-                            localStorage.setItem("Wallet", JSON.stringify(oridata))
-                            localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+                            setToStorage(JSON.stringify(oridata))
+                            
                         }
                     }
                     else
@@ -377,8 +377,8 @@
                             console.log(data)
                             oridata = JSON.parse(localStorage.getItem("Wallet"))
                             oridata["CASH"]=data
-                            localStorage.setItem("Wallet", JSON.stringify(oridata))
-                            localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})                            
+                            setToStorage(JSON.stringify(oridata))
+                                                        
                         }   
                     }
                 }

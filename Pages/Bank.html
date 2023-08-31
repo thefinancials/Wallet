@@ -4,7 +4,7 @@
    <link rel="icon" href="../Assets/main-icon.png">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <script src="https://kit.fontawesome.com/420eab8243.js" crossorigin="anonymous"></script>
-   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+   
 </head>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
@@ -188,7 +188,7 @@
                 <h3 id="name_ussser"></h3>
                 <p id="user_name"></p>
                 <br>
-                <button>Logout</button>
+                <button onclick="logoutFunction()">Logout</button>
             </div>
             <ul>
                 <li>
@@ -242,19 +242,31 @@
       display: block;
       ">
       <h2 class="centre">Transactions</h2>
+      
       <table id="transactions_table" class="center" border="1">
-         <tr>
+         <thead>
+            
             <th style="margin-left: 10px; margin-right:10px;">Date</th>
             <th style="margin-left: 10px; margin-right:10px;">Particulars</th>
             <th style="margin-left: 10px; margin-right:10px;">Bank</th>
             <th style="margin-left: 10px; margin-right:10px;">Type</th>
             <th style="margin-left: 10px; margin-right:10px;">Amount</th>
             <th style="margin-left: 10px; margin-right:10px;">Actions</th>
-         </tr>
+         </thead>
+         <tbody id="ttbody">
+
+         </tbody>
+         <tfoot>
+
+         </tfoot>
       </table>
    </div>
 </body>
 <script src="../localforage.js"></script>
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="../Assets/functions.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" src="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
 <script>
     function localStorageGetItem(vallue)
@@ -297,6 +309,7 @@
     }
     window.addEventListener('load', addDarkmodeWidget);
     document.getElementById("name_ussser").innerHTML = localStorageGetItem("NameUser")
+    document.getElementById("user_name").innerHTML = localStorageGetItem("user_id")
   </script>
 <script>
    function isStringInList(string, list) {
@@ -324,8 +337,7 @@
                array_part.push(document.getElementById("particulars_transaction").value)
                oridata = JSON.parse(localStorage.getItem("Wallet"))
                oridata["particulars_ai"]=array_part
-               localStorage.setItem("Wallet", JSON.stringify(oridata))
-               localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+               setToStorage(JSON.stringify(oridata))
            }
            else
            {
@@ -337,8 +349,8 @@
                    array_part.push(document.getElementById("particulars_transaction").value)
                    oridata = JSON.parse(localStorage.getItem("Wallet"))
                     oridata["particulars_ai"]=array_part
-                    localStorage.setItem("Wallet", JSON.stringify(oridata))
-                    localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+                    setToStorage(JSON.stringify(oridata))
+                    
                }
            }
            new_object.Type = "Cr"
@@ -355,8 +367,8 @@
            data[bankkk.split(" - ")[0]]=cash_balance
            oridata = JSON.parse(localStorage.getItem("Wallet"))
            oridata["BANKS"]=data
-           localStorage.setItem("Wallet", JSON.stringify(oridata))
-           localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+           setToStorage(JSON.stringify(oridata))
+           
            alert("Added!")
            window.location.reload();
        }
@@ -443,43 +455,6 @@
        }
        else
        {
-        
-            data = (localStorageGetItem("BANKS"))
-            new_object = new Object()
-            new_object.Date = document.getElementById("date_transaction").value
-            if(document.getElementById("particulars_transaction").value=="CASH")
-            {
-                new_object.Particulars="Cash withdrawn from Bank"
-            }
-            else
-            {
-                new_object.Particulars = document.getElementById("particulars_transaction").value
-                if(localStorageGetItem("particulars_ai")==null)
-                {
-                    array_part =[]
-                    array_part.push(document.getElementById("particulars_transaction").value)
-                    oridata = JSON.parse(localStorage.getItem("Wallet"))
-                    oridata["particulars_ai"]=array_part
-                    localStorage.setItem("Wallet", JSON.stringify(oridata))
-                    localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
-                }
-                else
-                {
-                    array_part=(localStorageGetItem("particulars_ai"))
-                    if(isStringInList(document.getElementById("particulars_transaction").value, array_part)==true)
-                    {}
-                    else
-                    {
-                        array_part.push(document.getElementById("particulars_transaction").value)
-                        oridata = JSON.parse(localStorage.getItem("Wallet"))
-                            oridata["particulars_ai"]=array_part
-                            localStorage.setItem("Wallet", JSON.stringify(oridata))
-                            localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
-                    }
-                }
-            }
-           new_object.Type = "Dr"
-           new_object.Amount = document.getElementById("amount_transaction").value
            bankkk = document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text
            new_object.BankAccount = bankkk.split(" - ")[0]
            new_object.Narration = document.getElementById("narration").value
@@ -516,8 +491,8 @@
                     cashdata["CASH_BALANCE"]=cash_balance
                     oridata["CASH"]=cashdata
                 }
-                localStorage.setItem("Wallet", JSON.stringify(oridata))
-                localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+                setToStorage(JSON.stringify(oridata))
+                
            alert("Added!")
            window.location.reload();
            
@@ -648,6 +623,9 @@
            no_trx.style.cssText = 'text-align:center;';
            document.getElementById("details_div").appendChild(no_trx)
            }
+           
+           
+           
        }
    }
    function add(item)
@@ -670,10 +648,9 @@
        newType.innerHTML=item["Type"]
        var newAmount = document.createElement("td")
        newAmount.innerHTML=item["Amount"]
+       var newB = document.createElement("td")
        var newButton = document.createElement("button")
         newButton.innerHTML="🔍\nActions:\nView and Delete"
-        newButton.style.height = "100px"; // Set the desired height in pixels
-    newButton.style.verticalAlign = "top"; // Align the content to the top
 
         newButton.addEventListener("click", function(){window.location.href=`ViewTransaction.html?type=B&trxnum=${item["TRXNUM"]}`})
         if(item["Particulars"].includes("Payment of") && item["Particulars"].includes("Credit Card"))
@@ -686,13 +663,14 @@
        newRow.appendChild(newBank)
        newRow.appendChild(newType)
        newRow.appendChild(newAmount)
-       newRow.appendChild(newButton)
-       document.getElementById("transactions_table").appendChild(newRow)
+       newB.appendChild(newButton)
+       newRow.appendChild(newB)
+       document.getElementById("ttbody").appendChild(newRow)
        }
        
    }
    data = (localStorageGetItem("BANKS"))
-   
+    
 const bankAccountData = [];
 for (const key in data) {
   if (key !== "NO_OF_BANKACCOUNTS" && key !== "TRXNUM" && key !== "TRANSACTIONS") {
@@ -755,6 +733,40 @@ bankAccountData.forEach(({ card, balance }) => {
 });
 table.append(tbody)
 document.getElementById("cur_balance").append(table)
+$(document).ready(function() {
+    $('#transactions_table').DataTable();
+});
+
+data = JSON.parse(localStorage.getItem("Wallet"))
+    userName = data["user_id"]
+    fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${userName}`, {
+  method: "GET", // Specify the HTTP method
+  headers: {
+    "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your API key
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your access token
+    "Content-Type": "application/json",
+    "Prefer": "return=minimal",
+  }
+})
+.then(response => {
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+})
+.then(addata => {
+    tocheck = JSON.parse(addata[0]["Details"])
+    if(deepEqual(tocheck, data)==true)
+    {
+        console.log("NO CHANGES")
+    } 
+    else
+    {
+        localStorage.setItem("Wallet", JSON.stringify(tocheck))
+        localforage.setItem("Wallet", JSON.stringify(tocheck), function(err, value){})
+        window.location.reload()
+    }
+})  
 </script>
 </body>
 </html>

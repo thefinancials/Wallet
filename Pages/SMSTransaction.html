@@ -247,8 +247,8 @@
                array_part.push(document.getElementById("particularsCard").value)
                oridata = JSON.parse(localStorage.getItem("Wallet"))
                oridata["particulars_ai"]=array_part
-               localStorage.setItem("Wallet", JSON.stringify(oridata))
-               localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+               setToStorage(JSON.stringify(oridata))
+               
            }
            else
            {
@@ -260,8 +260,8 @@
                    array_part.push(document.getElementById("particularsCard").value)
                    oridata = JSON.parse(localStorage.getItem("Wallet"))
                     oridata["particulars_ai"]=array_part
-                    localStorage.setItem("Wallet", JSON.stringify(oridata))
-                    localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+                    setToStorage(JSON.stringify(oridata))
+                    
                }
            }
            new_object.Type = "Dr"
@@ -280,8 +280,8 @@
            oridata = JSON.parse(localStorage.getItem("Wallet"))
            oridata["CREDIT CARDS"]=data
            console.log(oridata)
-           localStorage.setItem("Wallet", JSON.stringify(oridata))
-           localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+           setToStorage(JSON.stringify(oridata))
+           
            alert("Added!")
            window.location.reload()     
         }

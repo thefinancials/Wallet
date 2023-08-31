@@ -183,7 +183,7 @@ body{
                 <h3 id="name_ussser"></h3>
                 <p id="user_name"></p>
                 <br>
-                <button>Logout</button>
+                <button onclick="logoutFunction()">Logout</button>
             </div>
             <ul>
                 <li>
@@ -226,6 +226,7 @@ body{
 
 </body>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="Assets/functions.js"></script>
 <script src="localforage.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
 <script>
@@ -246,7 +247,8 @@ localforage.getItem("TOWRITE", function(err, value){
     if (value!=null)
     {
         oridata = JSON.parse(value)
-        localStorage.setItem("Wallet", JSON.stringify(oridata))
+        setToStorage(JSON.stringify(oridata))
+        localforage.removeItem("TOWRITE", function(err, value){})
     }
 })
 
@@ -329,6 +331,49 @@ darkmode.showWidget();
   return false;
 }
 
+if(localStorage.getItem("Wallet")==null)
+    {
+        window.location="Pages/Signup.html"
+    }
+    else
+    {
+        document.getElementById("name_ussser").innerHTML = localStorageGetItem("NameUser")
+        document.getElementById("user_name").innerHTML = localStorageGetItem("user_id")
+        initialise()
+    }
+    function initialise()
+    {
+        if(localStorageGetItem("CASH") == null)
+        {
+            document.getElementById("cashbalance").innerHTML = "Not set up"
+        }
+        else
+        {
+            data = localStorageGetItem("CASH")
+            document.getElementById("cashbalance").innerHTML = `Rs. ${data["CASH_BALANCE"]}`
+        }
+
+        if(localStorageGetItem("BANKS") == null)
+        {
+            document.getElementById("bankaccount_no").innerHTML = "Not set up"
+        }
+        else
+        {
+            data = localStorageGetItem("BANKS")
+            document.getElementById("bankaccount_no").innerHTML = `${data["NO_OF_BANKACCOUNTS"]} Account(s)`
+        }
+        if(localStorageGetItem("CREDIT CARDS") == null)
+        {
+            document.getElementById("creditcard_no").innerHTML = "Not set up"
+        }
+        else
+        {
+            data = localStorageGetItem("CREDIT CARDS")
+            document.getElementById("creditcard_no").innerHTML = `${data["NO_OF_CARDS"]} Credit Card(s)`
+        }
+        
+    }   
+
     data = localStorageGetItem("CREDIT CARDS")
     for(var keeey in data)
     {
@@ -368,8 +413,7 @@ darkmode.showWidget();
                     data[keeey]["DueDate"]=cccc.toString()
                     oridata = JSON.parse(localStorage.getItem("Wallet"))
                     oridata["CREDIT CARDS"]=data
-                    localStorage.setItem("Wallet", JSON.stringify(oridata))
-                    localforage.setItem("Wallet", JSON.stringify(oridata), function(err, value){})
+                    setToStorage(JSON.stringify(oridata))
                     try
                     {
                         showNotification(`Statement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
@@ -381,48 +425,40 @@ darkmode.showWidget();
             }
         }
     }
-    if(localStorageGetItem("setup")==null)
+
+
+
+
+    data = JSON.parse(localStorage.getItem("Wallet"))
+    userName = data["user_id"]
+    fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${userName}`, {
+  method: "GET", // Specify the HTTP method
+  headers: {
+    "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your API key
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your access token
+    "Content-Type": "application/json",
+    "Prefer": "return=minimal",
+  }
+})
+.then(response => {
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+})
+.then(addata => {
+    tocheck = JSON.parse(addata[0]["Details"])
+    if(deepEqual(tocheck, data)==true)
     {
-        window.location="Pages/Signup.html"
-    }
+        console.log("NO CHANGES")
+    } 
     else
     {
-        document.getElementById("name_ussser").innerHTML = localStorageGetItem("NameUser")
-        initialise()
+        localStorage.setItem("Wallet", JSON.stringify(tocheck))
+        localforage.setItem("Wallet", JSON.stringify(tocheck), function(err, value){})
+        window.location.reload()
     }
-    function initialise()
-    {
-        if(localStorageGetItem("CASH") == null)
-        {
-            document.getElementById("cashbalance").innerHTML = "Not set up"
-        }
-        else
-        {
-            data = localStorageGetItem("CASH")
-            document.getElementById("cashbalance").innerHTML = `Rs. ${data["CASH_BALANCE"]}`
-        }
-
-        if(localStorageGetItem("BANKS") == null)
-        {
-            document.getElementById("bankaccount_no").innerHTML = "Not set up"
-        }
-        else
-        {
-            data = localStorageGetItem("BANKS")
-            document.getElementById("bankaccount_no").innerHTML = `${data["NO_OF_BANKACCOUNTS"]} Account(s)`
-        }
-        if(localStorageGetItem("CREDIT CARDS") == null)
-        {
-            document.getElementById("creditcard_no").innerHTML = "Not set up"
-        }
-        else
-        {
-            data = localStorageGetItem("CREDIT CARDS")
-            document.getElementById("creditcard_no").innerHTML = `${data["NO_OF_CARDS"]} Credit Card(s)`
-        }
-        
-    }   
-    
+})    
     
 </script>
 </html>
