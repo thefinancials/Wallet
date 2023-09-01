@@ -159,7 +159,7 @@
                 <h3 id="name_ussser"></h3>
                 <p id="user_name"></p>
                 <br>
-                <button onclick="logoutFunction()">Logout</button>
+                <button onclick="logoutFunction()" id="logout_btn" style="visibility: hidden;">Logout</button>
             </div>
             <ul>
                 <li>
@@ -203,7 +203,7 @@
          <a class="active" onclick="personaloption()" id="personal_settings">Personal Settings</a>
          <a onclick="financialoption()" id="financial_settings">Financial Options</a>
          <a onclick="" id="about_settings">About</a>
-         <a onclick="" id="logout_settings">Logout</a>
+         <a onclick="logoutoption()" id="logout_settings">Logout</a>
        </div>
        <div id="personalsettingsform">
          <h2>Manage your personal settings:</h2>
@@ -224,8 +224,7 @@
       <button onclick="loginPage()">Already have an account? Sign in to Wallet</button>
       
       
-      <!-- <button onclick="del_data()" id="delButton">Delete data and logout</button>
-      <br> -->
+      
        </div>
       
       
@@ -241,7 +240,15 @@
             <option>Cash</option>
          </select>
       </div>
-      
+
+      <div id="logoutform">
+         <h2>Logout Options</h2>
+         <br>
+         <button onclick="logoutFunction()" id="delButton">Logout from this device</button>
+         <br><br>
+         <button onclick="del_data()" id="delButton">Delete data and logout</button>
+         <br>
+      </div>
    </form>
    <div class="centre" id="to_delete"></div>
    
@@ -367,6 +374,8 @@
    window.addEventListener('load', addDarkmodeWidget);
 </script>
 <script>
+   var logoutdiv = document.getElementById("logoutform");
+   logoutdiv.style.display="none";
    function personaloption()
    {
       document.getElementById("about_settings").classList.remove("active")
@@ -375,8 +384,30 @@
       document.getElementById("personal_settings").classList.add("active")
       var personalDiv = document.getElementById("personalsettingsform");
       var otherDiv = document.getElementById("financialsettingsform");
+      var logoutdiv = document.getElementById("logoutform");
       personalDiv.style.display = "block";
       otherDiv.style.display = "none";
+      logoutdiv.style.display="none";
+   }
+   function logoutoption()
+   {
+      if(localStorage.getItem("Wallet")!=null)
+      {
+         document.getElementById("about_settings").classList.remove("active")
+         document.getElementById("logout_settings").classList.add("active")
+         document.getElementById("financial_settings").classList.remove("active")
+         document.getElementById("personal_settings").classList.remove("active")
+         var personalDiv = document.getElementById("personalsettingsform");
+         var otherDiv = document.getElementById("financialsettingsform");
+         var logoutdiv = document.getElementById("logoutform");
+         personalDiv.style.display = "none";
+         logoutdiv.style.display="block";
+         otherDiv.style.display = "none";
+      }
+    else
+    {
+      
+    }  
    }
    function financialoption()
    {
@@ -388,12 +419,14 @@
       {
          if (localStorageGetItem("NameUser") != null) {
             var personalDiv = document.getElementById("personalsettingsform");
+            var logoutdiv = document.getElementById("logoutform");
               var otherDiv = document.getElementById("financialsettingsform");
               document.getElementById("financial_settings").classList.add("active")
               document.getElementById("personal_settings").classList.remove("active")
               document.getElementById("about_settings").classList.remove("active")
                document.getElementById("logout_settings").classList.remove("active")
               personalDiv.style.display = "none";
+              logoutdiv.style.display="none"
             otherDiv.style.display = "block";
          document.getElementById("add_details_1").style.visibility = "visible";
          document.getElementById("type_of_finance").style.visibility = "visible";
@@ -402,7 +435,8 @@
       }
    }
    if (localStorage.getItem("Wallet") != null) {
-      document.getElementById("name_user").value = localStorageGetItem("NameUser")  
+      document.getElementById("name_user").value = localStorageGetItem("NameUser") 
+      document.getElementById("logout_btn").style.visibility="visible"
    document.getElementById("name_ussser").innerHTML = localStorageGetItem("NameUser")
    document.getElementById("usernamee_entry").value = localStorageGetItem("user_id")  
    document.getElementById("user_name").innerHTML = localStorageGetItem("user_id")
@@ -418,10 +452,12 @@
    else
    {  
       var personalDiv = document.getElementById("personalsettingsform");
+      var logoutdiv = document.getElementById("logoutform");
       var otherDiv = document.getElementById("financialsettingsform");
       document.getElementById("financial_settings").classList.add("active")
       document.getElementById("personal_settings").classList.remove("active")
       personalDiv.style.display = "none";
+      var logoutdiv = document.getElementById("logoutform");
       otherDiv.style.display = "block";      
       document.getElementById("name_user").value = localStorageGetItem("NameUser") 
       type=(urlparams.split("?")[1]).split("=")[0]
@@ -648,12 +684,14 @@
          if(tod=="CC")
          {
                var personalDiv = document.getElementById("personalsettingsform");
+               var logoutdiv = document.getElementById("logoutform");
                var otherDiv = document.getElementById("financialsettingsform");
                document.getElementById("financial_settings").classList.add("active")
                document.getElementById("personal_settings").classList.remove("active")
                document.getElementById("about_settings").classList.remove("active")
                document.getElementById("logout_settings").classList.remove("active")
                personalDiv.style.display = "none";
+               logoutdiv.style.display="none"
                otherDiv.style.display = "block";
                document.getElementById("add_details_1").style.visibility = "visible";
                document.getElementById("add_details_1").innerHTML="Add Credit Card"
@@ -1036,12 +1074,26 @@ function del_data() {
          switch (value) {
 
             case "ok":
-               try {
+                  data = JSON.parse(localStorage.getItem("Wallet"))
+                  userName = data["user_id"]
                   localStorage.removeItem("Wallet")
-                  window.location.reload()
-               } catch {
-
-               }
+                  localforage.removeItem("Wallet", function(err, value){})
+                  fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${userName}`, {
+                  method: "DELETE", // Specify the HTTP method
+                  headers: {
+                     "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your API key
+                     "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your access token
+                     "Content-Type": "application/json",
+                     "Prefer": "return=minimal",
+                  }
+                  })
+                  .then(res => res.text())
+                  .then(res => {if (res==""){
+                     console.log("Done")
+                     window.location.reload()
+               }})
+                  // 
+               
                break;
 
             case "cancel":
@@ -1055,11 +1107,12 @@ function del_data() {
 
 function submitName() {
    event.preventDefault();
-   if (name_user.value == "") {
-      swal("Enter your name", "Please enter your name to proceed", "info");
+   if (name_user.value == "" || usernamee_entry.value=="" || password_user.value=="") {
+      swal("Enter your name, a username and a password", "Please enter your name, a username and a password to proceed", "info");
    } else {
       var personalDiv = document.getElementById("personalsettingsform");
       var otherDiv = document.getElementById("financialsettingsform");
+      var logoutdiv = document.getElementById("logoutform");
       data = {"NameUser":name_user.value, "user_id":usernamee_entry.value, "password_user":password_user.value}
       initialseset(JSON.stringify(data))
       document.getElementById("financial_settings").classList.add("active")
@@ -1067,6 +1120,7 @@ function submitName() {
       document.getElementById("about_settings").classList.remove("active")
       document.getElementById("logout_settings").classList.remove("active")
       personalDiv.style.display = "none";
+      logoutdiv.style.display="none"
       otherDiv.style.display = "block";
       document.getElementById("name_user").value = localStorageGetItem("NameUser")
       document.getElementById("add_details_1").style.visibility = "visible";
