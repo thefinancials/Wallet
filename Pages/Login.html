@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<head>
+   <title>Sign up for Wallet</title>
+   <link rel="icon" href="../Assets/main-icon.png">
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+   <script src="https://kit.fontawesome.com/420eab8243.js" crossorigin="anonymous"></script>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+   .centre
+   {
+   text-align: center;
+   }
+   .center{
+   margin: auto;
+   width: 30%;
+   align-items: center;  
+   padding: 10px;
+   }   
+   .rectangle {
+   width: 200px;
+   height: 100px;
+   border: 1px solid black;
+   text-align: center;
+   display: inline-block;
+   line-height: 50px;
+   font-weight: bold;
+   font-size: 20px;
+   }
+   .required::after {
+   color: red;
+   }
+   
+   *{
+   list-style: none;
+   text-decoration: none;
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   font-family: 'Open Sans', sans-serif;
+   }
+   body{
+   background: #f5f6fa;
+   }
+   .wrapper .sidebar{
+   background: rgb(5, 68, 104);
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 225px;
+   height: 100%;
+   padding: 20px 0;
+   transition: all 0.5s ease;
+   }
+   .wrapper .sidebar .profile{
+   margin-bottom: 30px;
+   text-align: center;
+   }
+   .wrapper .sidebar .profile img{
+   display: block;
+   width: 100px;
+   height: 100px;
+   border-radius: 50%;
+   margin: 0 auto;
+   }
+   .wrapper .sidebar .profile h3{
+   color: #ffffff;
+   margin: 10px 0 5px;
+   }
+   .wrapper .sidebar .profile p{
+   color: rgb(206, 240, 253);
+   font-size: 14px;
+   }
+   .wrapper .sidebar ul li a{
+   display: block;
+   padding: 13px 30px;
+   border-bottom: 1px solid #10558d;
+   color: rgb(241, 237, 237);
+   font-size: 16px;
+   position: relative;
+   }
+   .wrapper .sidebar ul li a .icon{
+   color: #dee4ec;
+   width: 30px;
+   display: inline-block;
+   }
+   .wrapper .sidebar ul li a:hover,
+   .wrapper .sidebar ul li a.active{
+   color: #0c7db1;
+   background:white;
+   border-right: 2px solid rgb(5, 68, 104);
+   }
+   .wrapper .sidebar ul li a:hover .icon,
+   .wrapper .sidebar ul li a.active .icon{
+   color: #0c7db1;
+   }
+   .wrapper .sidebar ul li a:hover:before,
+   .wrapper .sidebar ul li a.active:before{
+   display: block;
+   }
+   .collapsible {
+   display: none;
+   }
+   .collapsible.active {
+   display: block;
+   }
+   .collapsible-button {
+   background-color: transparent;
+   border: none;
+   color: #000;
+   font-size: 24px;
+   cursor: pointer;
+   position: absolute;
+   top: 10px;
+   left: 10px;
+   }
+   .pill-nav a {
+  display: inline-block;
+  color: black;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+  font-size: 17px;
+  border-radius: 5px;
+}
+
+.pill-nav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.pill-nav a.active {
+  background-color: dodgerblue;
+  color: white;
+}
+</style>
+<body>
+    <h1 class="centre">Wallet</h1>
+    <header>
+        <p class="centre">This app helps you manage all your financial transactions with ease</p>
+        <p class="centre">Works with:-
+        <li class="centre">Credit Cards</li>
+        <li class="centre">Banks, Debit Cards</li>
+        <li class="centre">Cash</li>
+        </p>
+        <p class="centre">The app is compatible with <i class="fa-brands fa-windows"></i> Windows, <i class="fa-brands fa-android"></i> Android, <i class="fa-brands fa-apple"></i> iOS, iPadOS, macOS, <i class="fa-brands fa-linux"></i> Linux, <i class="fa-solid fa-globe"></i> and on all devices that support the Web</p>
+     </header>
+    <br>
+    <form class="centre">
+        <h2>Login</h2>
+        <br>
+        <label for="usernamee_entry">Username:</label>
+        <input id="usernamee_entry" type="text">
+        <br><br>
+        <label for="password_user">Password:</label>
+        <input id="password_user" type="password">
+        <br><br>
+        <button onclick="submitName()">Submit</button>
+    </form>
+    
+</body>
+<script src="../Assets/functions.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="../localforage.js"></script>
+<script>
+    
+    function submitName()
+    {
+        event.preventDefault()
+        usernameentered = usernamee_entry.value
+        passwordentered = password_user.value
+        fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${usernameentered}`, {
+        method: "GET", // Specify the HTTP method
+        headers: {
+            "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your API key
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your access token
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal",
+        }
+        })
+        .then(response => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+        })
+        .then(addata => {
+            if (addata.length==0)
+            {
+                alert("Invalid username")
+            }
+            else
+            {
+                tocheck = JSON.parse(addata[0]["Details"])
+                if(passwordentered==tocheck["password_user"])
+                {
+                    localStorage.setItem("Wallet", JSON.stringify(tocheck))   
+                    localforage.setItem("Wallet", JSON.stringify(tocheck), function(err, value){})
+                    swal("Success", "You have logged in successfully", "success", {
+                              buttons: {
+                                 ok: true,
+                              },
+
+                           })
+                           .then((value) => {
+                              switch (value) {
+
+                                 case "ok":
+                                    window.location.href = "../index.html"
+                                    break;
+                              }
+                           });
+                }
+                else
+                {
+                    alert("Invalid password")
+                }
+            }
+        })
+}
+
+if(window.navigator.onLine==false)
+    {
+        alert("You are offline, get back online to login or signup to Wallet")
+        history.back()
+    }
+</script>
+</html>

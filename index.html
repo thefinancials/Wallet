@@ -169,7 +169,7 @@ body{
     </div>
    
     <br>
-    <button class="collapsible-button">&#9776;</button>
+    <button class="collapsible-button" id="coll-button">&#9776;</button>
     <div class="collapsible">
         
     <div class="wrapper">
@@ -211,7 +211,7 @@ body{
                     </a>
                 </li>
                 <li>
-                    <a href="Pages/Signup.html">
+                    <a href="Pages/Settings.html">
                         <span class="icon"><i class="fa-solid fa-gear"></i></span>
                         <span class="item">Settings</span>
                     </a>
@@ -228,7 +228,7 @@ body{
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="Assets/functions.js"></script>
 <script src="localforage.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
 <script>
     const collapsibleButton = document.querySelector('.collapsible-button');
 const menu = document.querySelector('.collapsible');
@@ -252,28 +252,11 @@ localforage.getItem("TOWRITE", function(err, value){
     }
 })
 
-function addDarkmodeWidget() {
-    const options = {
-  bottom: '32px', // default: '32px'
-  right: '32px', // default: '32px'
-  left: 'unset', // default: 'unset'
-  time: '0.5s', // default: '0.3s'
-  mixColor: '#fff', // default: '#fff'
-  backgroundColor: '#fff',  // default: '#fff'
-  buttonColorDark: '#100f2c',  // default: '#100f2c'
-  buttonColorLight: '#fff', // default: '#fff'
-  saveInCookies: true, // default: true,
-  label: '🌓', // default: ''
-  autoMatchOsTheme: true // default: true
-}
 
-const darkmode = new Darkmode(options);
-darkmode.showWidget();
-  }
-  window.addEventListener('load', addDarkmodeWidget);
 </script>
 
 <script>
+    
     function localStorageGetItem(vallue)
     {
         return JSON.parse(localStorage.getItem("Wallet"))[vallue]
@@ -339,7 +322,9 @@ if(localStorage.getItem("Wallet")==null)
     {
         document.getElementById("name_ussser").innerHTML = localStorageGetItem("NameUser")
         document.getElementById("user_name").innerHTML = localStorageGetItem("user_id")
+        
         initialise()
+        
     }
     function initialise()
     {
@@ -450,7 +435,7 @@ if(localStorage.getItem("Wallet")==null)
     tocheck = JSON.parse(addata[0]["Details"])
     if(deepEqual(tocheck, data)==true)
     {
-        console.log("NO CHANGES")
+        
     } 
     else
     {
@@ -459,6 +444,7 @@ if(localStorage.getItem("Wallet")==null)
         window.location.reload()
     }
 })    
+    
     
 </script>
 </html>
