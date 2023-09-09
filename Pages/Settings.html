@@ -202,7 +202,7 @@
       <div class="pill-nav">
          <a class="active" onclick="personaloption()" id="personal_settings">Personal Settings</a>
          <a onclick="financialoption()" id="financial_settings">Financial Options</a>
-         <a onclick="" id="about_settings">About</a>
+         <a onclick="aboutoption()" id="about_settings">About</a>
          <a onclick="logoutoption()" id="logout_settings">Logout</a>
        </div>
        <div id="personalsettingsform">
@@ -238,9 +238,20 @@
          </select>
       </div>
 
+      <div id="aboutform">
+         <h2 style="visibility: hidden;" id="add_details_1">About</h2>
+         <p>Wallet - The app designed and developed to keep track of your Cash, Bank, Debit Card and Credit Card Transactions</p>
+         <br>
+         <h3>Version 2.0</h3>
+         <h3>You are running the latest version of Wallet!</h3>
+         
+         <br><br>
+         <p>Developed by <a href="https://github.com/abhinavsatheesh">Abhinav Satheesh</a></p>
+         <p>Marketed by <a href="https://github.com/thefinancials">The Financials</a></p>
+      </div>
+
       <div id="logoutform" style="visibility:hidden">
          <h2>Wallet Settings</h2>
-         <button id="dlbutton" onclick="darkMode()"></button>
          <br>
          <br>
          <button onclick="logoutFunction()" >Logout from this device</button>
@@ -412,7 +423,19 @@
 
 </script>
 <script>
-   
+   function aboutoption()
+   {
+      document.getElementById("about_settings").classList.add("active")
+      document.getElementById("logout_settings").classList.remove("active")
+      document.getElementById("financial_settings").classList.remove("active")
+      document.getElementById("personal_settings").classList.remove("active")
+      var personalDiv = document.getElementById("personalsettingsform");
+      var otherDiv = document.getElementById("financialsettingsform");
+      var aboutdiv = document.getElementById("aboutform");
+      aboutdiv.style.display = "block";
+      otherDiv.style.display = "none";
+      personalDiv.style.display = "none";
+   }
    function personaloption()
    {
       document.getElementById("about_settings").classList.remove("active")
