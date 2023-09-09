@@ -445,8 +445,10 @@
       var personalDiv = document.getElementById("personalsettingsform");
       var otherDiv = document.getElementById("financialsettingsform");
       var logoutdiv = document.getElementById("logoutform");
+      var aboutdiv = document.getElementById("aboutform");
       personalDiv.style.display = "block";
       otherDiv.style.display = "none";
+      aboutdiv.style.visibility="hidden"
    }
    function logoutoption()
    {
@@ -459,14 +461,13 @@
          var personalDiv = document.getElementById("personalsettingsform");
          var otherDiv = document.getElementById("financialsettingsform");
          var logoutdiv = document.getElementById("logoutform");
+         var aboutdiv = document.getElementById("aboutform");
          personalDiv.style.display = "none";
          logoutdiv.style.visibility="visible";
          otherDiv.style.display = "none";
+         aboutdiv.style.visibility="hidden"
       }
-    else
-    {
-      
-    }  
+
    }
    function financialoption()
    {
@@ -479,6 +480,7 @@
          if (localStorageGetItem("NameUser") != null) {
             var personalDiv = document.getElementById("personalsettingsform");
             var logoutdiv = document.getElementById("logoutform");
+            var aboutdiv = document.getElementById("aboutform");
               var otherDiv = document.getElementById("financialsettingsform");
               document.getElementById("financial_settings").classList.add("active")
               document.getElementById("personal_settings").classList.remove("active")
@@ -486,6 +488,7 @@
                document.getElementById("logout_settings").classList.remove("active")
               personalDiv.style.display = "none";
             otherDiv.style.display = "block";
+            aboutdiv.style.visibility="hidden"
          document.getElementById("add_details_1").style.visibility = "visible";
          document.getElementById("type_of_finance").style.visibility = "visible";
       }
@@ -509,12 +512,14 @@
    }
    else
    {  
+      var aboutdiv = document.getElementById("aboutform");
       var personalDiv = document.getElementById("personalsettingsform");
       var logoutdiv = document.getElementById("logoutform");
       var otherDiv = document.getElementById("financialsettingsform");
       document.getElementById("financial_settings").classList.add("active")
       document.getElementById("personal_settings").classList.remove("active")
       personalDiv.style.display = "none";
+      aboutdiv.style.visibility="hidden"
       var logoutdiv = document.getElementById("logoutform");
       otherDiv.style.display = "block";      
       document.getElementById("name_user").value = localStorageGetItem("NameUser") 
