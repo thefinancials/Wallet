@@ -238,7 +238,7 @@
          </select>
       </div>
 
-      <div id="aboutform">
+      <div id="aboutform" style="visibility:hidden">
          <h2 style="visibility: hidden;" id="add_details_1">About</h2>
          <p>Wallet - The app designed and developed to keep track of your Cash, Bank, Debit Card and Credit Card Transactions</p>
          <br>
@@ -432,7 +432,7 @@
       var personalDiv = document.getElementById("personalsettingsform");
       var otherDiv = document.getElementById("financialsettingsform");
       var aboutdiv = document.getElementById("aboutform");
-      aboutdiv.style.display = "block";
+      aboutdiv.style.visibility = "visible";
       otherDiv.style.display = "none";
       personalDiv.style.display = "none";
    }
