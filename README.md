@@ -47,5 +47,6 @@ I also want to bring in Telegram here. Introducing a Telegram bot, would help us
 
 Wallet
 Developed by [Abhinav Satheesh](https://github.com/abhinavsatheesh)
+A product of [ASA Finserve](https://github.com/asafinserve)
 Version 2.0
 Releasing on 12:00 PM, 9th September 2023

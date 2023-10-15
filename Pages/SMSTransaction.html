@@ -321,6 +321,7 @@
                         newElement.innerHTML = options[i]
                         document.getElementById("cardSelect").add(newElement)
                     }
+                    
                     particulars = (smsPasted.split("At")[1]).split("On")[0]
                     document.getElementById("particularsCard").value=particulars
                     amount = parseFloat(((smsPasted.split("You've spent")[1]).split("On")[0]).replace("Rs.", ""))
@@ -445,6 +446,35 @@
                     particulars = (smsPasted.split("at")[1]).split("on")[0]
                     document.getElementById("particularsCard").value=particulars
                     amount = parseFloat(((smsPasted.split("INR")[1]).split("is")[0]).replace(",", ""))
+                    document.getElementById("amountCard").value=amount
+                }
+            }
+            else if (smsPasted.includes("ICICI Bank Card"))
+            {
+                for (var key in data)
+                {
+                    if (key.startsWith("ICICI Bank"))
+                    {
+                        options.push(key)
+                    }
+                }   
+                if (options.length==0)
+                {
+                    alert("You don't have an ICICI Bank Credit Card")
+                    window.location.href="Settings.html?addType=CC"
+                }
+                else
+                {
+                    document.getElementById("ccsub").style.visibility="visible"
+                    for (var i = 0; i < options.length; i++) 
+                    {
+                        var newElement = document.createElement("option")
+                        newElement.innerHTML = options[i]
+                        document.getElementById("cardSelect").add(newElement)
+                    }
+                    particulars = (smsPasted.split("at")[1]).split(". Avl")[0]
+                    document.getElementById("particularsCard").value=particulars
+                    amount = parseFloat(((smsPasted.split("INR")[1]).split("spent")[0]).replace(",", ""))
                     document.getElementById("amountCard").value=amount
                 }
             }

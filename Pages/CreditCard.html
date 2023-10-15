@@ -4,7 +4,7 @@
    <link rel="icon" href="../Assets/main-icon.png">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-   <script src="https://kit.fontawesome.com/420eab8243.js" crossorigin="anonymous"></script>
+   <script src="../Assets/420eab8243.js" ></script>
 </head>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
@@ -82,7 +82,11 @@
    .required::after {
    color: red;
    }
-   
+   th, td
+   {
+  padding-right: 20px;
+
+   }
    *{
    list-style: none;
    text-decoration: none;
@@ -239,8 +243,22 @@
       display: block;
       ">
       <br>
-      <h2 class="centre">Transactions</h2>      
-      <table id="transactions_table" class="center" border="1">
+      <h2 class="centre">Transactions</h2> 
+      <h3 class="centre">Select a card in the table above</h3>
+      <p class="centre" id="card_buttons">
+        <h3 id="card_name_selected"></h3>
+        <form id="to_check" style="display:none">
+            <label>From: </label>
+            <input type="date" id="from_date" />
+            <label>To: </label>
+            <input type="date" id="to_date" />
+            <br><br>
+            <button onclick="getTransactions()">Get Transactions</button>
+            <br>
+            <br>
+        </form>
+      </p>
+      <table id="transactions_table" style="display:none">
          <thead>
             <th style="margin-left: 10px; margin-right:10px;">Date</th>
             <th style="margin-left: 10px; margin-right:10px;">Particulars</th>
@@ -263,6 +281,8 @@
 
 <script src="../localforage.js"></script>
 <script>
+
+    document.getElementById('card_buttons').visibility=false
         if(window.navigator.onLine==false)
     {
         alert("You are offline, get back online to login or signup to Wallet")
@@ -292,7 +312,60 @@ function localStorageGetItem(vallue)
    
   </script>
 <script>    
-    
+    function getTransactions()
+    {
+        event.preventDefault()  
+        fromDate = document.getElementById("from_date").value
+        toDate = document.getElementById("to_date").value
+        if(fromDate==""||toDate=="")
+        {
+            alert("Enter period between which you require the transactions")
+        }
+        else
+        {
+            cardselected = document.getElementById("card_name_selected").innerHTML
+            transactions = localStorageGetItem("CREDIT CARDS")["TRANSACTIONS"]
+            toAdd = []
+            for (transaction of transactions)
+            {
+                if(transaction.Particulars=="Modifying Entry" && transaction.Narration=="Being modification entry passed")
+                {}
+                else
+                {
+                    if(transaction.CreditCard==cardselected && new Date(transaction.Date)>=new Date(fromDate) && new Date(transaction.Date)<=new Date(toDate))
+                    {
+                        toAdd.push(transaction)
+                    }
+                }
+            }
+            toAdd.forEach(add)
+           if(document.getElementById("transactions_table").rows.length==1)
+           {
+           var no_trx = document.createElement("h2")
+           no_trx.id="no_trx"
+           no_trx.innerHTML="No transactions found"
+           no_trx.style.cssText = 'text-align:center;';
+           document.getElementById("details_div").appendChild(no_trx)
+           }
+           else
+        {
+                document.getElementById("transactions_table").style.display="block"
+                try
+                {
+                    document.getElementById("no_trx").style.display="none"
+                }
+                catch
+                {
+
+                }
+        }
+           $(document).ready(function() {
+    $('#transactions_table').DataTable();
+    $(".dataTables_empty").empty();
+});
+
+        }
+    }
     function goto()
    {
     event.preventDefault()
@@ -577,6 +650,7 @@ function localStorageGetItem(vallue)
        <br><select id="bank_select" class="margin: auto; display: block;"><option>Select a credit card</option></select>\
        <br><input id="narration" class="margin: auto; display: block;" type="text" placeholder="Enter narration"></p>\
        <br><button onclick="moneyadded_out()">Add transaction</button>'
+       dates=[]
        data = (localStorageGetItem("CREDIT CARDS"))
         for (keey in data)
         {
@@ -588,11 +662,14 @@ function localStorageGetItem(vallue)
             {
                 var newElement = document.createElement("option")
                 newElement.innerHTML = keey
+                dates.push(data[keey]["DueDate"])
                 document.getElementById("bank_select").add(newElement)
             }
             
         }
-       if (localStorageGetItem("particulars_ai")==null)
+        
+        
+        if (localStorageGetItem("particulars_ai")==null)
        {
    
        }
@@ -640,31 +717,24 @@ function localStorageGetItem(vallue)
    }
    else
    {
-           data = (localStorageGetItem("CREDIT CARDS"))
-       if(data["TRANSACTIONS"].length==0)
-       {
-           document.getElementById("transactions_table").style.visibility="hidden"
-           var no_trx = document.createElement("h2")
-           no_trx.innerHTML="No transactions found"
-           no_trx.style.cssText = 'text-align:center;';
-           document.getElementById("details_div").appendChild(no_trx)
            
-       }
-       else
-       {
-
-           trx = data["TRANSACTIONS"]
-           trx.forEach(add)
-           if(document.getElementById("transactions_table").rows.length==1)
-           {
-            document.getElementById("transactions_table").style.visibility="hidden"
-           var no_trx = document.createElement("h2")
-           no_trx.innerHTML="No transactions found"
-           no_trx.style.cssText = 'text-align:center;';
-           document.getElementById("details_div").appendChild(no_trx)
            }
-       }
-   }
+    //     if(data["TRANSACTIONS"].length==0)
+    //    {
+    //        document.getElementById("transactions_table").style.visibility="hidden"
+    //        var no_trx = document.createElement("h2")
+    //        no_trx.innerHTML="No transactions found"
+    //        no_trx.style.cssText = 'text-align:center;';
+    //        document.getElementById("details_div").appendChild(no_trx)
+           
+    //    }
+    //    else
+    //    {
+
+    //        trx = data["TRANSACTIONS"]
+    //        
+    //    }
+   
    function add(item)
    {
         if(item["Particulars"]=="Modifying Entry"&&item["Narration"]=="Being modification entry passed")
@@ -711,7 +781,7 @@ function localStorageGetItem(vallue)
     data = (localStorageGetItem("CREDIT CARDS"))
     const cardDetails = Object.entries(data)
     .filter(([key]) => key !== "NO_OF_CARDS" && key !== "TRANSACTIONS" && key!="TRXNUM")
-    .map(([card, details]) => ({
+    .map(([card, details, balance]) => ({
         card,
         dueDate: new Date(details.DueDate),
         balance: details.BalanceOutstanding
@@ -727,15 +797,16 @@ function localStorageGetItem(vallue)
 table=document.createElement("table")
 table.classList.add("card")
 table.classList.add("centeer")
+
 thead=document.createElement("thead")
 tr=document.createElement("tr")
 
 th_name=document.createElement("th")
 th_name.innerHTML = "Card Name"
 th_nickname=document.createElement("th")
-th_nickname.innerHTML = "Nick Name"
+th_nickname.innerHTML = "Outstanding"
 th_duedays=document.createElement("th")
-th_duedays.innerHTML = "Due in"
+th_duedays.innerHTML = "Payment Due Date"
 th_actions=document.createElement("th")
 th_actions.innerHTML = "Edit Card"
 // th_duedate=document.createElement("th")
@@ -745,44 +816,34 @@ thead.append(tr)
 table.append(thead)
 tbody=document.createElement("tbody")
 
-cardDetails.forEach(({ card, dueDate }) => {
-    var nickname = card.substring(card.indexOf("(") + 1, card.lastIndexOf(")"))
+cardDetails.forEach(({ card, dueDate, balance}) => {    
     const formattedDate = `${dueDate.getDate()}-${dueDate.getMonth()+1}-${dueDate.getFullYear()}`
     var daystogo = parseInt((dueDate.getTime()-new Date().getTime())/(1000*60*60*24)+1)
-    
     htmlcard = document.createElement("div")
     htmlcard.classList.add("card")
     htmlcard.classList.add("dotted")
     htmlcontainer = document.createElement("div")
     htmlcontainer.classList.add("container")
     htmlcardname = document.createElement("h4")
-    sss =card.replace(`(${nickname})`, "")
-    htmlcardname.innerHTML = sss
+    htmlcardname.innerHTML = card
     htmlcontainer.appendChild(htmlcardname)
-    htmlnickname = document.createElement("p")
-    htmlnickname.innerHTML = nickname
-    htmlcontainer.appendChild(htmlnickname)
-    htmlduein = document.createElement("p")
-    htmlduein.innerHTML = `Due in ${daystogo} days`
-    htmlcontainer.appendChild(htmlduein)
-    htmlduedate = document.createElement("p")
-    htmlduedate.innerHTML = `Statement generating on ${formattedDate}`
-    htmlcontainer.appendChild(htmlduedate)
     htmlcard.appendChild(htmlcontainer)
 
     tr=document.createElement("tr")
     th_name=document.createElement("td")
-    th_name.innerHTML = sss
+    th_name.innerHTML = card
+    th_name.addEventListener("click", function(){
+        document.getElementById("card_name_selected").innerHTML=card
+        document.getElementById("to_check").style.display="block"
+    })
     th_nickname=document.createElement("td")
-    th_nickname.innerHTML = nickname
+    th_nickname.innerHTML = balance
     th_duedays=document.createElement("td")
     if (daystogo<=5)
     {
         th_duedays.classList.add("red")
     }
     th_duedays.innerHTML = `${daystogo} days`
-    // th_duedate=document.createElement("td")
-    // th_duedate.innerHTML = formattedDate
     th_action = document.createElement("button")
     th_action.innerHTML="<i class='fa-solid fa-pen-to-square'></i> Edit Card"
     th_action.addEventListener("click", function(){window.location.href=`Settings.html?modify=CC&${card}`})
@@ -793,10 +854,6 @@ cardDetails.forEach(({ card, dueDate }) => {
 });
 table.append(tbody)
 document.getElementById("cur_balance").append(table)
-$(document).ready(function() {
-    $('#transactions_table').DataTable();
-    $(".dataTables_empty").empty();
-});
 
 
 

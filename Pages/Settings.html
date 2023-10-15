@@ -3,7 +3,7 @@
    <title>Sign up for Wallet</title>
    <link rel="icon" href="../Assets/main-icon.png">
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-   <script src="https://kit.fontawesome.com/420eab8243.js" crossorigin="anonymous"></script>
+   <script src="../Assets/420eab8243.js" ></script>
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <style>
@@ -144,7 +144,7 @@
       <li class="centre">Banks, Debit Cards</li>
       <li class="centre">Cash</li>
       </p>
-      <p class="centre">The app is compatible with <i class="fa-brands fa-windows"></i> Windows, <i class="fa-brands fa-android"></i> Android, <i class="fa-brands fa-apple"></i> iOS, iPadOS, macOS, <i class="fa-brands fa-linux"></i> Linux, <i class="fa-solid fa-globe"></i> and on all devices that support the Web</p>
+      <p class="centre">The app is compatible with <i class="fa-solid fa-globe"></i> all devices that support the Web</p>
    </header>
    <button class="collapsible-button" id="coll-button">&#9776;</button>
    <div class="collapsible">
@@ -228,18 +228,18 @@
       
       <br>
       <div id="financialsettingsform">
-         <h2 style="visibility: hidden;" id="add_details_1">Add a financial option</h2>
-         <br>
-         <select style="visibility: hidden;" id="type_of_finance" onchange="change_option()">
+         <h2 style="display:none;" id="add_details_1">Add a financial option</h2>
+         <br>  
+         <select style="display:none;" id="type_of_finance" onchange="change_option()">
             <option>Select a financial option</option>
             <option>Credit Cards</option>
             <option>Banks</option>
             <option>Cash</option>
          </select>
       </div>
-
-      <div id="aboutform" style="visibility:hidden">
-         <h2 style="visibility: hidden;" id="add_details_1">About</h2>
+      
+      <div id="aboutform" style="display:none">
+         <h2 style="display:none;" id="add_details_1">About</h2>
          <p>Wallet - The app designed and developed to keep track of your Cash, Bank, Debit Card and Credit Card Transactions</p>
          <br>
          <h3>Version 2.0</h3>
@@ -247,10 +247,11 @@
          
          <br><br>
          <p>Developed by <a href="https://github.com/abhinavsatheesh">Abhinav Satheesh</a></p>
-         <p>Marketed by <a href="https://github.com/thefinancials">The Financials</a></p>
+         <p>A product of <a href="https://github.com/asafinserv">ASA Finserve</a></p>
+         <p>Accounting, Working Capital and Treasury Solutions</p>
       </div>
 
-      <div id="logoutform" style="visibility:hidden">
+      <div id="logoutform" style="display:none">
          <h2>Wallet Settings</h2>
          <br>
          <br>
@@ -260,10 +261,10 @@
          <br>
       </div>
    </form>
-   <div class="centre" id="to_delete"></div>
+   <div class="centre" id="to_delete"></div>   </div>
    
 </body>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="../Assets/sweetalert.min.js"></script>
 <script src="../Assets/functions.js"></script>
 <script src="../localforage.js"></script>
 
@@ -419,8 +420,365 @@
    discollapisbleButton.addEventListener('click', () => {
    menu.classList.remove('active')
    });
+   
+creditcarddiv = document.createElement("div")
+creditcarddiv.style.display="none"
+creditcarddiv.id="creditcarddiv"
+creditcarddiv.appendChild(document.createElement("br"))
+var creditcard_entry = document.createElement("select")
+creditcard_entry.id = "creditcard_entry"
+var optionss = ["Credit Card Bank", "HDFC Bank", "SBI", "American Express", "ICICI Bank", "Axis Bank", "Citibank", "YES Bank", "SCB", "IndusInd Bank", "RBL Bank", "Bank of Baroda", "Vijaya Bank", "Allahabad Bank", "Andhra Bank", "Bajaj Finserv", "Bank of India", "Bank of Maharashtra", "Canara Bank", "Central Bank of India", "Federal Bank", "HSBC Bank", "IDFC Bank", "Kotak Mahindra Bank", "Others (Please specify)"]
+for (var i = 0; i < optionss.length; i++) {
+   var option = document.createElement("option");
+   option.value = optionss[i];
+   option.text = optionss[i];
+   creditcard_entry.appendChild(option);
+}
+creditcard_entry.addEventListener("change", function(){
+if(creditcard_entry.options[creditcard_entry.selectedIndex].text=="Others (Please specify)")
+{
+   vvv = prompt("Enter your credit card issuing bank")
+}
+})
+var nickname_entry_card = document.createElement("input")
+nickname_entry_card.id = "nickname_entry"
+nickname_entry_card.placeholder = "Enter a nickname for your card"
+nickname_entry_card.width = "150px"
+nickname_entry_card.type = "text"
+var spacer = document.createElement("br")
+var due_date = document.createElement("select")
+due_date.id = "due_date_checker"
+var options = ["Payment Due Date?", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
+for (var i = 0; i < options.length; i++) {
+   var option = document.createElement("option");
+   option.value = options[i];
+   option.text = options[i];
+   due_date.appendChild(option);
+}
+creditcarddiv.appendChild(creditcard_entry)
+creditcarddiv.appendChild(document.createElement("br"))
+creditcarddiv.appendChild(document.createElement("br"))
+creditcarddiv.appendChild(nickname_entry_card)
+creditcarddiv.appendChild(document.createElement("br"))
+creditcarddiv.appendChild(document.createElement("br"))
+creditcarddiv.appendChild(due_date)
+creditcarddiv.appendChild(document.createElement("br"))
+var submit_btn = document.createElement("button")
+submit_btn.id = "submit_btn"
+submit_btn.innerHTML = "Add details"
+submit_btn.addEventListener("click", function () {
+   if (nickname_entry_card.value == "" || document.getElementById("creditcard_entry").options[document.getElementById("creditcard_entry").selectedIndex].text == "Credit Card Bank" || document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text == "Payment Due Date?") {
+      swal("Please fill all the fields", "Please fill out all the fields - Nickname, Credit Card Name and Payment Due Date", "info");
+   } else {
+      try
+      {
+         document.getElementById("creditcard_entry").options[document.getElementById("creditcard_entry").selectedIndex].text=vvv
+      }
+      catch
+      {
+         
+      }
+      if (localStorageGetItem("CREDIT CARDS") == null) {
+         objeee = new Object()
+         objeee.NO_OF_CARDS = 1
+         objeee.TRXNUM = 0
+         strrr = `${document.getElementById("creditcard_entry").options[document.getElementById("creditcard_entry").selectedIndex].text} (${nickname_entry_card.value})`
+         objeee.TRANSACTIONS = []
+         oobb = new Object()
+         todayDate = new Date()
+         tempDate = new Date()
+         tempDate.setDate(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)
+         tempDate.setHours(0, 0, 0)
+         if (todayDate >= tempDate) {
+            tempDate.setMonth(tempDate.getMonth() + 1)
+            oobb.DueDate = tempDate.toString()
+         } else {
+            oobb.DueDate = tempDate.toString()
+         }
+         oobb.BalanceOutstanding = 0
+         objeee[strrr] = oobb
+         data = JSON.parse(localStorage.getItem("Wallet"))
+         data["CREDIT CARDS"]=objeee
+         data["setup"]="DONE"
+         setToStorage(JSON.stringify(data))
+         if (localStorageGetItem("NameUser") == null) {
+                  swal("Enter your name and username", "Please enter your name and username to proceed", "info")
+               } else {
+                  swal("Done", "Added successfully!", "success", {
+                        buttons: {
+                           ok: true,
+                        },
+
+                     })
+                     .then((value) => {
+                        switch (value) {
+
+                           case "ok":
+                              window.location.href = "../index.html"
+                              break;
+                        }
+                     });
+
+               }
+         
 
 
+      } 
+      else {
+         oridata = JSON.parse(localStorage.getItem("Wallet"))
+         data = localStorageGetItem("CREDIT CARDS")
+         if (`${document.getElementById("creditcard_entry").options[document.getElementById("creditcard_entry").selectedIndex].text} (${nickname_entry_card.value})` in data) {
+            swal("You already have a card with same bank and nickname", "To fix this issue, try typing some other nicknames", "error");
+         } else {
+            data["NO_OF_CARDS"] += 1
+            oobb = new Object()
+            todayDate = new Date()
+            tempDate = new Date()
+            tempDate.setDate(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)
+            tempDate.setHours(0, 0, 0)
+            if (todayDate >= tempDate) {
+               tempDate.setMonth(tempDate.getMonth() + 1)
+               oobb.DueDate = tempDate.toString()
+            } else {
+               oobb.DueDate = tempDate.toString()
+            }
+            oobb.BalanceOutstanding = 0
+            data[`${document.getElementById("creditcard_entry").options[document.getElementById("creditcard_entry").selectedIndex].text} (${nickname_entry_card.value})`] = oobb
+            oridata["CREDIT CARDS"]=data
+            setToStorage(JSON.stringify(oridata))
+            if (localStorageGetItem("NameUser") == null) {
+                     swal("Enter your name and username", "Please enter your name and username to proceed", "info")
+                  } else {
+                     swal("Done", "Added successfully!", "success", {
+                           buttons: {
+                              ok: true,
+                           },
+
+                        })
+                        .then((value) => {
+                           switch (value) {
+
+                              case "ok":
+                                 window.location.href = "../index.html"
+                                 break;
+                           }
+                        });
+
+                  }
+         }
+      }
+   }
+
+})
+creditcarddiv.appendChild(spacer)
+creditcarddiv.appendChild(submit_btn)
+document.getElementById("to_delete").appendChild(creditcarddiv)
+
+cashdiv=document.createElement("div")
+cashdiv.id="cashdiv"
+cashdiv.style.display="none"
+var spacer = document.createElement("br")
+var creditcard_entry = document.createElement("input")
+creditcard_entry.id = "cash_entry"
+creditcard_entry.placeholder = "Enter the amount of cash with you now"
+creditcard_entry.width = "150px"
+creditcard_entry.type = "text"
+var spacer = document.createElement("br")
+cashdiv.appendChild(creditcard_entry)
+cashdiv.appendChild(document.createElement("br"))
+cashdiv.appendChild(document.createElement("br"))
+var submit_btn = document.createElement("button")
+submit_btn.id = "submit_btn"
+submit_btn.innerHTML = "Add details"
+submit_btn.addEventListener("click", function () {
+   if (document.getElementById("cash_entry").value == "") {
+      swal("Please fill all the fields", "Please fill out the field of amount of cash with you", "info");
+   } else {
+      if (localStorageGetItem("CASH") != null) {
+         swal("Warning", "This will overwrite your current cash balance and delete all your previous transactions recorded in Wallet. Continue?", "warning", {
+               buttons: {
+                  cancel: "No, stay here",
+                  ok: true,
+               },
+
+            })
+            .then((value) => {
+               switch (value) {
+
+                  case "ok":
+                     objeee = new Object()
+                     objeee.CASH_BALANCE = parseInt(document.getElementById("cash_entry").value)
+                     objeee.TRXNUM = 0
+                     objeee.TRANSACTIONS = []
+                     data = JSON.parse(localStorage.getItem("Wallet"))
+                     data["CASH"]=objeee
+                     data["setup"]="DONE"
+                     setToStorage(JSON.stringify(data))
+                     swal("Done", "Added successfully!", "success", {
+                           buttons: {
+                              ok: true,
+                           },
+
+                        })
+                        .then((value) => {
+                           switch (value) {
+
+                              case "ok":
+                                 window.location.href = "../index.html"
+                                 break;
+
+                           }
+                        });
+                     break;
+
+                  case "cancel":
+                     break;
+               }
+            });
+      } else {
+         oridata = JSON.parse(localStorage.getItem("Wallet"))
+         objeee = new Object()
+         objeee.CASH_BALANCE = parseInt(document.getElementById("cash_entry").value)
+         objeee.TRXNUM = 0
+         objeee.TRANSACTIONS = []
+         oridata["CASH"]=objeee
+         oridata["setup"]="DONE"
+         setToStorage(JSON.stringify(oridata))
+         if (localStorageGetItem("NameUser") == null) {
+            swal("Enter your name and username", "Please enter your name and username to proceed", "info")
+         } else {
+            swal("Done", "Added successfully!", "success", {
+                  buttons: {
+                     ok: true,
+                  },
+
+               })
+               .then((value) => {
+                  switch (value) {
+
+                     case "ok":
+                        window.location.href = "../index.html"
+                        break;
+                  }
+               });
+         }
+      }
+   }
+})
+cashdiv.appendChild(submit_btn)
+document.getElementById("to_delete").appendChild(cashdiv)
+
+bankdiv=document.createElement("div")
+bankdiv.style.display="none"
+bankdiv.id="bankdiv"
+var spacer = document.createElement("br")
+bankdiv.appendChild(spacer)
+var creditcard_entry = document.createElement("select")
+creditcard_entry.id = "bank_entry"
+var optionss = ["Bank Account", "HDFC Bank", "SBI", "American Express", "ICICI Bank", "Axis Bank", "Citibank", "YES Bank", "SCB", "IndusInd Bank", "RBL Bank", "Bank of Baroda", "Vijaya Bank", "Allahabad Bank", "Andhra Bank", "Bajaj Finserv", "Bank of India", "Bank of Maharashtra", "Canara Bank", "Central Bank of India", "Federal Bank", "HSBC Bank", "IDFC Bank", "Kotak Mahindra Bank"]
+for (var i = 0; i < optionss.length; i++) {
+   var option = document.createElement("option");
+   option.value = optionss[i];
+   option.text = optionss[i];
+   creditcard_entry.appendChild(option);
+}
+var nickname_entry_bank = document.createElement("input")
+nickname_entry_bank.id = "nickname_entry"
+nickname_entry_bank.placeholder = "Enter a nickname for your bank account"
+nickname_entry_bank.width = "150px"
+nickname_entry_bank.type = "text"
+var balance_entry = document.createElement("input")
+balance_entry.id = "balance_entry"
+balance_entry.placeholder = "Enter your bank balance"
+balance_entry.width = "150px"
+balance_entry.type = "number"
+var spacer = document.createElement("br")
+bankdiv.appendChild(creditcard_entry)
+bankdiv.appendChild(document.createElement("br"))
+bankdiv.appendChild(document.createElement("br"))
+bankdiv.appendChild(nickname_entry_bank)
+bankdiv.appendChild(document.createElement("br"))
+bankdiv.appendChild(document.createElement("br"))
+bankdiv.appendChild(balance_entry)
+bankdiv.appendChild(document.createElement("br"))
+var submit_btn = document.createElement("button")
+submit_btn.id = "submit_btn"
+submit_btn.innerHTML = "Add details"
+submit_btn.addEventListener("click", function () {
+   if (nickname_entry_bank.value == "" || document.getElementById("bank_entry").options[document.getElementById("bank_entry").selectedIndex].text == "Bank Account" || balance_entry.value == "") {
+      swal("Please fill all the fields", "Please fill out all the fields - Nickname, Bank Name and Balance in bank", "info");
+   } else {
+      if (localStorageGetItem("BANKS") == null) {
+         objeee = new Object()
+         objeee.NO_OF_BANKACCOUNTS = 1
+         objeee.TRXNUM = 0
+         strrr = `${document.getElementById("bank_entry").options[document.getElementById("bank_entry").selectedIndex].text} (${nickname_entry_bank.value})`
+         objeee[strrr] = parseFloat(balance_entry.value)
+         objeee.TRANSACTIONS = []
+         data = JSON.parse(localStorage.getItem("Wallet"))
+         data["BANKS"]=objeee
+         data["setup"]="DONE"
+         setToStorage(JSON.stringify(data))
+         if (localStorageGetItem("NameUser") == null) {
+            swal("Enter your name and username", "Please enter your name and username to proceed", "info")
+         } else {
+            swal("Done", "Added successfully!", "success", {
+                  buttons: {
+                     ok: true,
+                  },
+
+               })
+               .then((value) => {
+                  switch (value) {
+
+                     case "ok":
+                        window.location.href = "../index.html"
+                        break;
+
+                  }
+               });
+         }
+
+      } else {
+         oridata = JSON.parse(localStorage.getItem("Wallet"))
+         data = localStorageGetItem("BANKS")
+         if (`${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry_bank.value})` in data) {
+            swal("You already have a bank with same nickname", "To fix this issue, try typing some other nicknames", "error");
+
+         } else {
+            data["NO_OF_BANKACCOUNTS"] += 1
+            data[`${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry_bank.value})`] = parseFloat(balance_entry.value)
+            oridata["BANKS"]=data
+            oridata["setup"]="DONE"
+            setToStorage(JSON.stringify(oridata))
+
+            if (localStorageGetItem("NameUser") == null) {
+               swal("Enter your name and username", "Please enter your name and username to proceed", "info")
+            } else {
+               swal("Done", "Added successfully!", "success", {
+                     buttons: {
+                        ok: true,
+                     },
+
+                  })
+                  .then((value) => {
+                     switch (value) {
+
+                        case "ok":
+                           window.location.href = "../index.html"
+                           break;
+
+                     }
+                  });
+            }
+
+         }
+      }
+   }
+})
+bankdiv.appendChild(spacer)
+bankdiv.appendChild(submit_btn)
+document.getElementById("to_delete").appendChild(bankdiv)
 </script>
 <script>
    function aboutoption()
@@ -433,8 +791,8 @@
       var otherDiv = document.getElementById("financialsettingsform");
       var aboutdiv = document.getElementById("aboutform");
       var logoutdiv = document.getElementById("logoutform");
-      logoutdiv.style.visibility="hidden"
-      aboutdiv.style.visibility = "visible";
+      logoutdiv.style.display="none"
+      aboutdiv.style.display = "block";
       otherDiv.style.display = "none";
       personalDiv.style.display = "none";
    }
@@ -449,9 +807,9 @@
       var logoutdiv = document.getElementById("logoutform");
       var aboutdiv = document.getElementById("aboutform");
       personalDiv.style.display = "block";
-      logoutdiv.style.visibility="hidden"
+      logoutdiv.style.display="none"
       otherDiv.style.display = "none";
-      aboutdiv.style.visibility="hidden"
+      aboutdiv.style.display="none"
    }
    function logoutoption()
    {
@@ -466,9 +824,9 @@
          var logoutdiv = document.getElementById("logoutform");
          var aboutdiv = document.getElementById("aboutform");
          personalDiv.style.display = "none";
-         logoutdiv.style.visibility="visible";
+         logoutdiv.style.display="block"
          otherDiv.style.display = "none";
-         aboutdiv.style.visibility="hidden"
+         aboutdiv.style.display="none"
       }
 
    }
@@ -491,10 +849,10 @@
                document.getElementById("logout_settings").classList.remove("active")
               personalDiv.style.display = "none";
             otherDiv.style.display = "block";
-            logoutdiv.style.visibility="hidden"
-            aboutdiv.style.visibility="hidden"
-         document.getElementById("add_details_1").style.visibility = "visible";
-         document.getElementById("type_of_finance").style.visibility = "visible";
+            logoutdiv.style.display="none"
+            aboutdiv.style.display="none"
+         document.getElementById("add_details_1").style.display = "block";
+         document.getElementById("type_of_finance").style.display = "block";
       }
          
       }
@@ -523,7 +881,7 @@
       document.getElementById("financial_settings").classList.add("active")
       document.getElementById("personal_settings").classList.remove("active")
       personalDiv.style.display = "none";
-      aboutdiv.style.visibility="hidden"
+      aboutdiv.style.display="none"
       var logoutdiv = document.getElementById("logoutform");
       otherDiv.style.display = "block";      
       document.getElementById("name_user").value = localStorageGetItem("NameUser") 
@@ -537,7 +895,7 @@
          if(ti=="CC")
          {  
             creditcard = ins.replace(/%20/g, ' ');  
-         document.getElementById("add_details_1").style.visibility = "visible";
+         document.getElementById("add_details_1").style.display = "block";
          document.getElementById("add_details_1").innerHTML="Edit Credit Card"
          var creditcard_entry = document.createElement("select")
          creditcard_entry.id = "creditcard_entry"
@@ -555,7 +913,7 @@
          nickname_entry.type = "text"
          var spacer = document.createElement("br")
          var due_date = document.createElement("select")
-         due_date.id = "due_date_checker"
+         due_date.id = "due_date_checker_modify"
          var options = ["Monthly Billing Date?", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
          for (var i = 0; i < options.length; i++) {
             var option = document.createElement("option");
@@ -572,57 +930,43 @@
          nickname_entry.value=nickname
          document.getElementById("to_delete").appendChild(spacer)
          document.getElementById("to_delete").appendChild(due_date)
-         data = localStorageGetItem("CREDIT CARDS")
-         details = data[creditcard]
-         
-         datedue = new Date(details.DueDate)
+         dde = localStorageGetItem("CREDIT CARDS")
+         datedue = new Date(dde[creditcard].DueDate)
          dd = datedue.getDate()
          due_date.value=dd
          var submit_btn = document.createElement("button")
          submit_btn.id = "submit_btn"
          submit_btn.innerHTML = "Modify details"
          submit_btn.addEventListener("click", function () {
-            if (nickname_entry.value == "" || creditcard_entry.value == "" || document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text == "Monthly Billing Date?") {
+            if (nickname_entry.value == "" || creditcard_entry.options[creditcard_entry.selectedIndex].text == "Credit Card Bank" || document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text == "Monthly Billing Date?") {
                swal("Please fill all the fields", "Please fill out all the fields - Nickname, Credit Card Name and Monthly Bill Date", "info");
             } else {
-               if(`${creditcard_entry.value} (${nickname_entry.value})`==creditcard) 
+               dde[`${creditcard_entry.value} (${nickname_entry.value})`]=dde[creditcard]
+               if (`${creditcard_entry.value} (${nickname_entry.value})`!=creditcard)
                {
-                  todayDate = new Date()
-                  tempDate = new Date()
-                  tempDate.setDate(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)
-                  tempDate.setHours(0, 0, 0)
-                  if (todayDate >= tempDate) {
-                     tempDate.setMonth(tempDate.getMonth() + 1)
-                     data[creditcard]["DueDate"] = tempDate.toString()
-                  }
-                  else {
-                     data[creditcard]["DueDate"] = tempDate.toString()
-                  }
+                  delete dde[creditcard]
                }
-               else
-               {
-                  data[`${creditcard_entry.value} (${nickname_entry.value})`]=data[creditcard]
-                  delete data[creditcard]
-                  todayDate = new Date()
-                  tempDate = new Date()
-                  tempDate.setDate(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)
-                  tempDate.setHours(0, 0, 0)
-                  if (todayDate >= tempDate) {
-                     tempDate.setMonth(tempDate.getMonth() + 1)
-                     data[`${creditcard_entry.value} (${nickname_entry.value})`]["DueDate"] = tempDate.toString()
-                  }
-                  else {
-                     data[`${creditcard_entry.value} (${nickname_entry.value})`]["DueDate"] = tempDate.toString()
-                  }
-                  transactions = data.TRANSACTIONS
-                  for (let i = 0; i < transactions.length; i++) {
-                     if (transactions[i].CreditCard === creditcard) {
-                        transactions[i].CreditCard = `${creditcard_entry.value} (${nickname_entry.value})`;
-                     }
-                  }  
+               todayDate = new Date()
+               tempDate = new Date()
+               tempDate.setDate(document.getElementById("due_date_checker_modify").options[document.getElementById("due_date_checker_modify").selectedIndex].text)
+               tempDate.setHours(0, 0, 0)
+               console.log(tempDate)
+               console.log(todayDate)
+               if (todayDate >= tempDate) {
+                  tempDate.setMonth(tempDate.getMonth() + 1)
+                  dde[`${creditcard_entry.value} (${nickname_entry.value})`]["DueDate"] = tempDate.toString()
                }
+               else {
+                  dde[`${creditcard_entry.value} (${nickname_entry.value})`]["DueDate"] = tempDate.toString()
+               }
+               transactions = dde.TRANSACTIONS
+               for (let i = 0; i < transactions.length; i++) {
+                  if (transactions[i].CreditCard === creditcard) {
+                     transactions[i].CreditCard = `${creditcard_entry.value} (${nickname_entry.value})`;
+                  }
+               }  
                oridata = JSON.parse(localStorage.getItem("Wallet"))
-               oridata["CREDIT CARDS"]=data
+               oridata["CREDIT CARDS"]=dde
                setToStorage(JSON.stringify(oridata))
                alert("Modified card details successfully!")
                history.back()
@@ -636,21 +980,21 @@
          del_btn.addEventListener("click", function(){
             if(confirm("Warning! Do you wish to delete this card?"))
             {
-               for (let i = 0; i < data.TRANSACTIONS.length; i++) {
-                  if (data.TRANSACTIONS[i].CreditCard === creditcard) {
-                     data.TRANSACTIONS.splice(i, 1);
+               for (let i = 0; i < dde.TRANSACTIONS.length; i++) {
+                  if (dde.TRANSACTIONS[i].CreditCard === creditcard) {
+                     dde.TRANSACTIONS.splice(i, 1);
                   }
                 }  
-               delete data[creditcard]
-               data.NO_OF_CARDS-=1
+               delete dde[creditcard]
+               dde.NO_OF_CARDS-=1
                oridata = JSON.parse(localStorage.getItem("Wallet"))
-               if (data.NO_OF_CARDS==0)
+               if (dde.NO_OF_CARDS==0)
                {
                   delete oridata["CREDIT CARDS"]
                }
                else
                {
-                  oridata["CREDIT CARDS"]=data
+                  oridata["CREDIT CARDS"]=dde
                }
                setToStorage(JSON.stringify(oridata))
                alert("Deleted card successfully!")
@@ -662,7 +1006,7 @@
          else
          {
             creditcard = ins.replace(/%20/g, ' ');
-         document.getElementById("add_details_1").style.visibility = "visible";
+         document.getElementById("add_details_1").style.display = "block";
          document.getElementById("add_details_1").innerHTML="Edit Bank Account"
          var spacer = document.createElement("br")
          var creditcard_entry = document.createElement("select")
@@ -750,382 +1094,26 @@
       {
          if(tod=="CC")
          {
-               var personalDiv = document.getElementById("personalsettingsform");
-               var logoutdiv = document.getElementById("logoutform");
-               var otherDiv = document.getElementById("financialsettingsform");
-               document.getElementById("financial_settings").classList.add("active")
-               document.getElementById("personal_settings").classList.remove("active")
-               document.getElementById("about_settings").classList.remove("active")
-               document.getElementById("logout_settings").classList.remove("active")
-               personalDiv.style.display = "none";
-               otherDiv.style.display = "block";
-               document.getElementById("add_details_1").style.visibility = "visible";
-               document.getElementById("add_details_1").innerHTML="Add Credit Card"
-               var spacer = document.createElement("br")
-               document.getElementById("details_form").appendChild(spacer)
-         var creditcard_entry = document.createElement("select")
-         creditcard_entry.id = "creditcard_entry"
-         var optionss = ["Credit Card Bank", "HDFC Bank", "SBI", "American Express", "ICICI Bank", "Axis Bank", "Citibank", "YES Bank", "SCB", "IndusInd Bank", "RBL Bank", "Bank of Baroda", "Vijaya Bank", "Allahabad Bank", "Andhra Bank", "Bajaj Finserv", "Bank of India", "Bank of Maharashtra", "Canara Bank", "Central Bank of India", "Federal Bank", "HSBC Bank", "IDFC Bank", "Kotak Mahindra Bank", "Others (Please specify)"]
-         for (var i = 0; i < optionss.length; i++) {
-            var option = document.createElement("option");
-            option.value = optionss[i];
-            option.text = optionss[i];
-            creditcard_entry.appendChild(option);
-         }
-         creditcard_entry.addEventListener("change", function(){
-            if(creditcard_entry.options[creditcard_entry.selectedIndex].text=="Others (Please specify)")
-            {
-               vvv = prompt("Enter your credit card issuing bank")
-            }
-         })
-         var nickname_entry = document.createElement("input")
-         nickname_entry.id = "nickname_entry"
-         nickname_entry.placeholder = "Enter a nickname for your card"
-         nickname_entry.width = "150px"
-         nickname_entry.type = "text"
-         var spacer = document.createElement("br")
-         var due_date = document.createElement("select")
-         due_date.id = "due_date_checker"
-         var options = ["Monthly Billing Date?", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
-         for (var i = 0; i < options.length; i++) {
-            var option = document.createElement("option");
-            option.value = options[i];
-            option.text = options[i];
-            due_date.appendChild(option);
-         }
-         document.getElementById("to_delete").innerHTML += "<br>"
-         document.getElementById("to_delete").appendChild(spacer)
-         document.getElementById("to_delete").appendChild(creditcard_entry)
-         document.getElementById("to_delete").appendChild(nickname_entry)
-         document.getElementById("to_delete").appendChild(spacer)
-         document.getElementById("to_delete").appendChild(due_date)
-         var submit_btn = document.createElement("button")
-         submit_btn.id = "submit_btn"
-         submit_btn.innerHTML = "Add details"
-         submit_btn.addEventListener("click", function () {
-         if (nickname_entry.value == "" || creditcard_entry.options[creditcard_entry.selectedIndex].text == "Credit Card Bank" || document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text == "Monthly Billing Date?") {
-            swal("Please fill all the fields", "Please fill out all the fields - Nickname, Credit Card Name and Monthly Bill Date", "info");
-         } else {
-            try
-            {
-               creditcard_entry.options[creditcard_entry.selectedIndex].text=vvv
-            }
-            catch
-            {
-               
-            }
-            if (localStorageGetItem("CREDIT CARDS") == null) {
-               objeee = new Object()
-               objeee.NO_OF_CARDS = 1
-               objeee.TRXNUM = 0
-               strrr = `${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry.value})`
-               objeee.TRANSACTIONS = []
-               oobb = new Object()
-               todayDate = new Date()
-               tempDate = new Date()
-               tempDate.setDate(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)
-               tempDate.setHours(0, 0, 0)
-               if (todayDate >= tempDate) {
-                  tempDate.setMonth(tempDate.getMonth() + 1)
-                  oobb.DueDate = tempDate.toString()
-               } else {
-                  oobb.DueDate = tempDate.toString()
-               }
-               oobb.BalanceOutstanding = 0
-               objeee[strrr] = oobb
-               data = JSON.parse(localStorage.getItem("Wallet"))
-               data["CREDIT CARDS"]=objeee
-               data["setup"]="DONE"
-               setToStorage(JSON.stringify(data))
-               if (localStorageGetItem("NameUser") == null) {
-                        swal("Enter your name and username", "Please enter your name and username to proceed", "info")
-                     } else {
-                        swal("Done", "Added successfully!", "success", {
-                              buttons: {
-                                 ok: true,
-                              },
-
-                           })
-                           .then((value) => {
-                              switch (value) {
-
-                                 case "ok":
-                                    window.location.href = "../index.html"
-                                    break;
-                              }
-                           });
-
-                     }
-               
-
-
-            } 
-            else {
-               oridata = JSON.parse(localStorage.getItem("Wallet"))
-               data = localStorageGetItem("CREDIT CARDS")
-               if (`${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry.value})` in data) {
-                  swal("You already have a card with same bank and nickname", "To fix this issue, try typing some other nicknames", "error");
-               } else {
-                  data["NO_OF_CARDS"] += 1
-                  oobb = new Object()
-                  todayDate = new Date()
-                  tempDate = new Date()
-                  tempDate.setDate(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)
-                  tempDate.setHours(0, 0, 0)
-                  if (todayDate >= tempDate) {
-                     tempDate.setMonth(tempDate.getMonth() + 1)
-                     oobb.DueDate = tempDate.toString()
-                  } else {
-                     oobb.DueDate = tempDate.toString()
-                  }
-                  oobb.BalanceOutstanding = 0
-                  data[`${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry.value})`] = oobb
-                  oridata["CREDIT CARDS"]=data
-                  setToStorage(JSON.stringify(oridata))
-
-                  if (localStorageGetItem("NameUser") == null) {
-                           swal("Enter your name and username", "Please enter your name and username to proceed", "info")
-                        } else {
-                           swal("Done", "Added successfully!", "success", {
-                                 buttons: {
-                                    ok: true,
-                                 },
-
-                              })
-                              .then((value) => {
-                                 switch (value) {
-
-                                    case "ok":
-                                       window.location.href = "../index.html"
-                                       break;
-                                 }
-                              });
-
-                        }
-               }
-            }
-         }
-
-      })
-      
-         document.getElementById("to_delete").appendChild(spacer)
-         document.getElementById("to_delete").appendChild(submit_btn)
+            document.getElementById("add_details_1").style.display = "block";
+            document.getElementById("add_details_1").innerHTML="Add Credit Card"
+               creditcarddiv.style.display="block"
          }
          else if(tod=="B")
          {
-            document.getElementById("add_details_1").style.visibility = "visible";
+            document.getElementById("add_details_1").style.display = "block";
                document.getElementById("add_details_1").innerHTML="Add Bank Account"
-            var spacer = document.createElement("br")
-         document.getElementById("details_form").appendChild(spacer)
-         var creditcard_entry = document.createElement("select")
-         creditcard_entry.id = "creditcard_entry"
-         var optionss = ["Bank Account", "HDFC Bank", "SBI", "American Express", "ICICI Bank", "Axis Bank", "Citibank", "YES Bank", "SCB", "IndusInd Bank", "RBL Bank", "Bank of Baroda", "Vijaya Bank", "Allahabad Bank", "Andhra Bank", "Bajaj Finserv", "Bank of India", "Bank of Maharashtra", "Canara Bank", "Central Bank of India", "Federal Bank", "HSBC Bank", "IDFC Bank", "Kotak Mahindra Bank"]
-         for (var i = 0; i < optionss.length; i++) {
-            var option = document.createElement("option");
-            option.value = optionss[i];
-            option.text = optionss[i];
-            creditcard_entry.appendChild(option);
-         }
-         var nickname_entry = document.createElement("input")
-         nickname_entry.id = "nickname_entry"
-         nickname_entry.placeholder = "Enter a nickname for your bank account"
-         nickname_entry.width = "150px"
-         nickname_entry.type = "text"
-
-
-         var spacer = document.createElement("br")
-         var balance_entry = document.createElement("input")
-         balance_entry.id = "balance_entry"
-         balance_entry.placeholder = "Enter your bank balance"
-         balance_entry.width = "150px"
-         balance_entry.type = "number"
-         var spacer = document.createElement("br")
-         document.getElementById("to_delete").appendChild(spacer)
-         document.getElementById("to_delete").appendChild(creditcard_entry)
-         document.getElementById("to_delete").appendChild(spacer)
-         document.getElementById("to_delete").appendChild(nickname_entry)
-         document.getElementById("to_delete").appendChild(spacer)
-         document.getElementById("to_delete").appendChild(balance_entry)
-         var details = document.createElement("p")
-
-         document.getElementById("to_delete").appendChild(spacer)
-         document.getElementById("to_delete").appendChild(details)
-         var submit_btn = document.createElement("button")
-         submit_btn.id = "submit_btn"
-         submit_btn.innerHTML = "Add details"
-         submit_btn.addEventListener("click", function () {
-         if (nickname_entry.value == "" || creditcard_entry.options[creditcard_entry.selectedIndex].text == "Bank Account" || balance_entry.value == "") {
-            swal("Please fill all the fields", "Please fill out all the fields - Nickname, Bank Name and Balance in bank", "info");
-         } else {
-            if (localStorageGetItem("BANKS") == null) {
-               objeee = new Object()
-               objeee.NO_OF_BANKACCOUNTS = 1
-               objeee.TRXNUM = 0
-               strrr = `${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry.value})`
-               objeee[strrr] = parseFloat(balance_entry.value)
-               objeee.TRANSACTIONS = []
-               data = JSON.parse(localStorage.getItem("Wallet"))
-               data["BANKS"]=objeee
-               data["setup"]="DONE"
-               setToStorage(JSON.stringify(data))
-               if (localStorageGetItem("NameUser") == null) {
-                  swal("Enter your name and username", "Please enter your name and username to proceed", "info")
-               } else {
-                  swal("Done", "Added successfully!", "success", {
-                        buttons: {
-                           ok: true,
-                        },
-
-                     })
-                     .then((value) => {
-                        switch (value) {
-
-                           case "ok":
-                              window.location.href = "../index.html"
-                              break;
-
-                        }
-                     });
-               }
-
-            } else {
-               oridata = JSON.parse(localStorage.getItem("Wallet"))
-               data = localStorageGetItem("BANKS")
-               if (`${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry.value})` in data) {
-                  swal("You already have a bank with same nickname", "To fix this issue, try typing some other nicknames", "error");
-
-               } else {
-                  data["NO_OF_BANKACCOUNTS"] += 1
-                  data[`${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry.value})`] = parseFloat(balance_entry.value)
-                  oridata["BANKS"]=data
-                  oridata["setup"]="DONE"
-                  setToStorage(JSON.stringify(oridata))
-                  if (localStorageGetItem("NameUser") == null) {
-                     swal("Enter your name and username", "Please enter your name and username to proceed", "info")
-                  } else {
-                     swal("Done", "Added successfully!", "success", {
-                           buttons: {
-                              ok: true,
-                           },
-
-                        })
-                        .then((value) => {
-                           switch (value) {
-
-                              case "ok":
-                                 window.location.href = "../index.html"
-                                 break;
-
-                           }
-                        });
-                  }
-
-               }
-            }
-         }
-      })
-      
-      document.getElementById("to_delete").appendChild(spacer)
-      document.getElementById("to_delete").appendChild(submit_btn)
+               bankdiv.style.display="block"
          }
          else
          {
-            document.getElementById("add_details_1").style.visibility = "visible";
+            document.getElementById("add_details_1").style.display = "block";
                document.getElementById("add_details_1").innerHTML="Add Cash Account"
-            var spacer = document.createElement("br")
-      var creditcard_entry = document.createElement("input")
-      creditcard_entry.id = "creditcard_entry"
-      creditcard_entry.placeholder = "Enter the amount of cash with you now"
-      creditcard_entry.width = "150px"
-      creditcard_entry.type = "text"
-      var spacer = document.createElement("br")
-      document.getElementById("to_delete").appendChild(spacer)
-      document.getElementById("to_delete").appendChild(creditcard_entry)
-      var submit_btn = document.createElement("button")
-      submit_btn.id = "submit_btn"
-      submit_btn.innerHTML = "Add details"
-      submit_btn.addEventListener("click", function () {
-         if (creditcard_entry.value == "") {
-            swal("Please fill all the fields", "Please fill out the field of amount of cash with you", "info");
-         } else {
-            if (localStorageGetItem("CASH") != null) {
-               swal("Warning", "This will overwrite your current cash balance and delete all your previous transactions recorded in Wallet. Continue?", "warning", {
-                     buttons: {
-                        cancel: "No, stay here",
-                        ok: true,
-                     },
-
-                  })
-                  .then((value) => {
-                     switch (value) {
-
-                        case "ok":
-                           objeee = new Object()
-                           objeee.CASH_BALANCE = parseInt(creditcard_entry.value)
-                           objeee.TRXNUM = 0
-                           objeee.TRANSACTIONS = []
-                           data = JSON.parse(localStorage.getItem("Wallet"))
-                           data["CASH"]=objeee
-                           data["setup"]="DONE"
-                           setToStorage(JSON.stringify(data))
-                           swal("Done", "Added successfully!", "success", {
-                                 buttons: {
-                                    ok: true,
-                                 },
-
-                              })
-                              .then((value) => {
-                                 switch (value) {
-
-                                    case "ok":
-                                       window.location.href = "../index.html"
-                                       break;
-
-                                 }
-                              });
-                           break;
-
-                        case "cancel":
-                           break;
-                     }
-                  });
-            } else {
-               oridata = JSON.parse(localStorage.getItem("Wallet"))
-               objeee = new Object()
-               objeee.CASH_BALANCE = parseInt(creditcard_entry.value)
-               objeee.TRXNUM = 0
-               objeee.TRANSACTIONS = []
-               oridata["CASH"]=objeee
-               oridata["setup"]="DONE"
-               setToStorage(JSON.stringify(oridata))
-               if (localStorageGetItem("NameUser") == null) {
-                  swal("Enter your name and username", "Please enter your name and username to proceed", "info")
-               } else {
-                  swal("Done", "Added successfully!", "success", {
-                        buttons: {
-                           ok: true,
-                        },
-
-                     })
-                     .then((value) => {
-                        switch (value) {
-
-                           case "ok":
-                              window.location.href = "../index.html"
-                              break;
-                        }
-                     });
-               }
-            }
-         }
-      })
-
-
-      document.getElementById("to_delete").appendChild(spacer)
-      document.getElementById("to_delete").appendChild(submit_btn)
+            cashdiv.style.display="block"
          }
       }       
 }
+
+
 
 function del_data() {
    event.preventDefault()
@@ -1169,8 +1157,6 @@ function del_data() {
 
 }
 
-
-
 function submitName() {
    event.preventDefault();
    if (name_user.value == "" || usernamee_entry.value=="" || password_user.value=="") {
@@ -1195,11 +1181,13 @@ function submitName() {
       personalDiv.style.display = "none"; 
       otherDiv.style.display = "block";
       document.getElementById("name_user").value = localStorageGetItem("NameUser")
-      document.getElementById("add_details_1").style.visibility = "visible";
-      document.getElementById("type_of_finance").style.visibility = "visible";
+      document.getElementById("add_details_1").style.display = "block";
+      document.getElementById("type_of_finance").style.display = "block";
    }
 
 }
+
+
 
 function change_option() {
    var x = document.getElementById("type_of_finance").value;
@@ -1208,367 +1196,17 @@ function change_option() {
       document.getElementById("to_delete").replaceChildren()
 
    } else if (x == "Credit Cards") {
-      try {
-         document.getElementById("to_delete").replaceChildren()
-      } catch {
-
-      }
-      var spacer = document.createElement("br")
-      document.getElementById("details_form").appendChild(spacer)
-      var creditcard_entry = document.createElement("select")
-      creditcard_entry.id = "creditcard_entry"
-      var optionss = ["Credit Card Bank", "HDFC Bank", "SBI", "American Express", "ICICI Bank", "Axis Bank", "Citibank", "YES Bank", "SCB", "IndusInd Bank", "RBL Bank", "Bank of Baroda", "Vijaya Bank", "Allahabad Bank", "Andhra Bank", "Bajaj Finserv", "Bank of India", "Bank of Maharashtra", "Canara Bank", "Central Bank of India", "Federal Bank", "HSBC Bank", "IDFC Bank", "Kotak Mahindra Bank", "Others (Please specify)"]
-      for (var i = 0; i < optionss.length; i++) {
-         var option = document.createElement("option");
-         option.value = optionss[i];
-         option.text = optionss[i];
-         creditcard_entry.appendChild(option);
-      }
-      creditcard_entry.addEventListener("change", function(){
-         if(creditcard_entry.options[creditcard_entry.selectedIndex].text=="Others (Please specify)")
-         {
-            vvv = prompt("Enter your credit card issuing bank")
-         }
-      })
-      var nickname_entry = document.createElement("input")
-      nickname_entry.id = "nickname_entry"
-      nickname_entry.placeholder = "Enter a nickname for your card"
-      nickname_entry.width = "150px"
-      nickname_entry.type = "text"
-      var spacer = document.createElement("br")
-      var due_date = document.createElement("select")
-      due_date.id = "due_date_checker"
-      var options = ["Monthly Billing Date?", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
-      for (var i = 0; i < options.length; i++) {
-         var option = document.createElement("option");
-         option.value = options[i];
-         option.text = options[i];
-         due_date.appendChild(option);
-      }
-      document.getElementById("to_delete").innerHTML += "<br>"
-      document.getElementById("to_delete").appendChild(spacer)
-      document.getElementById("to_delete").appendChild(creditcard_entry)
-      document.getElementById("to_delete").appendChild(nickname_entry)
-      document.getElementById("to_delete").appendChild(spacer)
-      document.getElementById("to_delete").appendChild(due_date)
-      var submit_btn = document.createElement("button")
-      submit_btn.id = "submit_btn"
-      submit_btn.innerHTML = "Add details"
-      submit_btn.addEventListener("click", function () {
-         if (nickname_entry.value == "" || creditcard_entry.options[creditcard_entry.selectedIndex].text == "Credit Card Bank" || document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text == "Monthly Billing Date?") {
-            swal("Please fill all the fields", "Please fill out all the fields - Nickname, Credit Card Name and Monthly Bill Date", "info");
-         } else {
-            try
-            {
-               creditcard_entry.options[creditcard_entry.selectedIndex].text=vvv
-            }
-            catch
-            {
-               
-            }
-            if (localStorageGetItem("CREDIT CARDS") == null) {
-               objeee = new Object()
-               objeee.NO_OF_CARDS = 1
-               objeee.TRXNUM = 0
-               strrr = `${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry.value})`
-               objeee.TRANSACTIONS = []
-               oobb = new Object()
-               todayDate = new Date()
-               tempDate = new Date()
-               tempDate.setDate(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)
-               tempDate.setHours(0, 0, 0)
-               if (todayDate >= tempDate) {
-                  tempDate.setMonth(tempDate.getMonth() + 1)
-                  oobb.DueDate = tempDate.toString()
-               } else {
-                  oobb.DueDate = tempDate.toString()
-               }
-               oobb.BalanceOutstanding = 0
-               objeee[strrr] = oobb
-               data = JSON.parse(localStorage.getItem("Wallet"))
-               data["CREDIT CARDS"]=objeee
-               data["setup"]="DONE"
-               setToStorage(JSON.stringify(data))
-               if (localStorageGetItem("NameUser") == null) {
-                        swal("Enter your name and username", "Please enter your name and username to proceed", "info")
-                     } else {
-                        swal("Done", "Added successfully!", "success", {
-                              buttons: {
-                                 ok: true,
-                              },
-
-                           })
-                           .then((value) => {
-                              switch (value) {
-
-                                 case "ok":
-                                    window.location.href = "../index.html"
-                                    break;
-                              }
-                           });
-
-                     }
-               
-
-
-            } 
-            else {
-               oridata = JSON.parse(localStorage.getItem("Wallet"))
-               data = localStorageGetItem("CREDIT CARDS")
-               if (`${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry.value})` in data) {
-                  swal("You already have a card with same bank and nickname", "To fix this issue, try typing some other nicknames", "error");
-               } else {
-                  data["NO_OF_CARDS"] += 1
-                  oobb = new Object()
-                  todayDate = new Date()
-                  tempDate = new Date()
-                  tempDate.setDate(document.getElementById("due_date_checker").options[document.getElementById("due_date_checker").selectedIndex].text)
-                  tempDate.setHours(0, 0, 0)
-                  if (todayDate >= tempDate) {
-                     tempDate.setMonth(tempDate.getMonth() + 1)
-                     oobb.DueDate = tempDate.toString()
-                  } else {
-                     oobb.DueDate = tempDate.toString()
-                  }
-                  oobb.BalanceOutstanding = 0
-                  data[`${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry.value})`] = oobb
-                  oridata["CREDIT CARDS"]=data
-                  setToStorage(JSON.stringify(oridata))
-                  if (localStorageGetItem("NameUser") == null) {
-                           swal("Enter your name and username", "Please enter your name and username to proceed", "info")
-                        } else {
-                           swal("Done", "Added successfully!", "success", {
-                                 buttons: {
-                                    ok: true,
-                                 },
-
-                              })
-                              .then((value) => {
-                                 switch (value) {
-
-                                    case "ok":
-                                       window.location.href = "../index.html"
-                                       break;
-                                 }
-                              });
-
-                        }
-               }
-            }
-         }
-
-      })
-      document.getElementById("to_delete").appendChild(spacer)
-      document.getElementById("to_delete").appendChild(submit_btn)
+      cashdiv.style.display="none"
+      creditcarddiv.style.display="block"
+      bankdiv.style.display="none"
    } else if (x == "Cash") {
-      try {
-         document.getElementById("to_delete").replaceChildren()
-      } catch {
-
-      }
-      var spacer = document.createElement("br")
-      var creditcard_entry = document.createElement("input")
-      creditcard_entry.id = "creditcard_entry"
-      creditcard_entry.placeholder = "Enter the amount of cash with you now"
-      creditcard_entry.width = "150px"
-      creditcard_entry.type = "text"
-      var spacer = document.createElement("br")
-      document.getElementById("to_delete").appendChild(spacer)
-      document.getElementById("to_delete").appendChild(creditcard_entry)
-      var submit_btn = document.createElement("button")
-      submit_btn.id = "submit_btn"
-      submit_btn.innerHTML = "Add details"
-      submit_btn.addEventListener("click", function () {
-         if (creditcard_entry.value == "") {
-            swal("Please fill all the fields", "Please fill out the field of amount of cash with you", "info");
-         } else {
-            if (localStorageGetItem("CASH") != null) {
-               swal("Warning", "This will overwrite your current cash balance and delete all your previous transactions recorded in Wallet. Continue?", "warning", {
-                     buttons: {
-                        cancel: "No, stay here",
-                        ok: true,
-                     },
-
-                  })
-                  .then((value) => {
-                     switch (value) {
-
-                        case "ok":
-                           objeee = new Object()
-                           objeee.CASH_BALANCE = parseInt(creditcard_entry.value)
-                           objeee.TRXNUM = 0
-                           objeee.TRANSACTIONS = []
-                           data = JSON.parse(localStorage.getItem("Wallet"))
-                           data["CASH"]=objeee
-                           data["setup"]="DONE"
-                           setToStorage(JSON.stringify(data))
-                           swal("Done", "Added successfully!", "success", {
-                                 buttons: {
-                                    ok: true,
-                                 },
-
-                              })
-                              .then((value) => {
-                                 switch (value) {
-
-                                    case "ok":
-                                       window.location.href = "../index.html"
-                                       break;
-
-                                 }
-                              });
-                           break;
-
-                        case "cancel":
-                           break;
-                     }
-                  });
-            } else {
-               oridata = JSON.parse(localStorage.getItem("Wallet"))
-               objeee = new Object()
-               objeee.CASH_BALANCE = parseInt(creditcard_entry.value)
-               objeee.TRXNUM = 0
-               objeee.TRANSACTIONS = []
-               oridata["CASH"]=objeee
-               oridata["setup"]="DONE"
-               setToStorage(JSON.stringify(oridata))
-               if (localStorageGetItem("NameUser") == null) {
-                  swal("Enter your name and username", "Please enter your name and username to proceed", "info")
-               } else {
-                  swal("Done", "Added successfully!", "success", {
-                        buttons: {
-                           ok: true,
-                        },
-
-                     })
-                     .then((value) => {
-                        switch (value) {
-
-                           case "ok":
-                              window.location.href = "../index.html"
-                              break;
-                        }
-                     });
-               }
-            }
-         }
-      })
-
-      document.getElementById("to_delete").appendChild(spacer)
-      document.getElementById("to_delete").appendChild(submit_btn)
+      cashdiv.style.display="block"
+      creditcarddiv.style.display="none"
+      bankdiv.style.display="none"
    } else if (x == "Banks") {
-      try {
-         document.getElementById("to_delete").replaceChildren()
-      } catch {
-
-      }
-      var spacer = document.createElement("br")
-      document.getElementById("details_form").appendChild(spacer)
-      var creditcard_entry = document.createElement("select")
-      creditcard_entry.id = "creditcard_entry"
-      var optionss = ["Bank Account", "HDFC Bank", "SBI", "American Express", "ICICI Bank", "Axis Bank", "Citibank", "YES Bank", "SCB", "IndusInd Bank", "RBL Bank", "Bank of Baroda", "Vijaya Bank", "Allahabad Bank", "Andhra Bank", "Bajaj Finserv", "Bank of India", "Bank of Maharashtra", "Canara Bank", "Central Bank of India", "Federal Bank", "HSBC Bank", "IDFC Bank", "Kotak Mahindra Bank"]
-      for (var i = 0; i < optionss.length; i++) {
-         var option = document.createElement("option");
-         option.value = optionss[i];
-         option.text = optionss[i];
-         creditcard_entry.appendChild(option);
-      }
-      var nickname_entry = document.createElement("input")
-      nickname_entry.id = "nickname_entry"
-      nickname_entry.placeholder = "Enter a nickname for your bank account"
-      nickname_entry.width = "150px"
-      nickname_entry.type = "text"
-      var spacer = document.createElement("br")
-      var balance_entry = document.createElement("input")
-      balance_entry.id = "balance_entry"
-      balance_entry.placeholder = "Enter your bank balance"
-      balance_entry.width = "150px"
-      balance_entry.type = "number"
-      var spacer = document.createElement("br")
-      document.getElementById("to_delete").appendChild(spacer)
-      document.getElementById("to_delete").appendChild(creditcard_entry)
-      document.getElementById("to_delete").appendChild(spacer)
-      document.getElementById("to_delete").appendChild(nickname_entry)
-      document.getElementById("to_delete").appendChild(spacer)
-      document.getElementById("to_delete").appendChild(balance_entry)
-      var submit_btn = document.createElement("button")
-      submit_btn.id = "submit_btn"
-      submit_btn.innerHTML = "Add details"
-      submit_btn.addEventListener("click", function () {
-         if (nickname_entry.value == "" || creditcard_entry.options[creditcard_entry.selectedIndex].text == "Bank Account" || balance_entry.value == "") {
-            swal("Please fill all the fields", "Please fill out all the fields - Nickname, Bank Name and Balance in bank", "info");
-         } else {
-            if (localStorageGetItem("BANKS") == null) {
-               objeee = new Object()
-               objeee.NO_OF_BANKACCOUNTS = 1
-               objeee.TRXNUM = 0
-               strrr = `${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry.value})`
-               objeee[strrr] = parseFloat(balance_entry.value)
-               objeee.TRANSACTIONS = []
-               data = JSON.parse(localStorage.getItem("Wallet"))
-               data["BANKS"]=objeee
-               data["setup"]="DONE"
-               setToStorage(JSON.stringify(data))
-               if (localStorageGetItem("NameUser") == null) {
-                  swal("Enter your name and username", "Please enter your name and username to proceed", "info")
-               } else {
-                  swal("Done", "Added successfully!", "success", {
-                        buttons: {
-                           ok: true,
-                        },
-
-                     })
-                     .then((value) => {
-                        switch (value) {
-
-                           case "ok":
-                              window.location.href = "../index.html"
-                              break;
-
-                        }
-                     });
-               }
-
-            } else {
-               oridata = JSON.parse(localStorage.getItem("Wallet"))
-               data = localStorageGetItem("BANKS")
-               if (`${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry.value})` in data) {
-                  swal("You already have a bank with same nickname", "To fix this issue, try typing some other nicknames", "error");
-
-               } else {
-                  data["NO_OF_BANKACCOUNTS"] += 1
-                  data[`${creditcard_entry.options[creditcard_entry.selectedIndex].text} (${nickname_entry.value})`] = parseFloat(balance_entry.value)
-                  oridata["BANKS"]=data
-                  oridata["setup"]="DONE"
-                  setToStorage(JSON.stringify(oridata))
-
-                  if (localStorageGetItem("NameUser") == null) {
-                     swal("Enter your name and username", "Please enter your name and username to proceed", "info")
-                  } else {
-                     swal("Done", "Added successfully!", "success", {
-                           buttons: {
-                              ok: true,
-                           },
-
-                        })
-                        .then((value) => {
-                           switch (value) {
-
-                              case "ok":
-                                 window.location.href = "../index.html"
-                                 break;
-
-                           }
-                        });
-                  }
-
-               }
-            }
-         }
-      })
-      document.getElementById("to_delete").appendChild(spacer)
-      document.getElementById("to_delete").appendChild(submit_btn)
-
+      cashdiv.style.display="none"
+      creditcarddiv.style.display="none"
+      bankdiv.style.display="block"
    }
 }
 
@@ -1599,9 +1237,9 @@ try
     } 
     else
     {
-        localStorage.setItem("Wallet", JSON.stringify(tocheck))
-        localforage.setItem("Wallet", JSON.stringify(tocheck), function(err, value){})
-        window.location.reload()
+      //   localStorage.setItem("Wallet", JSON.stringify(tocheck))
+      //   localforage.setItem("Wallet", JSON.stringify(tocheck), function(err, value){})
+      //   window.location.reload()
     }
 })    
 }
