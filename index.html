@@ -439,13 +439,10 @@ if(localStorage.getItem("Wallet")==null)
                 {
                     console.log("TRYING")
                     showNotification(`Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
-                    sessionStorage.setItem("sent", true)
                 }
                 catch{
                     console.log("FAILED")
                     swal("Payment due", `Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
-                    sessionStorage.setItem("sent", true)
-
                 }
             }
             if(daystogo<=0)
@@ -464,6 +461,7 @@ if(localStorage.getItem("Wallet")==null)
             }
         }
     }
+    sessionStorage.setItem("sent", true)
 
     data = (localStorageGetItem("CREDIT CARDS"))
     const cardDetails = Object.entries(data)
