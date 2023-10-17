@@ -265,6 +265,12 @@
                         <span class="item">Settings</span>
                     </a>
                 </li>
+                <li>
+                    <a href="https://wealthfolio.vercel.app/">
+                        <span class="icon"></span>
+                        <span class="item">Wealthfolio (BETA)</span>
+                    </a>
+                </li>
             </ul>
         </div>
         </div>
@@ -346,7 +352,7 @@ localforage.getItem("TOWRITE", function(err, value){
         Notification.requestPermission().then((result) => {
             if (result === "granted") {
             navigator.serviceWorker.ready.then((registration) => {
-                registration.showNotification("Statement generated", {
+                registration.showNotification("Payment for card due in 5 days", {
                 body: messagee,
                 vibrate: [200, 100, 200, 100, 200, 100, 200],
                 });
@@ -426,39 +432,32 @@ if(localStorage.getItem("Wallet")==null)
             curre = new Date();
             orrr = new Date(currentDate)
             cccc = new Date(currentDate);
-            if(curre>=cccc)
+            var daystogo = parseInt((cccc.getTime()-new Date().getTime())/(1000*60*60*24)+1)
+            if (daystogo>0 && daystogo<=5)
+            {
+                try
+                {
+                    console.log("TRYING")
+                    showNotification(`Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
+                }
+                catch{
+                    console.log("FAILED")
+                    swal("Payment due", `Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
+                }
+            }
+            if(daystogo<=0)
             {
                 cccc.setMonth(cccc.getMonth()+1)
                 if(cccc.getMonth()==0)
                 {
                     cccc.setFullYear(cccc.getFullYear()+1)
                 }
-                
-                trrr = data["TRANSACTIONS"]           
-                let statementGenerated = isStatementGeneratedForMonth(trrr, new Date().getMonth()+1, new Date().getFullYear(), keeey)  
-                if(statementGenerated==false)
-                {
-                    new_object = new Object()
-                    tobewritten = `${orrr.getFullYear()}-${orrr.getMonth()+1}-${orrr.getDate()}`
-                    new_object.Date = tobewritten
-                    new_object.Particulars = "Statement generated"
-                    new_object.CreditCard = keeey
-                    new_object.Amount = data[keeey]["BalanceOutstanding"]
-                    new_object.Type=""
-                    new_object.Narration=""
-                    data["TRANSACTIONS"].push(new_object)
-                    data[keeey]["DueDate"]=cccc.toString()
-                    oridata = JSON.parse(localStorage.getItem("Wallet"))
-                    oridata["CREDIT CARDS"]=data
-                    setToStorage(JSON.stringify(oridata))
-                    try
-                    {
-                        showNotification(`Statement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
-                    }
-                    catch{
-                        swal("Statement generated", `Statement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
-                    }
-                }
+
+                data[keeey]["DueDate"]=cccc.toString()
+                oridata = JSON.parse(localStorage.getItem("Wallet"))
+                oridata["CREDIT CARDS"]=data
+                setToStorage(JSON.stringify(oridata))
+            
             }
         }
     }

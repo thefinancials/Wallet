@@ -16,25 +16,13 @@ self.addEventListener('periodicsync', event => {
   }
 });
 
-function isStatementGeneratedForMonth(transactions, month, year, cardname) {
-  for (const transaction of transactions) {
-    if (
-      transaction.Particulars === "Statement generated" &&
-      transaction.Date.startsWith(`${year}-${month}`) && transaction.CreditCard ==cardname
-    ) {
-      return true;
-    }
-  }
-  return false;
-}
-
 function showNotification(messagee) {
   if(Notification.permission==='granted'){
     const options = {
       body: messagee,
     };
 
-    self.registration.showNotification('Statement generated', options)
+    self.registration.showNotification('Payment due', options)
   }
 }
 function getDailyNewsInCache() {
@@ -53,41 +41,21 @@ function getDailyNewsInCache() {
               curre = new Date();
               orrr = new Date(currentDate)
               cccc = new Date(currentDate);
-              if(curre>=cccc)
+              if (daystogo>0 && daystogo<=5)
               {
-                  cccc.setMonth(cccc.getMonth()+1)
-                  if(cccc.getMonth()==0)
+                  try
                   {
-                      cccc.setFullYear(cccc.getFullYear()+1)
+                      console.log("TRYING")
+                      showNotification(`Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
                   }
-                  
-                  trrr = data["TRANSACTIONS"]           
-                  let statementGenerated = isStatementGeneratedForMonth(trrr, new Date().getMonth()+1, new Date().getFullYear(), keeey)  
-                  if(statementGenerated==false)
-                  {
-                      new_object = new Object()
-                      tobewritten = `${orrr.getFullYear()}-${orrr.getMonth()+1}-${orrr.getDate()}`
-                      new_object.Date = tobewritten
-                      new_object.Particulars = "Statement generated"
-                      new_object.CreditCard = keeey
-                      new_object.Amount = data[keeey]["BalanceOutstanding"]
-                      new_object.Type=""
-                      new_object.Narration=""
-                      data["TRANSACTIONS"].push(new_object)
-                      data[keeey]["DueDate"]=cccc.toString()
-                      localforage.getItem("Wallet", function(err, value){
-                        oridata = JSON.parse(value)
-                        oridata["CREDIT CARDS"]=data
-                        localforage.setItem("Wallet", JSON.stringify(oridata))
-                        localforage.setItem("TOWRITE", JSON.stringify(oridata))
-                        showNotification(`Statement for ${keeey} has become due. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)                      
-                      })
-                      
+                  catch{
+                      console.log("FAILED")
+                      swal("Payment due", `Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
                   }
               }
-              else
+              else if(daystogo<0)
               {
-                console.log("No statements generated")
+
               }
           }
       }
