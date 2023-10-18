@@ -354,23 +354,13 @@ localforage.getItem("TOWRITE", function(err, value){
             navigator.serviceWorker.ready.then((registration) => {
                 registration.showNotification("Payment for card due in 5 days", {
                 body: messagee,
+                icon: "Assets/main-icon.png",
                 vibrate: [200, 100, 200, 100, 200, 100, 200],
                 });
             });
             }
         });
     }
-    function isStatementGeneratedForMonth(transactions, month, year, cardname) {
-  for (const transaction of transactions) {
-    if (
-      transaction.Particulars === "Statement generated" &&
-      transaction.Date.startsWith(`${year}-${month}`) && transaction.CreditCard ==cardname
-    ) {
-      return true;
-    }
-  }
-  return false;
-}
 
 if(localStorage.getItem("Wallet")==null)
     {
@@ -437,15 +427,23 @@ if(localStorage.getItem("Wallet")==null)
             {
                 try
                 {
-                    console.log("TRYING")
                     showNotification(`Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
                 }
                 catch{
-                    console.log("FAILED")
                     swal("Payment due", `Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
                 }
             }
-            if(daystogo<=0)
+            else if(daystogo==0)
+            {
+                try
+                {
+                    showNotification(`Last date for Payment of ${keeey} is today. Please pay if you have'nt already. Ignore if already paid. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
+                }
+                catch{
+                    swal("Payment due", `Last date for Payment of ${keeey} is today. Please pay if you have'nt already. Ignore if already paid. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
+                }
+            }
+            else if(daystogo<0)
             {
                 cccc.setMonth(cccc.getMonth()+1)
                 if(cccc.getMonth()==0)

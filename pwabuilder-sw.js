@@ -20,6 +20,7 @@ function showNotification(messagee) {
   if(Notification.permission==='granted'){
     const options = {
       body: messagee,
+      icon: "Assets/main-icon.png",
     };
 
     self.registration.showNotification('Payment due', options)
@@ -53,9 +54,15 @@ function getDailyNewsInCache() {
                       swal("Payment due", `Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
                   }
               }
-              else if(daystogo<0)
+              else if(daystogo==0)
               {
-
+                  try
+                  {
+                      showNotification(`Last date for Payment of ${keeey} is today. Please pay if you have'nt already. Ignore if already paid. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
+                  }
+                  catch{
+                      swal("Payment due", `Last date for Payment of ${keeey} is today. Please pay if you have'nt already. Ignore if already paid. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
+                  }
               }
           }
       }
