@@ -42,6 +42,7 @@ function getDailyNewsInCache() {
               curre = new Date();
               orrr = new Date(currentDate)
               cccc = new Date(currentDate);
+              var daystogo = parseInt((cccc.getTime()-new Date().getTime())/(1000*60*60*24)+1)
               if (daystogo>0 && daystogo<=5)
               {
                   try
