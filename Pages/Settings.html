@@ -144,7 +144,7 @@
       <li class="centre">Banks, Debit Cards</li>
       <li class="centre">Cash</li>
       </p>
-      <p class="centre">The app is compatible with <i class="fa-solid fa-globe"></i> all devices that support the Web</p>
+      <p class="centre">The app is compatible with all devices that support the <i class="fa-solid fa-globe"></i> Web</p>
    </header>
    <button class="collapsible-button" id="coll-button">&#9776;</button>
    <div class="collapsible">
@@ -1032,8 +1032,8 @@ document.getElementById("to_delete").appendChild(bankdiv)
       document.getElementById("to_delete").appendChild(nickname_entry)
       nickname_entry.value=nickname
       document.getElementById("to_delete").appendChild(spacer)
-      data = localStorageGetItem("BANKS")
-      balance = data[creditcard]
+      ddddd = localStorageGetItem("BANKS")
+      balance = ddddd[creditcard]
       var submit_btn = document.createElement("button")
       submit_btn.id = "submit_btn"
       submit_btn.innerHTML = "Modify details"
@@ -1042,17 +1042,17 @@ document.getElementById("to_delete").appendChild(bankdiv)
             swal("Please fill all the fields", "Please fill out all the fields - Nickname and Bank Name", "info");
          } else {
             let newKey=creditcard_entry.value
-            vflkvkrv = data[creditcard]
-            data[`${creditcard_entry.value} (${nickname_entry.value})`]=vflkvkrv
-            delete data[creditcard]
-            transactions = data.TRANSACTIONS
+            vflkvkrv = ddddd[creditcard]
+            ddddd[`${creditcard_entry.value} (${nickname_entry.value})`]=vflkvkrv
+            delete ddddd[creditcard]
+            transactions = ddddd.TRANSACTIONS
             for (let i = 0; i < transactions.length; i++) {
                if (transactions[i].BankAccount === creditcard) {
                   transactions[i].BankAccount = `${creditcard_entry.value} (${nickname_entry.value})`;
                }
             }  
             oridata = JSON.parse(localStorage.getItem("Wallet"))
-            oridata["BANKS"]=data
+            oridata["BANKS"]=ddddd
             setToStorage(JSON.stringify(oridata))
             alert("Modified bank details successfully!")
             history.back()
@@ -1066,21 +1066,21 @@ document.getElementById("to_delete").appendChild(bankdiv)
          del_btn.addEventListener("click", function(){
             if(confirm("Warning! Do you wish to delete this bank?"))
             {
-               for (let i = 0; i < data.TRANSACTIONS.length; i++) {
-                  if (data.TRANSACTIONS[i].CreditCard === creditcard) {
-                     data.TRANSACTIONS.splice(i, 1);
+               for (let i = 0; i < ddddd.TRANSACTIONS.length; i++) {
+                  if (ddddd.TRANSACTIONS[i].CreditCard === creditcard) {
+                     ddddd.TRANSACTIONS.splice(i, 1);
                   }
                 }  
-               delete data[creditcard]
-               data.NO_OF_BANKACCOUNTS-=1
+               delete ddddd[creditcard]
+               ddddd.NO_OF_BANKACCOUNTS-=1
                oridata=JSON.parse(localStorage.getItem("Wallet"))
-               if(data.NO_OF_BANKACCOUNTS==0)
+               if(ddddd.NO_OF_BANKACCOUNTS==0)
                {
                   delete oridata["BANKS"]
                }
                else
                {
-                  oridata["BANKS"]=data
+                  oridata["BANKS"]=ddddd
                }
                setToStorage(JSON.stringify(oridata))
                alert("Deleted bank successfully!")

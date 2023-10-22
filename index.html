@@ -560,6 +560,7 @@ for(var keeey in data)
             }
 
             data[keeey]["DueDate"]=cccc.toString()
+            data[keeey]["BalanceOutstanding"]=0
             oridata = JSON.parse(localStorage.getItem("Wallet"))
             oridata["CREDIT CARDS"]=data
             setToStorage(JSON.stringify(oridata))
