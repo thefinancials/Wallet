@@ -278,6 +278,9 @@
     </div>
 
 </div>
+<div id="detection"
+     style="display: none; background-color: canvas; color-scheme: light">
+</div>
 
 </body>
 <script src="Assets/sweetalert.min.js"></script>
@@ -523,15 +526,16 @@ for(var keeey in data)
     }
     else
     {
-        
         currentDate = data[keeey]["DueDate"]
         curre = new Date();
         orrr = new Date(currentDate)
         cccc = new Date(currentDate)
         
         var daystogo = parseInt((cccc.getTime()-new Date().getTime())/(1000*60*60*24)+1)
+        
         if (daystogo>0 && daystogo<=5 && sessionStorage.getItem("sent")==null)
         {
+            console.log("FIRST CONDITION")
             try
             {
                 showNotification(`Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
@@ -540,8 +544,9 @@ for(var keeey in data)
                 swal("Payment due", `Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
             }
         }
-        else if(daystogo==0 && curre==cccc)
+        else if(daystogo==0 && curre.getDate()==cccc.getDate() && sessionStorage.getItem("sent")==null)
         {
+            console.log("SECOND CONDITION")
             try
             {
                 showNotification(`Last date for Payment of ${keeey} is today. Please pay if you have'nt already. Ignore if already paid. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
@@ -551,8 +556,9 @@ for(var keeey in data)
             }
         }
         
-        else if(curre>cccc)
+        else if(daystogo==0||daystogo<0)
         {
+            console.log("LAST CONDITION")
             cccc.setMonth(cccc.getMonth()+1)
             if(cccc.getMonth()==0)
             {
