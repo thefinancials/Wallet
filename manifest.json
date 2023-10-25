@@ -3,10 +3,40 @@
     "protocol_handlers": [{"protocol":"wallet:","url":"/Wallet/Pages/%s.html"}],
     "screenshots": [
       {
-        "src": "https://www.pwabuilder.com/assets/screenshots/screen1.png",
-        "sizes": "2880x1800",
+        "src": "/Wallet/Assets/screenshot1.png",
+        "sizes": "1080x1920",
         "type": "image/png",
-        "description": "PWABuilder Home Screen"
+        "description": "Screenshot of Wallet's home page"
+      },
+      {
+        "src": "/Wallet/Assets/screenshot2.png",
+        "sizes": "1080x1920",
+        "type": "image/png",
+        "description": "Screenshot of Wallet's Credit Card page"
+      },
+      {
+        "src": "/Wallet/Assets/screenshot3.png",
+        "sizes": "1080x1920",
+        "type": "image/png",
+        "description": "Screenshot of Wallet's SMS transaction page"
+      },
+      {
+        "src": "/Wallet/Assets/screenshot4.png",
+        "sizes": "1080x1920",
+        "type": "image/png",
+        "description": "Screenshot of Wallet's Bank page"
+      },
+      {
+        "src": "/Wallet/Assets/screenshot5.png",
+        "sizes": "1080x1920",
+        "type": "image/png",
+        "description": "Screenshot of Wallet's cash page"
+      },
+      {
+        "src": "/Wallet/Assets/screenshot6.png",
+        "sizes": "1080x1920",
+        "type": "image/png",
+        "description": "Screenshot of compatibility of Wallet"
       }
     ], 
       "theme_color": "#f69435",
