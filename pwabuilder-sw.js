@@ -43,29 +43,31 @@ function getDailyNewsInCache() {
               orrr = new Date(currentDate)
               cccc = new Date(currentDate);
               var daystogo = parseInt((cccc.getTime()-new Date().getTime())/(1000*60*60*24)+1)
-              if (daystogo>0 && daystogo<=5)
-              {
-                  try
-                  {
-                      console.log("TRYING")
-                      showNotification(`Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
-                  }
-                  catch{
-                      console.log("FAILED")
-                      swal("Payment due", `Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
-                  }
-              }
-              else if(daystogo==0)
-              {
-                  try
-                  {
-                      showNotification(`Last date for Payment of ${keeey} is today. Please pay if you have'nt already. Ignore if already paid. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
-                  }
-                  catch{
-                      swal("Payment due", `Last date for Payment of ${keeey} is today. Please pay if you have'nt already. Ignore if already paid. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
-                  }
-              }
-          }
+              if (daystogo>0 && daystogo<=5 && sessionStorage.getItem("sent")==null)
+        {
+            console.log("FIRST CONDITION")
+            try
+            {
+                showNotification(`Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
+            }
+            catch{
+                swal("Payment due", `Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
+            }
+        }
+        else if(daystogo==0 && curre.getDate()==cccc.getDate() && sessionStorage.getItem("sent")==null)
+        {
+            console.log("SECOND CONDITION")
+            try
+            {
+                showNotification(`Last date for Payment of ${keeey} is today. Please pay if you have'nt already. Ignore if already paid. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
+            }
+            catch{
+                swal("Payment due", `Last date for Payment of ${keeey} is today. Please pay if you have'nt already. Ignore if already paid. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
+            }
+        }
+        
+        else if(daystogo==0||daystogo<0)
+        { }
       }
       
     } else {
