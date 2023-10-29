@@ -33,7 +33,7 @@ We are pleased to announce support for ICICI Bank SMSs, ensuring a seamless expe
 
 **Milestones ahead**
 
-Work has started on our app for businesses codenamed BalanceIT. 
+Work has started on our app for businesses codenamed ASA Books. 
 > Names are invited from the developer community!
 
 More details shortly
