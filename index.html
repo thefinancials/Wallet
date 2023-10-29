@@ -304,15 +304,6 @@ discollapisbleButton.addEventListener('click', () => {
     menu.classList.remove('active')
 });
 
-localforage.getItem("TOWRITE", function(err, value){
-    if (value!=null)
-    {
-        oridata = JSON.parse(value)
-        setToStorage(JSON.stringify(oridata))
-        localforage.removeItem("TOWRITE", function(err, value){})
-    }
-})
-
 
 </script>
 
@@ -511,7 +502,6 @@ if (table.rows.length==1)
     {
         localStorage.setItem("Wallet", JSON.stringify(tocheck))
         localforage.setItem("Wallet", JSON.stringify(tocheck), function(err, value){})
-        console.log("BYE")
         window.location.reload()
 
     }
