@@ -8,6 +8,8 @@ Links for accessing Wallet:
 
 [Render](https://wallet-aluf.onrender.com/)
 
+[Firebase](https://wallet-asafinserve.web.app/)
+
 We are delighted to confirm that both links are fully functional and operating at the expected speeds.
 
 **New Features in This Update**
