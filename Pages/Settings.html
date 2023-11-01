@@ -354,6 +354,7 @@
 .then(addata => {
   if (addata.length==0)
   {
+   console.log(data)
    fetch("https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData", {
       method: "POST",
       body: JSON.stringify({ "user_id": userName, "Details": data}),
