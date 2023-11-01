@@ -523,7 +523,7 @@ for(var keeey in data)
         
         var daystogo = parseInt((cccc.getTime()-new Date().getTime())/(1000*60*60*24)+1)
         
-        if (daystogo>0 && daystogo<=5 && sessionStorage.getItem("sent")==null)
+        if (daystogo>0 && daystogo<=5 && sessionStorage.getItem("sent")==null && data[keeey]["BalanceOutstanding"]!=0)
         {
             console.log("FIRST CONDITION")
             try
@@ -534,7 +534,7 @@ for(var keeey in data)
                 swal("Payment due", `Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
             }
         }
-        else if(daystogo==0 && curre.getDate()==cccc.getDate() && sessionStorage.getItem("sent")==null)
+        else if(daystogo==0 && curre.getDate()==cccc.getDate() && sessionStorage.getItem("sent")==null && data[keeey]["BalanceOutstanding"]!=0)
         {
             console.log("SECOND CONDITION")
             try
