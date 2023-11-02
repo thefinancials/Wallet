@@ -275,116 +275,143 @@
       event.preventDefault()
       window.location.href="Login.html"
    }
-   function initialseset(data, typeed)
+   function update(status_code, time)
    {
+      if(status_code==204 || status_code==201)
+      {
+         localStorage.setItem("Wallet", dddd)
+         localforage.setItem("Wallet", dddd, function(err, value){})
+         if (time!="first")
+         {
+            alert("Changes made successfully")
+            window.location.reload()
+         }
+         else
+         {
+            document.getElementById("financial_settings").classList.add("active")
+            document.getElementById("personal_settings").classList.remove("active")
+            document.getElementById("about_settings").classList.remove("active")
+            document.getElementById("logout_settings").classList.remove("active")
+            var personalDiv = document.getElementById("personalsettingsform");
+            var otherDiv = document.getElementById("financialsettingsform");
+            personalDiv.style.display = "none"; 
+            otherDiv.style.display = "block";
+            document.getElementById("name_user").value = localStorageGetItem("NameUser")
+            document.getElementById("add_details_1").style.display = "block";
+            document.getElementById("type_of_finance").style.display = "block";
+         }
+      }
+   }
+   function initialseset(data, d, typeed)
+   {
+      dddd = data
+      console.log(typeof(dddd))
       if(typeed=="")
       {
-         userName = JSON.parse(data)["user_id"]
-      localStorage.setItem("Wallet", data)
-      localforage.setItem("Wallet", data, function(err, value){})
-      fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${userName}`, {
-  method: "GET", // Specify the HTTP method
-  headers: {
-    "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your API key
-    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your access token
-    "Content-Type": "application/json",
-    "Prefer": "return=minimal",
+         userName = JSON.parse(dddd)["user_id"]
+         fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${userName}`, {
+            method: "GET", // Specify the HTTP method
+            headers: {
+               "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your API key
+               "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your access token
+               "Content-Type": "application/json",
+               "Prefer": "return=minimal",
+            }
+            })
+         .then(response => {
+         if (!response.ok) {
+            throw new Error("Network response was not ok");
+         }
+         return response.json();
+         })
+         .then(addata => {
+         if (addata.length==0)
+         {
+            fetch("https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData", {
+               method: "POST",
+               body: JSON.stringify({ "user_id": userName, "Details": dddd}),
+               headers: {
+               "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8",
+               "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8",
+               "Content-Type": "application/json",
+               "Prefer": "return=minimal",
+            }
+            })
+            .then((json) => update(json["status"], "first"))
+            
+         }
+      else
+      {
+      alert("Sorry, that username is not available. Try another")
+      window.location.reload()
   }
 })
-.then(response => {
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-  return response.json();
-})
-.then(addata => {
-  if (addata.length==0)
-  {
-   fetch("https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData", {
-      method: "POST",
-      body: JSON.stringify({ "user_id": userName, "Details": data}),
-      headers: {
-      "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8",
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8",
-      "Content-Type": "application/json",
-      "Prefer": "return=minimal",
-   }
-   });
-  }
-  else
-  {
-   alert("Sorry, that username is not available. Try another")
-   document.getElementById("about_settings").classList.remove("active")
-      document.getElementById("logout_settings").classList.remove("active")
-      document.getElementById("financial_settings").classList.remove("active")
-      document.getElementById("personal_settings").classList.add("active")
-      var personalDiv = document.getElementById("personalsettingsform");
-      var otherDiv = document.getElementById("financialsettingsform");
-      personalDiv.style.display = "block";
-      otherDiv.style.display = "none";
-  }
-})
-.catch(error => {
-  console.error("Fetch error:", error);
-});
 
       }
       
    else
    {
-      userName = JSON.parse(data)["user_id"]
-      localStorage.setItem("Wallet", data)
-      localforage.setItem("Wallet", data, function(err, value){})
-      fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${userName}`, {
-  method: "PATCH", 
-  body: JSON.stringify({ "user_id": userName, "Details": data}),
-  headers: {
-    "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your API key
-    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your access token
-    "Content-Type": "application/json",
-    "Prefer": "return=minimal",
-  }
-})
-.then(response => {
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-  return response.json();
-})
-.then(addata => {
-  if (addata.length==0)
-  {
-   console.log(data)
-   fetch("https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData", {
-      method: "POST",
-      body: JSON.stringify({ "user_id": userName, "Details": data}),
-      headers: {
-      "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8",
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8",
-      "Content-Type": "application/json",
-      "Prefer": "return=minimal",
-   }
-   });
-  }
-  else
-  {
-   alert("Sorry, that username is not available. Try another")
-   document.getElementById("about_settings").classList.remove("active")
-      document.getElementById("logout_settings").classList.remove("active")
-      document.getElementById("financial_settings").classList.remove("active")
-      document.getElementById("personal_settings").classList.add("active")
-      var personalDiv = document.getElementById("personalsettingsform");
-      var otherDiv = document.getElementById("financialsettingsform");
-      personalDiv.style.display = "block";
-      otherDiv.style.display = "none";
-  }
-})
-.catch(error => {
-  console.error("Fetch error:", error);
-});
-   }
+      console.log(dddd)
+      userName = JSON.parse(dddd)["user_id"]
+      if(d==userName)
+      {
+         fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${userName}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ "user_id": userName, "Details": dddd}),
+            headers: {
+               "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your API key
+               "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your access token
+               "Content-Type": "application/json",
+               "Prefer": "return=minimal",
+            },
+            })
+            .then((json) => update(json["status"]), "");
+      }
+      else
+      {
+         fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${userName}`, {
+            method: "GET", // Specify the HTTP method
+            headers: {
+               "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your API key
+               "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your access token
+               "Content-Type": "application/json",
+               "Prefer": "return=minimal",
+            }
+            })
+         .then(addata => {
+         if (addata.length==0)
+         {
+            fetch("https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData", {
+               method: "POST",
+               body: JSON.stringify({ "user_id": userName, "Details": dddd}),
+               headers: {
+               "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8",
+               "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8",
+               "Content-Type": "application/json",
+               "Prefer": "return=minimal",
+            }
+            })
+            fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${d}`, {
+               method: 'DELETE',
+               headers: {
+               "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your API key
+               "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your access token
+               "Content-Type": "application/json",
+               "Prefer": "return=minimal",
+            }
+            })
+            .then((json) => update(json["status"], ""))
+         }
+         else
+         {
+         alert("Sorry, that username is not available. Try another")
+         window.location.reload()
+         }
+      })
+      }
       
    }
+}
    function setToStorage(data)
    {
       userName = JSON.parse(data)["user_id"]
@@ -1169,21 +1196,19 @@ function submitName() {
       data = {"NameUser":name_user.value, "user_id":usernamee_entry.value, "password_user":password_user.value}
       if(localStorage.getItem("Wallet")==null)
       {
-         initialseset(JSON.stringify(data), "")
+         initialseset(JSON.stringify(data), "", "")
+         
       }
       else
       {
-         initialseset(JSON.stringify(data), "modify")
+         ttt = JSON.parse(localStorage.getItem("Wallet"))
+         ori=ttt["user_id"]
+         ttt['NameUser']=name_user.value
+         ttt["user_id"]=usernamee_entry.value
+         ttt["password_user"]=password_user.value
+         initialseset(JSON.stringify(ttt), ori, "modify")
       }
-      document.getElementById("financial_settings").classList.add("active")
-      document.getElementById("personal_settings").classList.remove("active")
-      document.getElementById("about_settings").classList.remove("active")
-      document.getElementById("logout_settings").classList.remove("active")
-      personalDiv.style.display = "none"; 
-      otherDiv.style.display = "block";
-      document.getElementById("name_user").value = localStorageGetItem("NameUser")
-      document.getElementById("add_details_1").style.display = "block";
-      document.getElementById("type_of_finance").style.display = "block";
+      
    }
 
 }

@@ -241,9 +241,22 @@
    <div id="details_div" class="margin: auto;
       display: block;
       ">
-      <h2 class="centre">Transactions</h2>
-      
-      <table id="transactions_table" class="center" border="1">
+      <h2 class="centre">Transactions</h2> 
+      <h3 class="centre">Select a bank in the table above</h3>
+      <p class="centre" id="card_buttons">
+        <h3 id="card_name_selected"></h3>
+        <form id="to_check" style="display:none">
+            <label>From: </label>
+            <input type="date" id="from_date" />
+            <label>To: </label>
+            <input type="date" id="to_date" />
+            <br><br>
+            <button onclick="getTransactions()">Get Transactions</button>
+            <br>
+            <br>
+        </form>
+      </p>      
+      <table id="transactions_table" style="display:none">
          <thead>
             
             <th style="margin-left: 10px; margin-right:10px;">Date</th>
@@ -256,9 +269,7 @@
          <tbody id="ttbody">
 
          </tbody>
-         <tfoot>
 
-         </tfoot>
       </table>
    </div>
 </body>
@@ -269,6 +280,69 @@
 <link rel="stylesheet" src="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
 <script>
+        function getTransactions()
+    {
+        event.preventDefault()  
+
+        fromDate = document.getElementById("from_date").value
+        toDate = document.getElementById("to_date").value
+        if(fromDate==""||toDate=="")
+        {
+            alert("Enter period between which you require the transactions")
+        }
+        else
+        {
+            cardselected = document.getElementById("card_name_selected").innerHTML
+            transactions = localStorageGetItem("BANKS")["TRANSACTIONS"]
+            console.log(transactions)
+            toAdd = []
+            for (transaction of transactions)
+            {
+                if(transaction.Particulars=="Modifying Entry" && transaction.Narration=="Being modification entry passed")
+                {}
+                else
+                {
+                    if(transaction.BankAccount==cardselected && new Date(transaction.Date)>=new Date(fromDate) && new Date(transaction.Date)<=new Date(toDate))
+                    {
+                        toAdd.push(transaction)
+                    }
+                }
+            }
+            console.log(toAdd)
+            toAdd.forEach(add)
+           if(document.getElementById("transactions_table").rows.length==1)
+           {
+           var no_trx = document.createElement("h2")
+           no_trx.id="no_trx"
+           no_trx.innerHTML="No transactions found"
+           no_trx.style.cssText = 'text-align:center;';
+           document.getElementById("details_div").appendChild(no_trx)
+           }
+           else
+        {
+                document.getElementById("transactions_table").style.display="block"
+                try
+                {
+                    document.getElementById("no_trx").style.display="none"
+                }
+                catch
+                {
+
+                }
+        }
+           $(document).ready(function() {
+    $('#transactions_table').DataTable();
+    $(".dataTables_empty").empty();
+});
+
+        }
+    }
+
+    if(localStorage.getItem("Wallet")==null)
+    {
+        window.location="Signup.html"
+    }
+
     if(window.navigator.onLine==false)
     {
         alert("You are offline, get back online to login or signup to Wallet")
@@ -445,12 +519,17 @@
        }
        else
        {
+            new_object = new Object()
            bankkk = document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text
            new_object.BankAccount = bankkk.split(" - ")[0]
+           new_object.Date = document.getElementById("date_transaction").value
+           new_object.Particulars = document.getElementById("particulars_transaction").value
            new_object.Narration = document.getElementById("narration").value
-           data["TRANSACTIONS"].push(new_object)
+           new_object.Type = "Dr"
+           new_object.Amount = document.getElementById("amount_transaction").value
            data["TRXNUM"]+=1
            new_object.TRXNUM=data["TRXNUM"]
+           data["TRANSACTIONS"].push(new_object)
            data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
            bankbalance = parseFloat(bankkk.split("₹")[1])
            if (bankbalance<parseFloat(document.getElementById("amount_transaction").value))
@@ -589,34 +668,7 @@
    }
    else
    {
-       data = (localStorageGetItem("BANKS"))
-       
-       
-       if(data["TRANSACTIONS"].length==0)
-       {
-           document.getElementById("transactions_table").style.visibility="hidden"
-           var no_trx = document.createElement("h2")
-           no_trx.innerHTML="No transactions found"
-           no_trx.style.cssText = 'text-align:center;';
-           document.getElementById("details_div").appendChild(no_trx)
-       }
-       else
-       {
-           data = (localStorageGetItem("BANKS"))
-           trx = data["TRANSACTIONS"]
-           trx.forEach(add)
-           if(document.getElementById("transactions_table").rows.length==1)
-           {
-            document.getElementById("transactions_table").style.visibility="hidden"
-           var no_trx = document.createElement("h2")
-           no_trx.innerHTML="No transactions found"
-           no_trx.style.cssText = 'text-align:center;';
-           document.getElementById("details_div").appendChild(no_trx)
-           }
-           
-           
-           
-       }
+    
    }
    function add(item)
    {
@@ -707,6 +759,10 @@ bankAccountData.forEach(({ card, balance }) => {
     tr=document.createElement("tr")
     th_name=document.createElement("td")
     th_name.innerHTML = sss
+    th_name.addEventListener("click", function(){
+        document.getElementById("card_name_selected").innerHTML=card
+        document.getElementById("to_check").style.display="block"
+    })
     th_nickname=document.createElement("td")
     th_nickname.innerHTML = nickname
     // th_duedate=document.createElement("td")
@@ -723,10 +779,7 @@ bankAccountData.forEach(({ card, balance }) => {
 });
 table.append(tbody)
 document.getElementById("cur_balance").append(table)
-$(document).ready(function() {
-    $('#transactions_table').DataTable();
-    $(".dataTables_empty").empty();
-});
+
 
 data = JSON.parse(localStorage.getItem("Wallet"))
     userName = data["user_id"]
