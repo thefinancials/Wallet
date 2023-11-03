@@ -712,29 +712,13 @@ function localStorageGetItem(vallue)
    
    if(localStorageGetItem("CREDIT CARDS")==null)
    {
-       alert("You have not setup a credit card. Please add atleast 1 credit card")
        window.location.href="Settings.html?addType=CC"
    }
    else
    {
            
            }
-    //     if(data["TRANSACTIONS"].length==0)
-    //    {
-    //        document.getElementById("transactions_table").style.visibility="hidden"
-    //        var no_trx = document.createElement("h2")
-    //        no_trx.innerHTML="No transactions found"
-    //        no_trx.style.cssText = 'text-align:center;';
-    //        document.getElementById("details_div").appendChild(no_trx)
-           
-    //    }
-    //    else
-    //    {
-
-    //        trx = data["TRANSACTIONS"]
-    //        
-    //    }
-   
+       
    function add(item)
    {
         if(item["Particulars"]=="Modifying Entry"&&item["Narration"]=="Being modification entry passed")
@@ -786,11 +770,7 @@ function localStorageGetItem(vallue)
         dueDate: new Date(details.DueDate),
         balance: details.BalanceOutstanding
     }));
-    if(cardDetails.length==0)
-    {
-        alert("You have not setup a credit card. Please add atleast 1 credit card")
-       window.location.href="Settings.html"
-    }
+
     // another = cardDetails
     cardDetails.sort((a, b) => b.dueDate - a.dueDate);
 

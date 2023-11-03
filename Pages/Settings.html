@@ -75,7 +75,7 @@
    .wrapper .sidebar ul li a{
    display: block;
    padding: 13px 30px;
-   border-bottom: 1px solid #10558d;
+   border-bottom: 1px solid;
    color: rgb(241, 237, 237);
    font-size: 16px;
    position: relative;
@@ -215,9 +215,15 @@
       <label for="usernamee_entry">Username:</label>
       <input id="usernamee_entry" type="text">
       <br><br>
-      <label for="password_user">Enter a strong password</label>
+      <label for="password_user">Password:</label>
       <input id="password_user" type="password">
       <br><br>
+      <p style="font-weight: bold;">Please note:-</p>
+      <ul>
+         <li>Ensure that you remember the username you entered, as it cannot be changed later</li>
+         <li>Please ensure that you enter a strong password</li>
+      </ul>
+
       <button onclick="submitName()">Submit</button>
       <br>
       <br>
@@ -353,8 +359,7 @@
    {
       console.log(dddd)
       userName = JSON.parse(dddd)["user_id"]
-      if(d==userName)
-      {
+      
          fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${userName}`, {
             method: 'PATCH',
             body: JSON.stringify({ "user_id": userName, "Details": dddd}),
@@ -366,50 +371,6 @@
             },
             })
             .then((json) => update(json["status"]), "");
-      }
-      else
-      {
-         fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${userName}`, {
-            method: "GET", // Specify the HTTP method
-            headers: {
-               "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your API key
-               "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your access token
-               "Content-Type": "application/json",
-               "Prefer": "return=minimal",
-            }
-            })
-         .then(addata => {
-         if (addata.length==0)
-         {
-            fetch("https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData", {
-               method: "POST",
-               body: JSON.stringify({ "user_id": userName, "Details": dddd}),
-               headers: {
-               "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8",
-               "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8",
-               "Content-Type": "application/json",
-               "Prefer": "return=minimal",
-            }
-            })
-            fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${d}`, {
-               method: 'DELETE',
-               headers: {
-               "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your API key
-               "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your access token
-               "Content-Type": "application/json",
-               "Prefer": "return=minimal",
-            }
-            })
-            .then((json) => update(json["status"], ""))
-         }
-         else
-         {
-         alert("Sorry, that username is not available. Try another")
-         window.location.reload()
-         }
-      })
-      }
-      
    }
 }
    function setToStorage(data)
@@ -890,6 +851,7 @@ document.getElementById("to_delete").appendChild(bankdiv)
       document.getElementById("logout_btn").style.visibility="visible"
    document.getElementById("name_ussser").innerHTML = localStorageGetItem("NameUser")
    document.getElementById("usernamee_entry").value = localStorageGetItem("user_id")  
+   document.getElementById("usernamee_entry").disabled=true
    document.getElementById("user_name").innerHTML = localStorageGetItem("user_id")
    document.getElementById("password_user").value = localStorageGetItem("password_user")  
 }

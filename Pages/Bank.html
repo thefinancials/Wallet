@@ -663,13 +663,9 @@
    
    if(localStorageGetItem("BANKS")==null)
    {
-       alert("You have not setup a bank account. Please add atleast 1 bank account")
        window.location.href="Settings.html?addType=B"
    }
-   else
-   {
-    
-   }
+   
    function add(item)
    {
         if(item["Particulars"]=="Modifying Entry"&&item["Narration"]=="Being modification entry passed")

@@ -404,6 +404,10 @@ if(localStorage.getItem("Wallet")==null)
    
 
     data = (localStorageGetItem("CREDIT CARDS"))
+    if(data != null)
+    {
+
+    
     const cardDetails = Object.entries(data)
     .filter(([key]) => key !== "NO_OF_CARDS" && key !== "TRANSACTIONS" && key!="TRXNUM")
     .map(([card, details, balance]) => ({
@@ -411,11 +415,6 @@ if(localStorage.getItem("Wallet")==null)
         dueDate: new Date(details.DueDate),
         balance: details.BalanceOutstanding
     }));
-    if(cardDetails.length==0)
-    {
-        alert("You have not setup a credit card. Please add atleast 1 credit card")
-       window.location.href="Settings.html"
-    }
     // another = cardDetails
     cardDetails.sort((a, b) => b.dueDate - a.dueDate);
 
@@ -475,6 +474,11 @@ if (table.rows.length==1)
 {
     document.getElementById("cur_balance").innerHTML="No cards due"
 }
+}
+else
+{
+    document.getElementById("cur_balance").innerHTML="No cards setup"
+}
     dataa = JSON.parse(localStorage.getItem("Wallet"))
     userName = dataa["user_id"]
     fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${userName}`, {
@@ -525,7 +529,6 @@ for(var keeey in data)
         
         if (daystogo>0 && daystogo<=5 && sessionStorage.getItem("sent")==null && data[keeey]["BalanceOutstanding"]!=0)
         {
-            console.log("FIRST CONDITION")
             try
             {
                 showNotification(`Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
@@ -536,7 +539,6 @@ for(var keeey in data)
         }
         else if(daystogo==0 && curre.getDate()==cccc.getDate() && sessionStorage.getItem("sent")==null && data[keeey]["BalanceOutstanding"]!=0)
         { 
-            console.log("SECOND CONDITION")
             try
             {
                 showNotification(`Last date for Payment of ${keeey} is today. Please pay if you have'nt already. Ignore if already paid. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
@@ -548,7 +550,6 @@ for(var keeey in data)
         
         else if(daystogo==0||daystogo<0)
         {
-            console.log("LAST CONDITION")
             cccc.setMonth(cccc.getMonth()+1)
             if(cccc.getMonth()==0)
             {
