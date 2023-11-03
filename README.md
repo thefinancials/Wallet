@@ -33,6 +33,12 @@ Installing Progressive Web Apps (PWAs) from your browser is now more visually ap
 
 We are pleased to announce support for ICICI Bank SMSs, ensuring a seamless experience for our users.
 
+**Features to help you edit your basic details**
+
+We have introduced features to help you change your Password and name in the app easily
+
+> Note, Username once created, cannot be changed. Ensure you always remember it
+
 **Milestones ahead**
 
 Work has started on our app for businesses codenamed ASA Books. 
