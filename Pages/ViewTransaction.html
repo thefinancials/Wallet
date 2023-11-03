@@ -376,7 +376,6 @@
                             }
                             data["CASH_BALANCE"]=parseInt(curbalance)
                             transactions[i].Amount=parseInt(document.getElementById("amount_transaction").value)
-                            console.log(data)
                             oridata = JSON.parse(localStorage.getItem("Wallet"))
                             oridata["CASH"]=data
                             setToStorage(JSON.stringify(oridata))

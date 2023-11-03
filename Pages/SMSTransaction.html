@@ -285,7 +285,6 @@
            data[bankname]["BalanceOutstanding"] = cur_balance
            oridata = JSON.parse(localStorage.getItem("Wallet"))
            oridata["CREDIT CARDS"]=data
-           console.log(oridata)
            setToStorage(JSON.stringify(oridata))
            
            alert("Added!")

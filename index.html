@@ -328,7 +328,6 @@ discollapisbleButton.addEventListener('click', () => {
               await registration.periodicSync.register('creditcard-duedatechecker', {
                 minInterval: 24 * 60 * 60 * 1000,
               });
-              console.log('Periodic background sync registered!');
             } catch(e) {
               console.error(`Periodic background sync failed:\nx${e}`);
             }
@@ -336,7 +335,6 @@ discollapisbleButton.addEventListener('click', () => {
             console.info('Periodic background sync is not granted.');
           }
         } else {
-          console.log('Periodic background sync is not supported.');
         }
       }
 
@@ -358,7 +356,8 @@ discollapisbleButton.addEventListener('click', () => {
 
 if(localStorage.getItem("Wallet")==null)
     {
-        window.location="Pages/Signup.html"
+        document.body.innerHTML='<iframe src="Pages/Signup.html" frameborder="0" style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%"></iframe>'
+        
     }
     else
     {

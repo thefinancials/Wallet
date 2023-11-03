@@ -294,7 +294,6 @@
         {
             cardselected = document.getElementById("card_name_selected").innerHTML
             transactions = localStorageGetItem("BANKS")["TRANSACTIONS"]
-            console.log(transactions)
             toAdd = []
             for (transaction of transactions)
             {
@@ -308,7 +307,6 @@
                     }
                 }
             }
-            console.log(toAdd)
             toAdd.forEach(add)
            if(document.getElementById("transactions_table").rows.length==1)
            {

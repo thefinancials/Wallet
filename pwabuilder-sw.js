@@ -45,7 +45,6 @@ function getDailyNewsInCache() {
               var daystogo = parseInt((cccc.getTime()-new Date().getTime())/(1000*60*60*24)+1)
               if (daystogo>0 && daystogo<=5 && sessionStorage.getItem("sent")==null)
               {
-                  console.log("FIRST CONDITION")
                   try
                   {
                       showNotification(`Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
@@ -56,7 +55,6 @@ function getDailyNewsInCache() {
               }
               else if(daystogo==0 && curre.getDate()==cccc.getDate() && sessionStorage.getItem("sent")==null)
               {
-                  console.log("SECOND CONDITION")
                   try
                   {
                       showNotification(`Last date for Payment of ${keeey} is today. Please pay if you have'nt already. Ignore if already paid. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)

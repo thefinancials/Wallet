@@ -311,7 +311,7 @@
    function initialseset(data, d, typeed)
    {
       dddd = data
-      console.log(typeof(dddd))
+
       if(typeed=="")
       {
          userName = JSON.parse(dddd)["user_id"]
@@ -357,7 +357,6 @@
       
    else
    {
-      console.log(dddd)
       userName = JSON.parse(dddd)["user_id"]
       
          fetch(`https://nkafepwcnjcdvngvyrgz.supabase.co/rest/v1/UserData?user_id=eq.${userName}`, {
@@ -940,8 +939,6 @@ document.getElementById("to_delete").appendChild(bankdiv)
                tempDate = new Date()
                tempDate.setDate(document.getElementById("due_date_checker_modify").options[document.getElementById("due_date_checker_modify").selectedIndex].text)
                tempDate.setHours(0, 0, 0)
-               console.log(tempDate)
-               console.log(todayDate)
                if (todayDate >= tempDate) {
                   tempDate.setMonth(tempDate.getMonth() + 1)
                   dde[`${creditcard_entry.value} (${nickname_entry.value})`]["DueDate"] = tempDate.toString()
@@ -1133,7 +1130,6 @@ function del_data() {
                   })
                   .then(res => res.text())
                   .then(res => {if (res==""){
-                     console.log("Done")
                      window.location.reload()
                }})
                   // 

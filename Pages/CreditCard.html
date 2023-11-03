@@ -397,7 +397,6 @@ function localStorageGetItem(vallue)
            {
                 data_cash = (localStorageGetItem("CASH"))
                 cash_balance_to = parseFloat(data_cash["CASH_BALANCE"])
-                console.log(cash_balance_to)
                 if (cash_balance_to<parseFloat(document.getElementById("amount_transaction").value))
                 {
                         alert(`Insufficient cash balance`)
@@ -407,7 +406,6 @@ function localStorageGetItem(vallue)
                     new_object.Account="Cash"
                     new_object.CreditCard = (document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text).split(" - ")[0]
                     new_cashbalance = parseFloat(cash_balance_to)-parseFloat(document.getElementById("amount_transaction").value)
-                    console.log(new_cashbalance)
                     new_cashobject = new Object()
                     new_cashobject.Date = `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`
                     new_cashobject.Particulars = `Payment of ${(document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text).split(" - ")[0]} Credit Card`
@@ -426,7 +424,6 @@ function localStorageGetItem(vallue)
                     new_object.TRXNUM=data["TRXNUM"]
                     data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
                     balance_outstanding = data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]-parseFloat(document.getElementById("amount_transaction").value)
-                    console.log(balance_outstanding)
                     data[document.getElementById("bank_select").options[document.getElementById("bank_select").selectedIndex].text.split(" - ")[0]]["BalanceOutstanding"]=balance_outstanding
                     oridata["CREDIT CARDS"]=data
                     setToStorage(JSON.stringify(oridata))
@@ -446,7 +443,6 @@ function localStorageGetItem(vallue)
                 else
                 {
                     new_bankbalance = parseFloat(bank_balance)-parseFloat(document.getElementById("amount_transaction").value)
-                    console.log(new_bankbalance)
                     new_cashobject = new Object()
                     new_cashobject.Date = `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`
                     new_object.Account = bankname
