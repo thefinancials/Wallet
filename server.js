@@ -17,6 +17,18 @@ app.get("/:page", (req, res) => {
   res.sendFile(path.join(__dirname, page));
 });
 
+app.get("/localforage.js", (req, res) => {
+  res.sendFile(path.join(__dirname, "localforage.js"));
+});
+
+app.get("/manifest.json", (req, res) => {
+  res.sendFile(path.join(__dirname, "manifest.json"));
+});
+
+app.get("pwabuilder-sw.js", (req, res) => {
+  res.sendFile(path.join(__dirname, "pwabuilder-sw.js"));
+});
+
 app.get("/Assets/:page", (req, res) => {
   const page = req.params.page;
   res.sendFile(path.join(__dirname,"Assets", page));
