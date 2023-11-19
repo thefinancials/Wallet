@@ -499,7 +499,61 @@ else
     tocheck = JSON.parse(addata[0]["Details"])
     if(deepEqual(tocheck, dataa)==true)
     {
-        
+        data = localStorageGetItem("CREDIT CARDS")
+        for(var keeey in data)
+        {
+            
+            if(keeey=="TRANSACTIONS"||keeey=="NO_OF_CARDS"||keeey=="TRXNUM")
+            {
+                
+            }
+            else
+            {
+                currentDate = data[keeey]["DueDate"]
+                curre = new Date();
+                orrr = new Date(currentDate)
+                cccc = new Date(currentDate)
+                
+                var daystogo = parseInt((cccc.getTime()-new Date().getTime())/(1000*60*60*24)+1)
+                
+                if (daystogo>0 && daystogo<=5 && sessionStorage.getItem("sent")==null && data[keeey]["BalanceOutstanding"]!=0)
+                {
+                    try
+                    {
+                        showNotification(`Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
+                    }
+                    catch{
+                        swal("Payment due", `Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
+                    }
+                }
+                else if(daystogo==0 && curre.getDate()==cccc.getDate() && sessionStorage.getItem("sent")==null && data[keeey]["BalanceOutstanding"]!=0)
+                { 
+                    try
+                    {
+                        showNotification(`Last date for Payment of ${keeey} is today. Please pay if you have'nt already. Ignore if already paid. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
+                    }
+                    catch{
+                        swal("Payment due", `Last date for Payment of ${keeey} is today. Please pay if you have'nt already. Ignore if already paid. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
+                    }
+                }
+                
+                else if(daystogo==0||daystogo<0)
+                {
+                    cccc.setMonth(cccc.getMonth()+1)
+                    if(cccc.getMonth()==0)
+                    {
+                        cccc.setFullYear(cccc.getFullYear()+1)
+                    }
+
+                    data[keeey]["DueDate"]=cccc.toString()
+                    data[keeey]["BalanceOutstanding"]=0
+                    oridata = JSON.parse(localStorage.getItem("Wallet"))
+                    oridata["CREDIT CARDS"]=data
+                    setToStorage(JSON.stringify(oridata))
+                }
+            }
+        }
+        sessionStorage.setItem("sent", true)   
     } 
     else
     {
@@ -509,61 +563,7 @@ else
 
     }
 })    
-data = localStorageGetItem("CREDIT CARDS")
-for(var keeey in data)
-{
-    
-    if(keeey=="TRANSACTIONS"||keeey=="NO_OF_CARDS"||keeey=="TRXNUM")
-    {
-        
-    }
-    else
-    {
-        currentDate = data[keeey]["DueDate"]
-        curre = new Date();
-        orrr = new Date(currentDate)
-        cccc = new Date(currentDate)
-        
-        var daystogo = parseInt((cccc.getTime()-new Date().getTime())/(1000*60*60*24)+1)
-        
-        if (daystogo>0 && daystogo<=5 && sessionStorage.getItem("sent")==null && data[keeey]["BalanceOutstanding"]!=0)
-        {
-            try
-            {
-                showNotification(`Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
-            }
-            catch{
-                swal("Payment due", `Payment for ${keeey} is due in ${daystogo} day(s). Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
-            }
-        }
-        else if(daystogo==0 && curre.getDate()==cccc.getDate() && sessionStorage.getItem("sent")==null && data[keeey]["BalanceOutstanding"]!=0)
-        { 
-            try
-            {
-                showNotification(`Last date for Payment of ${keeey} is today. Please pay if you have'nt already. Ignore if already paid. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`)
-            }
-            catch{
-                swal("Payment due", `Last date for Payment of ${keeey} is today. Please pay if you have'nt already. Ignore if already paid. Amount to be paid is ₹${data[keeey]["BalanceOutstanding"]}`, "info");
-            }
-        }
-        
-        else if(daystogo==0||daystogo<0)
-        {
-            cccc.setMonth(cccc.getMonth()+1)
-            if(cccc.getMonth()==0)
-            {
-                cccc.setFullYear(cccc.getFullYear()+1)
-            }
 
-            data[keeey]["DueDate"]=cccc.toString()
-            data[keeey]["BalanceOutstanding"]=0
-            oridata = JSON.parse(localStorage.getItem("Wallet"))
-            oridata["CREDIT CARDS"]=data
-            setToStorage(JSON.stringify(oridata))
-        }
-    }
-}
-sessionStorage.setItem("sent", true)   
     
 </script>
 <script>
