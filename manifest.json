@@ -45,7 +45,7 @@
   "background_color": "#f69435",
   "display": "standalone",
   "scope": ".",
-  "start_url": "/Wallet/",
+  "start_url": "/",
   "name": "Wallet",
   "orientation": "any",
   "short_name": "Wallet",
