@@ -23,6 +23,11 @@ function deepEqual(obj1, obj2) {
     return true;
   }
 
+  function investmentstostorage(data)
+  {
+    userName = JSON.parse(data)["user_id"]
+    localStorage.setItem("Wallet", data)
+  }
   
   function setToStorage(data)
   {
