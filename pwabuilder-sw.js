@@ -1,6 +1,6 @@
 importScripts("localforage.js");
 const CACHE = "wallet-page";
-const offlineFallbackPage = "index.html";
+const offlineFallbackPage = "/";
 
 self.addEventListener("install", function (event) {
   event.waitUntil(
