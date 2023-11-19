@@ -4,37 +4,38 @@
   ],
   "screenshots": [
     {
-      "src": "/Wallet/Assets/screenshot1.png",
+      "src": "/Assets/screenshot1.png",
       "sizes": "1080x1920",
       "type": "image/png",
-      "description": "Screenshot of Wallet's home page"
+      "description": "Screenshot of Wallet's home page",
+      "form_factor": "wide"
     },
     {
-      "src": "/Wallet/Assets/screenshot2.png",
+      "src": "/Assets/screenshot2.png",
       "sizes": "1080x1920",
       "type": "image/png",
       "description": "Screenshot of Wallet's Credit Card page"
     },
     {
-      "src": "/Wallet/Assets/screenshot3.png",
+      "src": "/Assets/screenshot3.png",
       "sizes": "1080x1920",
       "type": "image/png",
       "description": "Screenshot of Wallet's SMS transaction page"
     },
     {
-      "src": "/Wallet/Assets/screenshot4.png",
+      "src": "/Assets/screenshot4.png",
       "sizes": "1080x1920",
       "type": "image/png",
       "description": "Screenshot of Wallet's Bank page"
     },
     {
-      "src": "/Wallet/Assets/screenshot5.png",
+      "src": "/Assets/screenshot5.png",
       "sizes": "1080x1920",
       "type": "image/png",
       "description": "Screenshot of Wallet's cash page"
     },
     {
-      "src": "/Wallet/Assets/screenshot6.png",
+      "src": "/Assets/screenshot6.png",
       "sizes": "1080x1920",
       "type": "image/png",
       "description": "Screenshot of compatibility of Wallet"
@@ -51,23 +52,28 @@
   "description": "Wallet is a PWA that helps you keep track of your cash, bank and credit card transactions.",
   "icons": [
     {
-      "src": "/Wallet/Assets/icon-192x192.png",
+      "src": "/Assets/maskable_icon_x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/Wallet/Assets/icon-256x256.png",
-      "sizes": "256x256",
+      "src": "/Assets/maskable_icon_x128.png",
+      "sizes": "128x128",
       "type": "image/png"
     },
     {
-      "src": "/Wallet/Assets/icon-384x384.png",
-      "sizes": "384x384",
+      "src": "/Assets/maskable_icon_x48.png",
+      "sizes": "48x48",
       "type": "image/png"
     },
     {
-      "src": "/Wallet/Assets/icon-512x512.png",
-      "sizes": "512x512",
+      "src": "/Assets/maskable_icon_x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/Assets/maskable_icon_x96.png",
+      "sizes": "96x96",
       "type": "image/png",
       "purpose": "any"
     }
@@ -102,33 +108,33 @@
       "name": "Cash",
       "icons": [
         {
-          "src": "/Wallet/Assets/icon-384x384.png",
-          "sizes": "384x384"
+          "src": "/Assets/maskable_icon_x192.png",
+          "sizes": "192x192"
         }
       ],
-      "url": "/Wallet/Pages/Cash.html",
+      "url": "/Pages/Cash.html",
       "description": "Quickly get access to cash page"
     },
     {
       "name": "Bank",
       "icons": [
         {
-          "src": "/Wallet/Assets/icon-384x384.png",
-          "sizes": "384x384"
+          "src": "/Assets/maskable_icon_x192.png",
+          "sizes": "192x192"
         }
       ],
-      "url": "/Wallet/Pages/Bank.html",
+      "url": "/Pages/Bank.html",
       "description": "Quickly get access to bank page"
     },
     {
       "name": "Read Transaction from SMS",
       "icons": [
         {
-          "src": "/Wallet/Assets/icon-384x384.png",
-          "sizes": "384x384"
+          "src": "/Assets/maskable_icon_x192.png",
+          "sizes": "192x192"
         }
       ],
-      "url": "/Wallet/Pages/SMSTransaction.html",
+      "url": "/Pages/SMSTransaction.html",
       "description": "Quickly analyse an SMS and gather details about a transaction"
     }
   ]
