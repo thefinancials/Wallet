@@ -20,7 +20,7 @@ app.get("/manifest.json", (req, res) => {
   res.sendFile(path.join(__dirname, "manifest.json"));
 });
 
-app.get("pwabuilder-sw.js", (req, res) => {
+app.get("/pwabuilder-sw.js", (req, res) => {
   res.sendFile(path.join(__dirname, "pwabuilder-sw.js"));
 });
 
