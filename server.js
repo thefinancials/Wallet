@@ -52,6 +52,4 @@ app.get('/getData', async (req, res) => {
 
 });
   
-app.listen(8080, () => {
-    console.log("Server started in port 8080. Visit localhost:8080")
-})
+app.listen(8080, () => {})
