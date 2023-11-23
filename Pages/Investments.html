@@ -279,7 +279,21 @@
     
         </div>
     </div>
-    
+    <table id="transactions_table" style="display:none">
+        <thead>
+           <th style="margin-left: 10px; margin-right:10px;">Share</th>
+           <th style="margin-left: 10px; margin-right:10px;">Current Market Price</th>
+           <th style="margin-left: 10px; margin-right:10px;">Number of shares held</th>
+           <th style="margin-left: 10px; margin-right:10px;">Purchase Price</th>
+           <th style="margin-left: 10px; margin-right:10px;">P&L</th>
+           <th style="margin-left: 10px; margin-right:10px;">Actions</th>
+        </thead>
+        <tbody id="ttbody">
+
+        </tbody>
+     </table>
+     <h3 id="no_message" style="display:none">No shares added yet!</h3>
+
                 
     </body>
     <script src="../localforage.js"></script>
@@ -295,6 +309,7 @@
         {
             alert("Do you hold this share? Please select Yes or No")
         }
+        share_selected = document.getElementById("share_name_p").innerHTML
         if (document.getElementById("yes_b").checked==true)
         {
             if((document.getElementById("no_of_shares").value=="" || document.getElementById("purchase_price").value==""))
@@ -308,9 +323,25 @@
                 {
                     Investments = new Object()
                     Investments.NO_OF_INVESTMENTS = 1
-                    Investments[`${share_selected}`]={"Type":"Share", "Holding":true, "NO_OF_SHARES":document.getElementById("no_of_shares").value, "PURCHASE_PRICE":document.getElementById("purchase_price").value}
-                    console.log(Investments)
+                    Investments[`${share_selected}`]={"Type":"Share", "Holding":true, "NO_OF_SHARES":parseInt(document.getElementById("no_of_shares").value), "PURCHASE_PRICE":parseInt(document.getElementById("purchase_price").value)}
+                    daataa["Investments"]=Investments
                 }
+                else
+                {
+                    Investments = daataa["Investments"]
+                    if(share_selected in Investments)
+                    {
+
+                    }
+                    else
+                    {
+                        Investments.NO_OF_INVESTMENTS+=1
+                    }
+                    Investments[`${share_selected}`]={"Type":"Share", "Holding":true, "NO_OF_SHARES":parseInt(document.getElementById("no_of_shares").value), "PURCHASE_PRICE":parseInt(document.getElementById("purchase_price").value)}
+                    daataa["Investments"]=Investments
+                }
+                setToStorage(JSON.stringify(daataa))
+                alert("Done!")
             }     
         }
         else
@@ -321,8 +352,24 @@
                 Investments = new Object()
                 Investments.NO_OF_INVESTMENTS = 1
                 Investments[`${share_selected}`]={"Type":"Share", "Holding":false, "NO_OF_SHARES":0, "PURCHASE_PRICE":0}
-                console.log(Investments)
+                daataa["Investments"]=Investments
             }
+            else
+            {
+                Investments = daataa["Investments"]
+                if(share_selected in Investments)
+                {
+                    
+                }
+                else
+                {
+                    Investments.NO_OF_INVESTMENTS+=1
+                }
+                Investments[`${share_selected}`]={"Type":"Share", "Holding":false, "NO_OF_SHARES":0, "PURCHASE_PRICE":0}
+                daataa["Investments"]=Investments
+            }
+            setToStorage(JSON.stringify(daataa))
+            alert("Done!")
         }
     }
     function getdata()
@@ -339,6 +386,22 @@
             .then(response => response.text())
             .then(data => {
                 daataa = JSON.parse(localStorage.getItem("Wallet"))
+                invess = daataa["Investments"]
+                if (invess != null)
+                {
+                    if (share_selected in invess && invess[share_selected].NO_OF_SHARES>0)
+                    {
+                        document.getElementById("yes_b").checked=true
+                        document.getElementById('pp_div').style.display='block';
+                        document.getElementById('no_div').style.display='block';
+                        document.getElementById("no_of_shares").value = invess[share_selected].NO_OF_SHARES
+                        document.getElementById("purchase_price").value = invess[share_selected].PURCHASE_PRICE
+                    }
+                    else if (share_selected in invess && invess[share_selected].NO_OF_SHARES==0)
+                    {
+                        document.getElementById("no_b").checked=true
+                    }
+                }
                 document.getElementById("question_form").style.display="block"
                 document.getElementById("share_name_p").innerHTML=share_selected
                 document.getElementById("ltp_now").innerHTML=`Current Market Price: ${data}`
@@ -385,7 +448,12 @@
             optionElement.text = option;
             selectElement.appendChild(optionElement);
         })
-
-    
+    </script>
+    <script>
+        daaata = JSON.parse(localStorage.getItem("Wallet"))
+        if(daaata["Investments"]==null)
+        {
+            document.getElementById("no_message").style.display="block"
+        }
     </script>
 </html>
