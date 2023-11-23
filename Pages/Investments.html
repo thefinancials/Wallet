@@ -199,11 +199,20 @@
             </div>
         </form>
         <form id="question_form" style="display: none;">
-            <h3>Share Name: <p id="share_name_p"></p></h3>
-            <h3>No. of shares held: <input type="number" id="no_of_shares"></input></h3>
+            <h3 id="share_name_p"></h3>
+            <h3>Do you hold this share?</h3>
+            <label for="yes_b">Yes</label>
+            <input type="radio" id="yes_b" onchange="document.getElementById('pp_div').style.display='block';document.getElementById('no_div').style.display='block';document.getElementById('no_b').checked=false">
+            <br>
+            <label for="no_b">No</label>
+            <input type="radio" id="no_b" value="No" onchange="document.getElementById('pp_div').style.display='none';document.getElementById('no_div').style.display='none';document.getElementById('yes_b').checked=false">
+            <h3 style="display:none;" id="no_div">No. of shares held: <input type="number" id="no_of_shares"></input></h3>
+            <h3 style="display:none;" id="pp_div">Enter purchase price: <input type="number" id="purchase_price"></h3>
+            <h3 id="ltp_now"></h3>
+            <button onclick="addShare()">+ Add</button>
         </form>
         <br>
-        <button id="share_list_table_btn" class="collapsible_share"></button>
+        <button id="share_list_table_btn" class="collapsible_share" style="display:none;"></button>
 
         <table id="share_table" class="content" border="1" >
             <tr>
@@ -279,6 +288,43 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" src="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <script>
+    function addShare()
+    {
+        event.preventDefault()
+        if(document.getElementById("yes_b").checked==false&&document.getElementById("no_b").checked==false)
+        {
+            alert("Do you hold this share? Please select Yes or No")
+        }
+        if (document.getElementById("yes_b").checked==true)
+        {
+            if((document.getElementById("no_of_shares").value=="" || document.getElementById("purchase_price").value==""))
+            {
+                alert("Enter no. of shares you are holding and it's purchase price")
+            }
+            else
+            {
+                dattaa = JSON.parse(localStorage.getItem("Wallet"))
+                if(daataa["Investments"]==null)
+                {
+                    Investments = new Object()
+                    Investments.NO_OF_INVESTMENTS = 1
+                    Investments[`${share_selected}`]={"Type":"Share", "Holding":true, "NO_OF_SHARES":document.getElementById("no_of_shares").value, "PURCHASE_PRICE":document.getElementById("purchase_price").value}
+                    console.log(Investments)
+                }
+            }     
+        }
+        else
+        {
+            dattaa = JSON.parse(localStorage.getItem("Wallet"))
+            if(daataa["Investments"]==null)
+            {
+                Investments = new Object()
+                Investments.NO_OF_INVESTMENTS = 1
+                Investments[`${share_selected}`]={"Type":"Share", "Holding":false, "NO_OF_SHARES":0, "PURCHASE_PRICE":0}
+                console.log(Investments)
+            }
+        }
+    }
     function getdata()
     {
         event.preventDefault()
@@ -294,6 +340,8 @@
             .then(data => {
                 daataa = JSON.parse(localStorage.getItem("Wallet"))
                 document.getElementById("question_form").style.display="block"
+                document.getElementById("share_name_p").innerHTML=share_selected
+                document.getElementById("ltp_now").innerHTML=`Current Market Price: ${data}`
             })
         }
 
