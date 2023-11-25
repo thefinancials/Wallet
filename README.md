@@ -4,6 +4,7 @@ Greetings, everyone! We are thrilled to announce the launch of Wallet Version 3.
 
 Links for accessing Wallet:
 
+[Vercel](https:/wallet-asafinserve.vercel.app/)
 [GitHub Pages](https://asafinserve.github.io/Wallet)
 
 We are delighted to confirm that both links are fully functional and operating at the expected speeds.
