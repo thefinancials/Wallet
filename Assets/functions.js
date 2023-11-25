@@ -1,5 +1,3 @@
-import config from "../config.js"
-
 function deepEqual(obj1, obj2) {
     if (obj1 === obj2) {
       return true;
@@ -34,12 +32,17 @@ function deepEqual(obj1, obj2) {
       method: "PATCH",
       body: JSON.stringify({ "user_id": userName, "Details": data}),
       headers: {
-      "apikey": config.API_KEY,
-      "Authorization": `Bearer ${config.API_KEY}`,
+      "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your API key
+      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWZlcHdjbmpjZHZuZ3Z5cmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMyMjk4NTgsImV4cCI6MjAwODgwNTg1OH0.N0WVNuW3S-6Fa6sgMfnLcvORYk7oawfEeUAdJ-IUCH8", // Replace with your access token"
       "Content-Type": "application/json",
       "Prefer": "return=minimal",
    }
    });
+}
+
+function checkForUpdates()
+{
+  
 }
 
 function logoutFunction()

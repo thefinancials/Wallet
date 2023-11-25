@@ -1,4 +1,4 @@
-importScripts("localforage.js");
+importScripts("Assets/localforage.js");
 const CACHE = "wallet-page";
 const offlineFallbackPage = "/";
 
