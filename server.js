@@ -16,6 +16,10 @@ app.get("/localforage.js", (req, res) => {
   res.sendFile(path.join(__dirname, "localforage.js"));
 });
 
+app.get("/config.js", (req, res) => {
+  res.sendFile(path.join(__dirname, "config.js"));
+});
+
 app.get("/manifest.json", (req, res) => {
   res.sendFile(path.join(__dirname, "manifest.json"));
 });
