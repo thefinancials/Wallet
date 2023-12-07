@@ -76,6 +76,12 @@
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/Assets/maskable_icon_x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "launch_handler": {
@@ -93,7 +99,7 @@
   ],
   "dir": "ltr",
   "lang": "en",
-  "id":"/Wallet/",
+  "id":"https://wallet-asafinserve.vercel.app/Wallet/",
   "prefer_related_applications": false,
   "categories": [
     "business",
