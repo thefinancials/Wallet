@@ -231,6 +231,7 @@
     </div>
     <br>
    <p class="centre" id="cur_balance" style="font-size: 20px;"></p>
+   <p class="centre" id="noteCountDisplay" style="font-size: 20px;"></p>
    <br>
    <form class="centre">
       <button class="button" id="inBtn" onclick="money_in()">+ Money comes in</button>
@@ -261,6 +262,8 @@
 <link rel="stylesheet" src="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
 <script>
+    notional_count = {"500":0, "200":0, "100":0, "50":0, "20":0, "10":0, "5":0, "2":0, "1":0}
+    tot_amount = 0
         if(window.navigator.onLine==false)
     {
         alert("You are offline, get back online to login or signup to Wallet")
@@ -332,14 +335,22 @@ document.getElementById("user_name").innerHTML = localStorageGetItem("user_id")
                }
            }
            data["TRXNUM"]+=1
+           let newObj = Object.keys(data["NOTE_COUNT"]).reduce((a, k) => {
+                a[k] = data["NOTE_COUNT"][k] + notional_count[k];
+                return a;
+            }, {});
+            // console.log(data["NOTE_COUNT"])
+            // console.log(notional_count)
+            // console.log(newObj)
            new_object.Type = "Cr"
            new_object.TRXNUM = data["TRXNUM"]
-           new_object.Amount = parseInt(document.getElementById("amount_transaction").value)
+           new_object.Amount = parseInt(document.getElementById("amount_transaction").innerHTML)
            new_object.Narration = document.getElementById("narration").value
            data["TRANSACTIONS"].push(new_object)
            data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
            cash_balance = parseFloat(data["CASH_BALANCE"])
-           cash_balance+=parseFloat(document.getElementById("amount_transaction").value)
+           data["NOTE_COUNT"]=newObj
+           cash_balance+=parseFloat(document.getElementById("amount_transaction").innerHTML)
            data["CASH_BALANCE"]=cash_balance
            oridata = JSON.parse(localStorage.getItem("Wallet"))
            oridata["CASH"]=data
@@ -359,7 +370,24 @@ document.getElementById("user_name").innerHTML = localStorageGetItem("user_id")
        <form><label>Enter the date of the transaction</form><input id="date_transaction" class="margin: auto; display: block;" type="date" placeholder="Enter the date of the transaction"></form>\
        <br><input id="particulars_transaction" class="margin: auto; display: block;" type="text" placeholder="Who paid you money?">\
        <br><ul id="list"></ul>\
-       <br><input id="amount_transaction" class="margin: auto; display: block;" type="number" placeholder="Enter the amount">\
+       <form id="quick_options">\
+        <p>Denominations Available:\
+        <br><br>\
+       <button class="button" onclick="updateBalance_(500)">₹500</button>\
+       <button class="button" onclick="updateBalance_(200)">₹200</button>\
+        <button class="button" onclick="updateBalance_(100)">₹100</button>\
+        <br><br>\
+        <button class="button" onclick="updateBalance_(50)">₹50</button>\
+        <button class="button" onclick="updateBalance_(20)">₹20</button>\
+        <button class="button" onclick="updateBalance_(10)">₹10</button>\
+        <br><br>\
+        <button class="button" onclick="updateBalance_(5)">₹5</button>\
+        <button class="button" onclick="updateBalance_(2)">₹2</button>\
+        <button class="button" onclick="updateBalance_(1)">₹1</button>\
+        <br><br>\
+        <button class="button" onclick="updateBalance_(0)">Clear</button>\
+        <br><br>\
+        <br><p id="amount_transaction"></p>\
        <br><input id="narration" class="margin: auto; display: block;" type="text" placeholder="Enter narration"></p>\
        <br><button onclick="moneyadded_in()">Add transaction</button>'
        if (localStorageGetItem("particulars_ai")==null)
@@ -407,10 +435,49 @@ document.getElementById("user_name").innerHTML = localStorageGetItem("user_id")
        }
        
    }
+   function updateBalance(amount) {
+        event.preventDefault()
+        data = localStorageGetItem("CASH")["NOTE_COUNT"]
+        if(amount==0)
+        {
+            document.getElementById("amount_transaction").innerHTML=""
+            notional_count = {"500":0, "200":0, "100":0, "50":0, "20":0, "10":0, "5":0, "2":0, "1":0}
+            tot_amount = 0
+        }
+        else
+        {
+            if (notional_count[amount]+1>data[amount]){
+                alert("You do not have any more ₹"+ amount+" notes")
+            }
+            else{
+                notional_count[amount]+=1
+                tot_amount+=amount
+                document.getElementById("amount_transaction").innerHTML=tot_amount
+            }
+        }
+        
+   }
+   function updateBalance_(amount) {
+        event.preventDefault()
+        data = localStorageGetItem("CASH")["NOTE_COUNT"]
+        if(amount==0)
+        {
+            document.getElementById("amount_transaction").innerHTML=""
+            notional_count = {"500":0, "200":0, "100":0, "50":0, "20":0, "10":0, "5":0, "2":0, "1":0}
+            tot_amount = 0
+        }
+        else
+        {
+            notional_count[amount]+=1
+            tot_amount+=amount
+            document.getElementById("amount_transaction").innerHTML=tot_amount
+        }
+        
+   }
    function moneyadded_out()
    {
        event.preventDefault()
-       if(document.getElementById("date_transaction").value=="" || document.getElementById("particulars_transaction").value=="" || document.getElementById("amount_transaction").value=="")
+       if(document.getElementById("date_transaction").value=="" || document.getElementById("particulars_transaction").value=="" || document.getElementById("amount_transaction").innerHTML=="")
        {
            alert("Please enter all the details. The narration is optional")
        }
@@ -426,8 +493,7 @@ document.getElementById("user_name").innerHTML = localStorageGetItem("user_id")
                array_part.push(document.getElementById("particulars_transaction").value)
                oridata = JSON.parse(localStorage.getItem("Wallet"))
                oridata["particulars_ai"]=array_part
-               setToStorage(JSON.stringify(oridata))
-               
+               setToStorage(JSON.stringify(oridata))   
            }
            else
            {
@@ -443,19 +509,23 @@ document.getElementById("user_name").innerHTML = localStorageGetItem("user_id")
                }
            }
            data["TRXNUM"]+=1
+           let newObj = Object.keys(data["NOTE_COUNT"]).reduce((a, k) => {
+                a[k] = data["NOTE_COUNT"][k] - notional_count[k];
+                return a;
+            }, {});
            new_object.Type = "Dr"
            new_object.TRXNUM = data["TRXNUM"]
-           new_object.Amount = parseInt(document.getElementById("amount_transaction").value)
+           new_object.Amount = parseInt(document.getElementById("amount_transaction").innerHTML)
            new_object.Narration = document.getElementById("narration").value
            data["TRANSACTIONS"].push(new_object)
            data["TRANSACTIONS"].sort((a, b) => new Date(a.Date) - new Date(b.Date));
            cash_balance = parseFloat(data["CASH_BALANCE"])
-           cash_balance-=parseFloat(document.getElementById("amount_transaction").value)
+           cash_balance-=parseFloat(document.getElementById("amount_transaction").innerHTML)
            data["CASH_BALANCE"]=cash_balance
+           data["NOTE_COUNT"]=newObj
            oridata = JSON.parse(localStorage.getItem("Wallet"))
            oridata["CASH"]=data
            setToStorage(JSON.stringify(oridata))
-           
            alert("Added!")
            window.location.reload();
        }
@@ -468,9 +538,27 @@ document.getElementById("user_name").innerHTML = localStorageGetItem("user_id")
        <br>\
        <h2 class="centre">- Money goes out</h2>\
        <form><label>Enter the date of the transaction</form><input id="date_transaction" class="margin: auto; display: block;" type="date" placeholder="Enter the date of the transaction"></form>\
-       <br><input id="particulars_transaction" class="margin: auto; display: block;" type="text" placeholder="Whom did you paid money?">\
+       <br><input id="particulars_transaction" class="margin: auto; display: block;" type="text" placeholder="Whom did you pay money?">\
        <br><ul id="list"></ul>\
-       <br><input id="amount_transaction" class="margin: auto; display: block;" type="number" placeholder="Enter the amount">\
+       <br>\
+        <form id="quick_options">\
+        <p>Denominations Available:\
+        <br><br>\
+       <button class="button" onclick="updateBalance(500)">₹500</button>\
+       <button class="button" onclick="updateBalance(200)">₹200</button>\
+        <button class="button" onclick="updateBalance(100)">₹100</button>\
+        <br><br>\
+        <button class="button" onclick="updateBalance(50)">₹50</button>\
+        <button class="button" onclick="updateBalance(20)">₹20</button>\
+        <button class="button" onclick="updateBalance(10)">₹10</button>\
+        <br><br>\
+        <button class="button" onclick="updateBalance(5)">₹5</button>\
+        <button class="button" onclick="updateBalance(2)">₹2</button>\
+        <button class="button" onclick="updateBalance(1)">₹1</button>\
+        <br><br>\
+        <button class="button" onclick="updateBalance(0)">Clear</button>\
+        <br><br>\
+        <br><p id="amount_transaction"></p>\
        <br><input id="narration" class="margin: auto; display: block;" type="text" placeholder="Enter narration"></p>\
        <br><button onclick="moneyadded_out()">Add transaction</button>'
        if (localStorageGetItem("particulars_ai")==null)
@@ -522,6 +610,8 @@ document.getElementById("user_name").innerHTML = localStorageGetItem("user_id")
    {
        data = (localStorageGetItem("CASH"))
        document.getElementById("cur_balance").innerHTML = `Balance : ₹ ${data["CASH_BALANCE"]}`
+       noteCounts = data["NOTE_COUNT"]
+       document.getElementById('noteCountDisplay').textContent = `Notes in Hand - ₹500: ${noteCounts['500']}, ₹200: ${[noteCounts['200']]}, ₹100: ${noteCounts['100']}, ₹50: ${noteCounts['50']}, ₹20: ${[noteCounts['20']]}, ₹10: ${noteCounts['10']}, ₹5: ${noteCounts['5']}, ₹1: ${noteCounts['1']}`;
        if(data["TRANSACTIONS"].length==0)
        {
            document.getElementById("transactions_table").style.visibility="hidden"

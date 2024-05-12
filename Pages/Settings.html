@@ -373,6 +373,7 @@
             .then((json) => update(json["status"]), "");
    }
 }
+
    function setToStorage(data)
    {
       userName = JSON.parse(data)["user_id"]
@@ -570,10 +571,25 @@ var spacer = document.createElement("br")
 var creditcard_entry = document.createElement("input")
 creditcard_entry.id = "cash_entry"
 creditcard_entry.placeholder = "Enter the amount of cash with you now"
+var fff = document.createElement("div")
+fff.id='noteCountInputs'
+fff.style='display:block;'
+fff.innerHTML="<input type='number' class='note-input' id='note500' placeholder='Count of ₹500 notes' />\
+   <br><input type='number' class='note-input' id='note200' placeholder='Count of ₹200 notes' />\
+  <br><input type='number' class='note-input' id='note100' placeholder='Count of ₹100 notes' />\
+  <br><input type='number' class='note-input' id='note50' placeholder='Count of ₹50 notes' />\
+  <br><input type='number' class='note-input' id='note20' placeholder='Count of ₹20 notes' />\
+  <br><input type='number' class='note-input' id='note10' placeholder='Count of ₹10 coins' />\
+  <br><input type='number' class='note-input' id='note5' placeholder='Count of ₹5 coins' />\
+  <br><input type='number' class='note-input' id='note2' placeholder='Count of ₹2 coins' />\
+  <br><input type='number' class='note-input' id='note1' placeholder='Count of ₹1 coins' />"
 creditcard_entry.width = "150px"
 creditcard_entry.type = "text"
 var spacer = document.createElement("br")
 cashdiv.appendChild(creditcard_entry)
+cashdiv.appendChild(document.createElement("br"))
+cashdiv.appendChild(document.createElement("br"))
+cashdiv.appendChild(fff)
 cashdiv.appendChild(document.createElement("br"))
 cashdiv.appendChild(document.createElement("br"))
 var submit_btn = document.createElement("button")
@@ -593,12 +609,23 @@ submit_btn.addEventListener("click", function () {
             })
             .then((value) => {
                switch (value) {
-
                   case "ok":
                      objeee = new Object()
                      objeee.CASH_BALANCE = parseInt(document.getElementById("cash_entry").value)
+                     noteCounts = {}
+                     noteCounts['500'] = parseInt(document.getElementById('note500').value) || 0;
+                     noteCounts['200'] = parseInt(document.getElementById('note200').value) || 0;
+                     noteCounts['100'] = parseInt(document.getElementById('note100').value) || 0;
+                     noteCounts['50'] = parseInt(document.getElementById('note50').value) || 0;
+                     noteCounts['20'] = parseInt(document.getElementById('note20').value) || 0;
+                     noteCounts['10'] = parseInt(document.getElementById('note10').value) || 0;
+                     noteCounts['5'] = parseInt(document.getElementById('note5').value) || 0;
+                     noteCounts['2'] = parseInt(document.getElementById('note2').value) || 0;
+                     noteCounts['1'] = parseInt(document.getElementById('note1').value) || 0;
+                     objeee.NOTE_COUNT = noteCounts
                      objeee.TRXNUM = 0
                      objeee.TRANSACTIONS = []
+                     console.log(objeee)
                      data = JSON.parse(localStorage.getItem("Wallet"))
                      data["CASH"]=objeee
                      data["setup"]="DONE"
@@ -628,8 +655,20 @@ submit_btn.addEventListener("click", function () {
          oridata = JSON.parse(localStorage.getItem("Wallet"))
          objeee = new Object()
          objeee.CASH_BALANCE = parseInt(document.getElementById("cash_entry").value)
+         noteCounts = {}
+         noteCounts['500'] = parseInt(document.getElementById('note500').value) || 0;
+         noteCounts['200'] = parseInt(document.getElementById('note200').value) || 0;
+         noteCounts['100'] = parseInt(document.getElementById('note100').value) || 0;
+         noteCounts['50'] = parseInt(document.getElementById('note50').value) || 0;
+         noteCounts['20'] = parseInt(document.getElementById('note20').value) || 0;
+         noteCounts['10'] = parseInt(document.getElementById('note10').value) || 0;
+         noteCounts['5'] = parseInt(document.getElementById('note5').value) || 0;
+         noteCounts['2'] = parseInt(document.getElementById('note2').value) || 0;
+         noteCounts['1'] = parseInt(document.getElementById('note1').value) || 0;
+         objeee.NOTE_COUNT = noteCounts
          objeee.TRXNUM = 0
          objeee.TRANSACTIONS = []
+         console.log(objeee)
          oridata["CASH"]=objeee
          oridata["setup"]="DONE"
          setToStorage(JSON.stringify(oridata))
